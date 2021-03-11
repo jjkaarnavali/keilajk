@@ -1,16 +1,13 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Domain.Base;
 
 namespace Domain.App
 {
-    public class ProductInOrder : DomainEntityId
+    public class ProductInWarehouse : DomainEntityId
     {
-     
-        
         public Guid ProductId { get; set; }
         
-        public Guid OrderId { get; set; }  = default!;
+        public Guid WarehouseId { get; set; }  = default!;
         
         public int ProductAmount { get; set; }
         

@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
+using DAL.App.EF.Repositories;
 using Domain.App;
 
 namespace WebApp.Controllers
@@ -13,16 +15,19 @@ namespace WebApp.Controllers
     public class PricesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IPriceRepository _repository;
 
         public PricesController(AppDbContext context)
         {
             _context = context;
+            _repository = new PriceRepository(_context);
         }
 
         // GET: Prices
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Prices.ToListAsync());
+            var res =  await _repository.GetAllAsync();
+            return View(res);
         }
 
         // GET: Prices/Details/5

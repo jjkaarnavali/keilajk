@@ -19,6 +19,7 @@ namespace DAL.App.EF
         public DbSet<Price> Prices { get; set; } = default!;
         public DbSet<Product> Products { get; set; } = default!;
         public DbSet<ProductInOrder> ProductsInOrders { get; set; } = default!;
+        public DbSet<ProductInWarehouse> ProductsInWarehouses { get; set; } = default!;
         public DbSet<ProductType> ProductTypes { get; set; } = default!;
         public DbSet<Warehouse> Warehouses { get; set; } = default!;
         

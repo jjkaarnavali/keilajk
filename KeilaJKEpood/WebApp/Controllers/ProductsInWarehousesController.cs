@@ -12,25 +12,25 @@ using Domain.App;
 
 namespace WebApp.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductsInWarehousesController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly IProductRepository _repository;
+        private readonly IProductInWarehouseRepository _repository;
 
-        public ProductsController(AppDbContext context)
+        public ProductsInWarehousesController(AppDbContext context)
         {
             _context = context;
-            _repository = new ProductRepository(_context);
+            _repository = new ProductInWarehouseRepository(_context);
         }
 
-        // GET: Products
+        // GET: ProductsInWarehouses
         public async Task<IActionResult> Index()
         {
             var res =  await _repository.GetAllAsync();
             return View(res);
         }
 
-        // GET: Products/Details/5
+        // GET: ProductsInWarehouses/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -38,40 +38,40 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
+            var productInWarehouse = await _context.ProductsInWarehouses
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (productInWarehouse == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(productInWarehouse);
         }
 
-        // GET: Products/Create
+        // GET: ProductsInWarehouses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: ProductsInWarehouses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,ProductTypeId,ProductName,ProductSize,ProductSeason,ProductCode,From,Until")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,WarehouseId,ProductAmount,From,Until,Id")] ProductInWarehouse productInWarehouse)
         {
             if (ModelState.IsValid)
             {
-                product.Id = Guid.NewGuid();
-                _context.Add(product);
+                productInWarehouse.Id = Guid.NewGuid();
+                _context.Add(productInWarehouse);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productInWarehouse);
         }
 
-        // GET: Products/Edit/5
+        // GET: ProductsInWarehouses/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -79,22 +79,22 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
+            if (productInWarehouse == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(productInWarehouse);
         }
 
-        // POST: Products/Edit/5
+        // POST: ProductsInWarehouses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,ProductTypeId,ProductName,ProductSize,ProductSeason,ProductCode,From,Until")] Product product)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ProductId,WarehouseId,ProductAmount,From,Until,Id")] ProductInWarehouse productInWarehouse)
         {
-            if (id != product.Id)
+            if (id != productInWarehouse.Id)
             {
                 return NotFound();
             }
@@ -103,12 +103,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(productInWarehouse);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ProductInWarehouseExists(productInWarehouse.Id))
                     {
                         return NotFound();
                     }
@@ -119,10 +119,10 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productInWarehouse);
         }
 
-        // GET: Products/Delete/5
+        // GET: ProductsInWarehouses/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -130,30 +130,30 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
+            var productInWarehouse = await _context.ProductsInWarehouses
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (productInWarehouse == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(productInWarehouse);
         }
 
-        // POST: Products/Delete/5
+        // POST: ProductsInWarehouses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
+            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
+            _context.ProductsInWarehouses.Remove(productInWarehouse);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(Guid id)
+        private bool ProductInWarehouseExists(Guid id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.ProductsInWarehouses.Any(e => e.Id == id);
         }
     }
 }
