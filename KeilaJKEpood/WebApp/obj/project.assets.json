@@ -2305,11 +2305,22 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "Contracts.Domain.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Contracts.Domain.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.Domain.Base.dll": {}
+        }
+      },
       "DAL.App.EF/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "Domain": "1.0.0",
+          "Domain.App": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "5.0.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.3"
         },
@@ -2328,6 +2339,32 @@
         },
         "runtime": {
           "bin/placeholder/Domain.dll": {}
+        }
+      },
+      "Domain.App/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Domain.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Domain.App.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.App.dll": {}
+        }
+      },
+      "Domain.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.Domain.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Domain.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.Base.dll": {}
         }
       }
     }
@@ -7827,6 +7864,11 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
+    "Contracts.Domain.Base/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj",
+      "msbuildProject": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj"
+    },
     "DAL.App.EF/1.0.0": {
       "type": "project",
       "path": "../DAL.App.EF/DAL.App.EF.csproj",
@@ -7836,6 +7878,16 @@
       "type": "project",
       "path": "../Domain/Domain.csproj",
       "msbuildProject": "../Domain/Domain.csproj"
+    },
+    "Domain.App/1.0.0": {
+      "type": "project",
+      "path": "../Domain.App/Domain.App.csproj",
+      "msbuildProject": "../Domain.App/Domain.App.csproj"
+    },
+    "Domain.Base/1.0.0": {
+      "type": "project",
+      "path": "../Domain.Base/Domain.Base.csproj",
+      "msbuildProject": "../Domain.Base/Domain.Base.csproj"
     }
   },
   "projectFileDependencyGroups": {
