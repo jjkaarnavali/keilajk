@@ -2305,6 +2305,33 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "Contracts.DAL.App/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
+          "Domain.App": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Contracts.DAL.App.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.DAL.App.dll": {}
+        }
+      },
+      "Contracts.DAL.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.Domain.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        }
+      },
       "Contracts.Domain.Base/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
@@ -2319,7 +2346,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "Domain": "1.0.0",
+          "Contracts.DAL.App": "1.0.0",
+          "DAL.Base.EF": "1.0.0",
           "Domain.App": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "5.0.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.3"
@@ -2331,14 +2359,18 @@
           "bin/placeholder/DAL.App.EF.dll": {}
         }
       },
-      "Domain/1.0.0": {
+      "DAL.Base.EF/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "5.0.3"
+        },
         "compile": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/DAL.Base.EF.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/DAL.Base.EF.dll": {}
         }
       },
       "Domain.App/1.0.0": {
@@ -7864,6 +7896,16 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
+    "Contracts.DAL.App/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.DAL.App/Contracts.DAL.App.csproj",
+      "msbuildProject": "../Contracts.DAL.App/Contracts.DAL.App.csproj"
+    },
+    "Contracts.DAL.Base/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj",
+      "msbuildProject": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj"
+    },
     "Contracts.Domain.Base/1.0.0": {
       "type": "project",
       "path": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj",
@@ -7874,10 +7916,10 @@
       "path": "../DAL.App.EF/DAL.App.EF.csproj",
       "msbuildProject": "../DAL.App.EF/DAL.App.EF.csproj"
     },
-    "Domain/1.0.0": {
+    "DAL.Base.EF/1.0.0": {
       "type": "project",
-      "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../Domain/Domain.csproj"
+      "path": "../DAL.Base.EF/DAL.Base.EF.csproj",
+      "msbuildProject": "../DAL.Base.EF/DAL.Base.EF.csproj"
     },
     "Domain.App/1.0.0": {
       "type": "project",

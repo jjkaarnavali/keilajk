@@ -1544,6 +1544,33 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "Contracts.DAL.App/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
+          "Domain.App": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Contracts.DAL.App.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.DAL.App.dll": {}
+        }
+      },
+      "Contracts.DAL.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.Domain.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        }
+      },
       "Contracts.Domain.Base/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
@@ -1554,14 +1581,18 @@
           "bin/placeholder/Contracts.Domain.Base.dll": {}
         }
       },
-      "Domain/1.0.0": {
+      "DAL.Base.EF/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "5.0.3"
+        },
         "compile": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/DAL.Base.EF.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Domain.dll": {}
+          "bin/placeholder/DAL.Base.EF.dll": {}
         }
       },
       "Domain.App/1.0.0": {
@@ -5895,15 +5926,25 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
+    "Contracts.DAL.App/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.DAL.App/Contracts.DAL.App.csproj",
+      "msbuildProject": "../Contracts.DAL.App/Contracts.DAL.App.csproj"
+    },
+    "Contracts.DAL.Base/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj",
+      "msbuildProject": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj"
+    },
     "Contracts.Domain.Base/1.0.0": {
       "type": "project",
       "path": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj",
       "msbuildProject": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj"
     },
-    "Domain/1.0.0": {
+    "DAL.Base.EF/1.0.0": {
       "type": "project",
-      "path": "../Domain/Domain.csproj",
-      "msbuildProject": "../Domain/Domain.csproj"
+      "path": "../DAL.Base.EF/DAL.Base.EF.csproj",
+      "msbuildProject": "../DAL.Base.EF/DAL.Base.EF.csproj"
     },
     "Domain.App/1.0.0": {
       "type": "project",
@@ -5918,7 +5959,8 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "Domain >= 1.0.0",
+      "Contracts.DAL.App >= 1.0.0",
+      "DAL.Base.EF >= 1.0.0",
       "Domain.App >= 1.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 5.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.3"
@@ -5949,11 +5991,14 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
+            "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj": {
+              "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj"
+            },
+            "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.Base.EF\\DAL.Base.EF.csproj": {
+              "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.Base.EF\\DAL.Base.EF.csproj"
+            },
             "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj": {
               "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj"
-            },
-            "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain\\Domain.csproj"
             }
           }
         }

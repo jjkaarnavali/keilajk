@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
+using DAL.App.EF.Repositories;
 using Domain.App;
 
 namespace WebApp.Controllers
@@ -13,16 +14,19 @@ namespace WebApp.Controllers
     public class PersonsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly PersonRepository _repository;
 
         public PersonsController(AppDbContext context)
         {
             _context = context;
+            _repository = new PersonRepository(_context);
         }
 
         // GET: Persons
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persons.ToListAsync());
+            var res =  await _repository.GetAllAsync();
+            return View(res);
         }
 
         // GET: Persons/Details/5
@@ -58,8 +62,7 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                person.Id = Guid.NewGuid();
-                _context.Add(person);
+                _repository.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

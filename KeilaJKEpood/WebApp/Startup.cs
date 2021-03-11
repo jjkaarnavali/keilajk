@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.EF;
+using DAL.App.EF.AppDataInit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -69,5 +70,44 @@ namespace WebApp
                 endpoints.MapRazorPages();
             });
         }
+        
+        private static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
+        {
+            using var serviceScope =
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
+
+            if (ctx != null)
+            {
+                if (configuration.GetValue<bool>("AppData:DropDatabase"))
+                {
+                    Console.Write("Drop database");
+                    DataInit.DropDatabase(ctx);
+                    Console.WriteLine(" - done");
+                }
+
+                if (configuration.GetValue<bool>("AppData:Migrate"))
+                {
+                    Console.Write("Migrate database");
+                    DataInit.MigrateDatabase(ctx);
+                    Console.WriteLine(" - done");
+                }
+
+                if (configuration.GetValue<bool>("AppData:SeedIdentity"))
+                {
+                    // TODO
+                }
+
+                if (configuration.GetValue<bool>("AppData:SeedData"))
+                {
+                    Console.Write("Seed database");
+                    DataInit.SeedAppData(ctx);
+                    Console.WriteLine(" - done");
+                }
+            }
+
+            //C# will dispose all the usings here
+        }
+
     }
 }
