@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class DiscountRepository : BaseRepository<Discount>, IDiscountRepository
+    public class DiscountRepository : BaseRepository<Discount, AppDbContext>, IDiscountRepository
     {
-        public DiscountRepository(DbContext dbContext) : base(dbContext)
+        public DiscountRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,10 +27,10 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.DiscountName)
                 .Include(p => p.DiscountPercentage)
-                .Include(p => p.RequiredUserLevel);
+                .Include(p => p.RequiredUserLevel);*/
             var res = await query.ToListAsync();
 
             

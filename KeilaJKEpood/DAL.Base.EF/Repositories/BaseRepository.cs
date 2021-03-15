@@ -7,21 +7,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF.Repositories
 {
-    public class BaseRepository<TEntity> : BaseRepository<TEntity, Guid>, IBaseRepository<TEntity>
+    public class BaseRepository<TEntity, TDbContext> : BaseRepository<TEntity, Guid, TDbContext>, IBaseRepository<TEntity>
         where TEntity : class, IDomainEntityId
+        where TDbContext: DbContext
     {
-        public BaseRepository(DbContext dbContext) : base(dbContext)
+        public BaseRepository(TDbContext dbContext) : base(dbContext)
         {
         }
     }
 
-    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
+    public class BaseRepository<TEntity, TKey, TDbContext> : IBaseRepository<TEntity, TKey>
         where TEntity : class, IDomainEntityId<TKey> 
         where TKey : IEquatable<TKey>
+        where TDbContext: DbContext
     {
-        protected readonly DbContext RepoDbContext;
+        protected readonly TDbContext RepoDbContext;
         protected readonly DbSet<TEntity> RepoDbSet;
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(TDbContext dbContext)
         {
             RepoDbContext = dbContext;
             RepoDbSet = dbContext.Set<TEntity>();
@@ -36,7 +38,7 @@ namespace DAL.Base.EF.Repositories
             return await RepoDbSet.ToListAsync();
         }
 
-        public virtual async Task<TEntity> FirstOrDefaultAsync(TKey id, bool noTracking = true)
+        public virtual async Task<TEntity?> FirstOrDefaultAsync(TKey id, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
             
@@ -63,7 +65,7 @@ namespace DAL.Base.EF.Repositories
             return RepoDbSet.Remove(entity).Entity;        
         }
 
-        public virtual async Task<TEntity> Remove(TKey id)
+        public virtual async Task<TEntity> RemoveAsync(TKey id)
         {
             var entity = await FirstOrDefaultAsync(id);
             return Remove(entity);
@@ -75,3 +77,4 @@ namespace DAL.Base.EF.Repositories
         }
     }
 }
+

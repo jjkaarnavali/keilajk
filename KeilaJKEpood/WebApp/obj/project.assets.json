@@ -2359,11 +2359,25 @@
           "bin/placeholder/DAL.App.EF.dll": {}
         }
       },
+      "DAL.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DAL.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.Base.dll": {}
+        }
+      },
       "DAL.Base.EF/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "Contracts.DAL.Base": "1.0.0",
+          "DAL.Base": "1.0.0",
           "Microsoft.EntityFrameworkCore": "5.0.3"
         },
         "compile": {
@@ -7915,6 +7929,11 @@
       "type": "project",
       "path": "../DAL.App.EF/DAL.App.EF.csproj",
       "msbuildProject": "../DAL.App.EF/DAL.App.EF.csproj"
+    },
+    "DAL.Base/1.0.0": {
+      "type": "project",
+      "path": "../DAL.Base/DAL.Base.csproj",
+      "msbuildProject": "../DAL.Base/DAL.Base.csproj"
     },
     "DAL.Base.EF/1.0.0": {
       "type": "project",

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ProductTypeRepository : BaseRepository<ProductType>, IProductTypeRepository
+    public class ProductTypeRepository : BaseRepository<ProductType, AppDbContext>, IProductTypeRepository
     {
-        public ProductTypeRepository(DbContext dbContext) : base(dbContext)
+        public ProductTypeRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,8 +27,8 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
-                .Include(p => p.TypeName);
+            /*query = query
+                .Include(p => p.TypeName);*/
             var res = await query.ToListAsync();
 
             

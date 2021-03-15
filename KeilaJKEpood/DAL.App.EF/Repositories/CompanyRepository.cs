@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class CompanyRepository : BaseRepository<Company>, ICompanyRepository
+    public class CompanyRepository : BaseRepository<Company, AppDbContext>, ICompanyRepository
     {
-        public CompanyRepository(DbContext dbContext) : base(dbContext)
+        public CompanyRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,11 +27,11 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.Email)
                 .Include(p => p.Phone)
                 .Include(p => p.CompanyName)
-                .Include(p => p.RegistrationCode);
+                .Include(p => p.RegistrationCode);*/
             var res = await query.ToListAsync();
 
             

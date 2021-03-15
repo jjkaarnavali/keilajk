@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
+    public class PaymentRepository : BaseRepository<Payment, AppDbContext>, IPaymentRepository
     {
-        public PaymentRepository(DbContext dbContext) : base(dbContext)
+        public PaymentRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,11 +27,11 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.BillId)
                 .Include(p => p.PaymentTime)
                 .Include(p => p.PersonId)
-                .Include(p => p.PaymentTypeId);
+                .Include(p => p.PaymentTypeId);*/
             var res = await query.ToListAsync();
 
             

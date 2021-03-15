@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class WarehouseRepository : BaseRepository<Warehouse>, IWarehouseRepository
+    public class WarehouseRepository : BaseRepository<Warehouse, AppDbContext>, IWarehouseRepository
     {
-        public WarehouseRepository(DbContext dbContext) : base(dbContext)
+        public WarehouseRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,11 +27,11 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.Address)
                 .Include(p => p.Email)
                 .Include(p => p.Phone)
-                .Include(p => p.WarehouseCode);
+                .Include(p => p.WarehouseCode);*/
             var res = await query.ToListAsync();
 
             

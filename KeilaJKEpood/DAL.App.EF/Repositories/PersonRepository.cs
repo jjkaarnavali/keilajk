@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class PersonRepository : BaseRepository<Person>, IPersonRepository
+    public class PersonRepository : BaseRepository<Person, AppDbContext>, IPersonRepository
     {
-        public PersonRepository(DbContext dbContext) : base(dbContext)
+        public PersonRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -31,10 +31,10 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.FirstName)
                 .Include(p => p.LastName)
-                .Include(p => p.PersonsIdCode);
+                .Include(p => p.PersonsIdCode);*/
             var res = await query.ToListAsync();
 
             

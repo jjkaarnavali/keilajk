@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ProductInOrderRepository : BaseRepository<ProductInOrder>, IProductInOrderRepository
+    public class ProductInOrderRepository : BaseRepository<ProductInOrder, AppDbContext>, IProductInOrderRepository
     {
-        public ProductInOrderRepository(DbContext dbContext) : base(dbContext)
+        public ProductInOrderRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,10 +27,10 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.OrderId)
                 .Include(p => p.ProductAmount)
-                .Include(p => p.ProductId);
+                .Include(p => p.ProductId);*/
             var res = await query.ToListAsync();
 
             

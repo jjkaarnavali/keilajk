@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class OrderRepository : BaseRepository<Order>, IOrderRepository
+    public class OrderRepository : BaseRepository<Order, AppDbContext>, IOrderRepository
     {
-        public OrderRepository(DbContext dbContext) : base(dbContext)
+        public OrderRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,8 +27,8 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
-                .Include(p => p.UserId);
+            /*query = query
+                .Include(p => p.UserId);*/
             var res = await query.ToListAsync();
 
             

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class LineOnBillRepository : BaseRepository<LineOnBill>, ILineOnBillRepository
+    public class LineOnBillRepository : BaseRepository<LineOnBill, AppDbContext>, ILineOnBillRepository
     {
-        public LineOnBillRepository(DbContext dbContext) : base(dbContext)
+        public LineOnBillRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -27,7 +27,7 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            query = query
+            /*query = query
                 .Include(p => p.Amount)
                 .Include(p => p.BillId)
                 .Include(p => p.PriceId)
@@ -35,7 +35,7 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.TaxPercentage)
                 .Include(p => p.PriceToPay)
                 .Include(p => p.PriceWithoutTax)
-                .Include(p => p.SumOfTax);
+                .Include(p => p.SumOfTax);*/
             var res = await query.ToListAsync();
 
             

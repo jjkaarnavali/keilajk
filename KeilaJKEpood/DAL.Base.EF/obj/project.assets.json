@@ -183,6 +183,19 @@
         "runtime": {
           "bin/placeholder/Contracts.Domain.Base.dll": {}
         }
+      },
+      "DAL.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DAL.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.Base.dll": {}
+        }
       }
     }
   },
@@ -552,11 +565,17 @@
       "type": "project",
       "path": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj",
       "msbuildProject": "../Contracts.Domain.Base/Contracts.Domain.Base.csproj"
+    },
+    "DAL.Base/1.0.0": {
+      "type": "project",
+      "path": "../DAL.Base/DAL.Base.csproj",
+      "msbuildProject": "../DAL.Base/DAL.Base.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "Contracts.DAL.Base >= 1.0.0",
+      "DAL.Base >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 5.0.3"
     ]
   },
@@ -587,6 +606,9 @@
           "projectReferences": {
             "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
               "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+            },
+            "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.Base\\DAL.Base.csproj": {
+              "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.Base\\DAL.Base.csproj"
             }
           }
         }
