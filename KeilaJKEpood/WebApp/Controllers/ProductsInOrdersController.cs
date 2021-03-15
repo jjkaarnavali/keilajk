@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class ProductsInOrdersController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IProductInOrderRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductsInOrdersController(AppDbContext context)
+        public ProductsInOrdersController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new ProductInOrderRepository(_context);
+            _uow = uow;
         }
 
         // GET: ProductsInOrders
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.ProductsInOrders.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _context.ProductsInOrders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductId,OrderId,ProductAmount,From,Until")] ProductInOrder productInOrder)
+        public async Task<IActionResult> Create(ProductInOrder productInOrder)
         {
             if (ModelState.IsValid)
             {
-                productInOrder.Id = Guid.NewGuid();
-                _context.Add(productInOrder);
-                await _context.SaveChangesAsync();
+                _uow.ProductsInOrders.Add(productInOrder);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(productInOrder);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _context.ProductsInOrders.FindAsync(id);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ProductId,OrderId,ProductAmount,From,Until")] ProductInOrder productInOrder)
+        public async Task<IActionResult> Edit(Guid id, ProductInOrder productInOrder)
         {
             if (id != productInOrder.Id)
             {
@@ -103,19 +102,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(productInOrder);
-                    await _context.SaveChangesAsync();
+                    _uow.ProductsInOrders.Update(productInOrder);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductInOrderExists(productInOrder.Id))
+                    if (!await ProductInOrderExists(productInOrder.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _context.ProductsInOrders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -145,15 +140,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var productInOrder = await _context.ProductsInOrders.FindAsync(id);
-            _context.ProductsInOrders.Remove(productInOrder);
-            await _context.SaveChangesAsync();
+            await _uow.ProductsInOrders.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductInOrderExists(Guid id)
+        private async Task<bool> ProductInOrderExists(Guid id)
         {
-            return _context.ProductsInOrders.Any(e => e.Id == id);
+            return await _uow.ProductsInOrders.ExistsAsync(id);
         }
     }
 }

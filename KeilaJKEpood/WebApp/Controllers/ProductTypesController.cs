@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class ProductTypesController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IProductTypeRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductTypesController(AppDbContext context)
+        public ProductTypesController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new ProductTypeRepository(_context);
+            _uow = uow;
         }
 
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.ProductTypes.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productType = await _context.ProductTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id.Value);
             if (productType == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TypeName")] ProductType productType)
+        public async Task<IActionResult> Create(ProductType productType)
         {
             if (ModelState.IsValid)
             {
-                productType.Id = Guid.NewGuid();
-                _context.Add(productType);
-                await _context.SaveChangesAsync();
+                _uow.ProductTypes.Add(productType);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(productType);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productType = await _context.ProductTypes.FindAsync(id);
+            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id.Value);
             if (productType == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,TypeName")] ProductType productType)
+        public async Task<IActionResult> Edit(Guid id, ProductType productType)
         {
             if (id != productType.Id)
             {
@@ -103,19 +102,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(productType);
-                    await _context.SaveChangesAsync();
+                    _uow.ProductTypes.Update(productType);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductTypeExists(productType.Id))
+                    if (!await ProductTypeExists(productType.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productType = await _context.ProductTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id.Value);
             if (productType == null)
             {
                 return NotFound();
@@ -145,15 +140,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var productType = await _context.ProductTypes.FindAsync(id);
-            _context.ProductTypes.Remove(productType);
-            await _context.SaveChangesAsync();
+            await _uow.ProductTypes.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductTypeExists(Guid id)
+        private async Task<bool> ProductTypeExists(Guid id)
         {
-            return _context.ProductTypes.Any(e => e.Id == id);
+            return await _uow.ProductTypes.ExistsAsync(id);
         }
     }
 }

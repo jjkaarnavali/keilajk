@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,20 @@ namespace WebApp.Controllers
 {
     public class BillController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IBillRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public BillController(AppDbContext context)
+        public BillController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new BillRepository(_context);
+            _uow = uow;
         }
 
         // GET: Bill
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Bills.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
+            
             return View(res);
         }
 
@@ -38,8 +40,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _context.Bills
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
             if (bill == null)
             {
                 return NotFound();
@@ -49,7 +50,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Bill/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -59,13 +60,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PersonId,UserId,OrderId,BillNr,CreationTime,PriceWithoutTax,SumOfTax,PriceToPay")] Bill bill)
+        public async Task<IActionResult> Create(Bill bill)
         {
             if (ModelState.IsValid)
             {
-                bill.Id = Guid.NewGuid();
-                _context.Add(bill);
-                await _context.SaveChangesAsync();
+                _uow.Bills.Add(bill);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(bill);
@@ -79,7 +79,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _context.Bills.FindAsync(id);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
             if (bill == null)
             {
                 return NotFound();
@@ -92,7 +92,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,PersonId,UserId,OrderId,BillNr,CreationTime,PriceWithoutTax,SumOfTax,PriceToPay")] Bill bill)
+        public async Task<IActionResult> Edit(Guid id, Bill bill)
         {
             if (id != bill.Id)
             {
@@ -103,19 +103,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(bill);
-                    await _context.SaveChangesAsync();
+                    _uow.Bills.Update(bill);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BillExists(bill.Id))
+                    if (!await BillExists(bill.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                   
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +127,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _context.Bills
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
+                
             if (bill == null)
             {
                 return NotFound();
@@ -145,15 +142,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var bill = await _context.Bills.FindAsync(id);
-            _context.Bills.Remove(bill);
-            await _context.SaveChangesAsync();
+            await _uow.Bills.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BillExists(Guid id)
+        private async Task<bool> BillExists(Guid id)
         {
-            return _context.Bills.Any(e => e.Id == id);
+            return await _uow.Bills.ExistsAsync(id);
         }
     }
 }

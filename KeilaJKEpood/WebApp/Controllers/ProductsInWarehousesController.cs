@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class ProductsInWarehousesController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IProductInWarehouseRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductsInWarehousesController(AppDbContext context)
+        public ProductsInWarehousesController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new ProductInWarehouseRepository(_context);
+            _uow = uow;
         }
 
         // GET: ProductsInWarehouses
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.ProductsInWarehouses.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _context.ProductsInWarehouses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,WarehouseId,ProductAmount,From,Until,Id")] ProductInWarehouse productInWarehouse)
+        public async Task<IActionResult> Create(ProductInWarehouse productInWarehouse)
         {
             if (ModelState.IsValid)
             {
-                productInWarehouse.Id = Guid.NewGuid();
-                _context.Add(productInWarehouse);
-                await _context.SaveChangesAsync();
+                _uow.ProductsInWarehouses.Add(productInWarehouse);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(productInWarehouse);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ProductId,WarehouseId,ProductAmount,From,Until,Id")] ProductInWarehouse productInWarehouse)
+        public async Task<IActionResult> Edit(Guid id, ProductInWarehouse productInWarehouse)
         {
             if (id != productInWarehouse.Id)
             {
@@ -103,19 +102,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(productInWarehouse);
-                    await _context.SaveChangesAsync();
+                    _uow.ProductsInWarehouses.Update(productInWarehouse);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductInWarehouseExists(productInWarehouse.Id))
+                    if (!await ProductInWarehouseExists(productInWarehouse.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _context.ProductsInWarehouses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -145,15 +140,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
-            _context.ProductsInWarehouses.Remove(productInWarehouse);
-            await _context.SaveChangesAsync();
+            await _uow.ProductsInWarehouses.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductInWarehouseExists(Guid id)
+        private async Task<bool> ProductInWarehouseExists(Guid id)
         {
-            return _context.ProductsInWarehouses.Any(e => e.Id == id);
+            return await _uow.ProductsInWarehouses.ExistsAsync(id);
         }
     }
 }

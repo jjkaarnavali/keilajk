@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class CompaniesController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly ICompanyRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public CompaniesController(AppDbContext context)
+        public CompaniesController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new CompanyRepository(_context);
+            _uow = uow;
         }
 
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Companies.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyName,RegistrationCode,Phone,Email,From,Until")] Company company)
+        public async Task<IActionResult> Create(Company company)
         {
             if (ModelState.IsValid)
             {
-                company.Id = Guid.NewGuid();
-                _context.Add(company);
-                await _context.SaveChangesAsync();
+                _uow.Companies.Add(company);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyName,RegistrationCode,Phone,Email,From,Until")] Company company)
+        public async Task<IActionResult> Edit(Guid id,Company company)
         {
             if (id != company.Id)
             {
@@ -103,12 +102,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(company);
-                    await _context.SaveChangesAsync();
+                    _uow.Companies.Update(company);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CompanyExists(company.Id))
+                    if (!await CompanyExists(company.Id))
                     {
                         return NotFound();
                     }
@@ -130,8 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -145,15 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
+            await _uow.Bills.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CompanyExists(Guid id)
+        private async Task<bool> CompanyExists(Guid id)
         {
-            return _context.Companies.Any(e => e.Id == id);
+            return await _uow.Companies.ExistsAsync(id);
         }
     }
 }

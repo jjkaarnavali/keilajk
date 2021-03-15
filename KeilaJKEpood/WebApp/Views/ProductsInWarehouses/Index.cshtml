@@ -1,10 +1,10 @@
-@model IEnumerable<Domain.App.Payment>
+@model IEnumerable<Domain.App.ProductInWarehouse>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Payments</h1>
+<h1>ProductsInWarehouses</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,16 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentTypeId)
+                @Html.DisplayNameFor(model => model.ProductId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BillId)
+                @Html.DisplayNameFor(model => model.WarehouseId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PersonId)
+                @Html.DisplayNameFor(model => model.ProductAmount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentTime)
+                @Html.DisplayNameFor(model => model.From)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Until)
             </th>
             <th></th>
         </tr>
@@ -31,16 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PaymentTypeId)
+                @Html.DisplayFor(modelItem => item.ProductId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BillId)
+                @Html.DisplayFor(modelItem => item.WarehouseId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PersonId)
+                @Html.DisplayFor(modelItem => item.ProductAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PaymentTime)
+                @Html.DisplayFor(modelItem => item.From)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Until)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

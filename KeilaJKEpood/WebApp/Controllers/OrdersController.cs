@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IOrderRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public OrdersController(AppDbContext context)
+        public OrdersController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new OrderRepository(_context);
+            _uow = uow;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Orders.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,From,Until")] Order order)
+        public async Task<IActionResult> Create(Order order)
         {
             if (ModelState.IsValid)
             {
-                order.Id = Guid.NewGuid();
-                _context.Add(order);
-                await _context.SaveChangesAsync();
+                _uow.Orders.Add(order);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(order);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,UserId,From,Until")] Order order)
+        public async Task<IActionResult> Edit(Guid id, Order order)
         {
             if (id != order.Id)
             {
@@ -103,19 +102,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    _uow.Orders.Update(order);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!await OrderExists(order.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -145,15 +140,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            await _uow.Orders.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderExists(Guid id)
+        private async Task<bool> OrderExists(Guid id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return await _uow.Orders.ExistsAsync(id);
         }
     }
 }

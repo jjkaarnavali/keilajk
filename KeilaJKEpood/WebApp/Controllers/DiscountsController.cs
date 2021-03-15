@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class DiscountsController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IDiscountRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public DiscountsController(AppDbContext context)
+        public DiscountsController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new DiscountRepository(_context);
+            _uow = uow;
         }
 
         // GET: Discounts
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Discounts.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _context.Discounts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RequiredUserLevel,DiscountPercentage,DiscountName,From,Until")] Discount discount)
+        public async Task<IActionResult> Create(Discount discount)
         {
             if (ModelState.IsValid)
             {
-                discount.Id = Guid.NewGuid();
-                _context.Add(discount);
-                await _context.SaveChangesAsync();
+                _uow.Discounts.Add(discount);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(discount);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,RequiredUserLevel,DiscountPercentage,DiscountName,From,Until")] Discount discount)
+        public async Task<IActionResult> Edit(Guid id, Discount discount)
         {
             if (id != discount.Id)
             {
@@ -103,12 +102,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(discount);
-                    await _context.SaveChangesAsync();
+                    _uow.Discounts.Update(discount);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DiscountExists(discount.Id))
+                    if (!await DiscountExists(discount.Id))
                     {
                         return NotFound();
                     }
@@ -130,8 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _context.Discounts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -145,15 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-            _context.Discounts.Remove(discount);
-            await _context.SaveChangesAsync();
+            await _uow.Bills.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DiscountExists(Guid id)
+        private async Task<bool> DiscountExists(Guid id)
         {
-            return _context.Discounts.Any(e => e.Id == id);
+            return await _uow.Discounts.ExistsAsync(id);
         }
     }
 }

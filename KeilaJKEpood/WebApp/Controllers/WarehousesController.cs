@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class WarehousesController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IWarehouseRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public WarehousesController(AppDbContext context)
+        public WarehousesController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new WarehouseRepository(_context);
+            _uow = uow;
         }
 
         // GET: Warehouses
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Warehouses.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address,Phone,Email,WarehouseCode,From,Until")] Warehouse warehouse)
+        public async Task<IActionResult> Create(Warehouse warehouse)
         {
             if (ModelState.IsValid)
             {
-                warehouse.Id = Guid.NewGuid();
-                _context.Add(warehouse);
-                await _context.SaveChangesAsync();
+                _uow.Warehouses.Add(warehouse);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(warehouse);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses.FindAsync(id);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Address,Phone,Email,WarehouseCode,From,Until")] Warehouse warehouse)
+        public async Task<IActionResult> Edit(Guid id, Warehouse warehouse)
         {
             if (id != warehouse.Id)
             {
@@ -103,18 +102,14 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(warehouse);
-                    await _context.SaveChangesAsync();
+                    _uow.Warehouses.Update(warehouse);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WarehouseExists(warehouse.Id))
+                    if (!await WarehouseExists(warehouse.Id))
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -130,8 +125,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -145,15 +139,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var warehouse = await _context.Warehouses.FindAsync(id);
-            _context.Warehouses.Remove(warehouse);
-            await _context.SaveChangesAsync();
+            await _uow.Warehouses.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool WarehouseExists(Guid id)
+        private async Task<bool> WarehouseExists(Guid id)
         {
-            return _context.Warehouses.Any(e => e.Id == id);
+            return await _uow.Warehouses.ExistsAsync(id);
         }
     }
 }

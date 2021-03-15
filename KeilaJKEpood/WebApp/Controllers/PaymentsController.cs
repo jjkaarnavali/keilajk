@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class PaymentsController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IPaymentRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public PaymentsController(AppDbContext context)
+        public PaymentsController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new PaymentRepository(_context);
+            _uow = uow;
         }
 
         // GET: Payments
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.Payments.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payments
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var payment = await _uow.Payments.FirstOrDefaultAsync(id.Value);
             if (payment == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PaymentTypeId,BillId,PersonId,PaymentTime")] Payment payment)
+        public async Task<IActionResult> Create(Payment payment)
         {
             if (ModelState.IsValid)
             {
-                payment.Id = Guid.NewGuid();
-                _context.Add(payment);
-                await _context.SaveChangesAsync();
+                _uow.Payments.Add(payment);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(payment);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payments.FindAsync(id);
+            var payment = await _uow.Payments.FirstOrDefaultAsync(id.Value);
             if (payment == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,PaymentTypeId,BillId,PersonId,PaymentTime")] Payment payment)
+        public async Task<IActionResult> Edit(Guid id, Payment payment)
         {
             if (id != payment.Id)
             {
@@ -103,19 +102,16 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(payment);
-                    await _context.SaveChangesAsync();
+                    _uow.Payments.Update(payment);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PaymentExists(payment.Id))
+                    if (!await PaymentExists(payment.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -130,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payments
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var payment = await _uow.Payments.FirstOrDefaultAsync(id.Value);
             if (payment == null)
             {
                 return NotFound();
@@ -145,15 +140,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var payment = await _context.Payments.FindAsync(id);
-            _context.Payments.Remove(payment);
-            await _context.SaveChangesAsync();
+            await _uow.Payments.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PaymentExists(Guid id)
+        private async Task<bool> PaymentExists(Guid id)
         {
-            return _context.Payments.Any(e => e.Id == id);
+            return await _uow.Payments.ExistsAsync(id);
         }
     }
 }

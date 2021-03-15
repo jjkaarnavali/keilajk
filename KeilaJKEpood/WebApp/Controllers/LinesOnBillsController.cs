@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,19 +15,19 @@ namespace WebApp.Controllers
 {
     public class LinesOnBillsController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly ILineOnBillRepository _repository;
+        private readonly IAppUnitOfWork _uow;
 
-        public LinesOnBillsController(AppDbContext context)
+        public LinesOnBillsController(IAppUnitOfWork uow)
         {
-            _context = context;
-            _repository = new LineOnBillRepository(_context);
+            _uow = uow;
         }
 
         // GET: LinesOnBills
         public async Task<IActionResult> Index()
         {
-            var res =  await _repository.GetAllAsync();
+            var res =  await _uow.LinesOnBills.GetAllAsync();
+
+            await _uow.SaveChangesAsync();
             return View(res);
         }
 
@@ -38,8 +39,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _context.LinesOnBills
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -59,13 +59,12 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BillId,PriceId,ProductId,Amount,TaxPercentage,PriceWithoutTax,SumOfTax,PriceToPay")] LineOnBill lineOnBill)
+        public async Task<IActionResult> Create(LineOnBill lineOnBill)
         {
             if (ModelState.IsValid)
             {
-                lineOnBill.Id = Guid.NewGuid();
-                _context.Add(lineOnBill);
-                await _context.SaveChangesAsync();
+                _uow.LinesOnBills.Add(lineOnBill);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(lineOnBill);
@@ -79,7 +78,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _context.LinesOnBills.FindAsync(id);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -92,7 +91,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,BillId,PriceId,ProductId,Amount,TaxPercentage,PriceWithoutTax,SumOfTax,PriceToPay")] LineOnBill lineOnBill)
+        public async Task<IActionResult> Edit(Guid id, LineOnBill lineOnBill)
         {
             if (id != lineOnBill.Id)
             {
@@ -103,12 +102,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(lineOnBill);
-                    await _context.SaveChangesAsync();
+                    _uow.LinesOnBills.Update(lineOnBill);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LineOnBillExists(lineOnBill.Id))
+                    if (!await LineOnBillExists(lineOnBill.Id))
                     {
                         return NotFound();
                     }
@@ -130,8 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _context.LinesOnBills
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -145,15 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var lineOnBill = await _context.LinesOnBills.FindAsync(id);
-            _context.LinesOnBills.Remove(lineOnBill);
-            await _context.SaveChangesAsync();
+            await _uow.LinesOnBills.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LineOnBillExists(Guid id)
+        private async Task<bool> LineOnBillExists(Guid id)
         {
-            return _context.LinesOnBills.Any(e => e.Id == id);
+            return await _uow.LinesOnBills.ExistsAsync(id);
         }
     }
 }
