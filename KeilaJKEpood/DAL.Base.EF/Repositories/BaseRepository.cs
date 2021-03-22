@@ -68,6 +68,7 @@ namespace DAL.Base.EF.Repositories
         public virtual async Task<TEntity> RemoveAsync(TKey id)
         {
             var entity = await FirstOrDefaultAsync(id);
+            if (entity != null) throw new NullReferenceException($"Entity with id {id} not found.");
             return Remove(entity);
         }
 

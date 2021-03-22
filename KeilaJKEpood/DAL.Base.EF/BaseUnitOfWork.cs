@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Contracts.DAL.Base;
 using DAL.Base;
+using System;
+using System.Collections.Generic;
+
 
 namespace DAL.Base.EF
 {

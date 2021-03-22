@@ -1,11 +1,12 @@
 ﻿using System;
 using Domain.App;
+using Domain.App.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         
         public DbSet<Person> Persons { get; set; } = default!;
