@@ -187,5 +187,51 @@ namespace WebApp.Areas.Admin.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }
+        public async Task<IActionResult> Block(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            await _userManager.SetLockoutEnabledAsync(appUser, true);
+            await _userManager.SetLockoutEndDateAsync(appUser, DateTimeOffset.MaxValue);
+            
+
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> UnBlock(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            await _userManager.SetLockoutEnabledAsync(appUser, true);
+            await _userManager.SetLockoutEndDateAsync(appUser, DateTimeOffset.MinValue);
+            
+
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> BlockOrUnblock(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            
+            
+
+            return View(appUser);
+        }
     }
+    
+    
 }
