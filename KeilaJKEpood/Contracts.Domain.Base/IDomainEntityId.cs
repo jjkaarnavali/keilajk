@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace Contracts.Domain.Base
 {
@@ -8,8 +9,10 @@ namespace Contracts.Domain.Base
     }
 
     public interface IDomainEntityId<TKey>
-        where TKey: IEquatable<TKey>
+        where TKey : IEquatable<TKey>
+
     {
-        TKey Id { get; set; }
+    TKey Id { get; set; }
+    
     }
 }

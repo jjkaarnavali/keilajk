@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -28,7 +29,7 @@ namespace WebApp.Controllers
         // GET: Bill
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Bills.GetAllAsync();
+            var res =  await _uow.Bills.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             
@@ -43,7 +44,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (bill == null)
             {
                 return NotFound();
@@ -82,7 +83,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (bill == null)
             {
                 return NotFound();
@@ -130,7 +131,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
                 
             if (bill == null)
             {
@@ -145,14 +146,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Bills.RemoveAsync(id);
+            await _uow.Bills.RemoveAsync(id,User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> BillExists(Guid id)
         {
-            return await _uow.Bills.ExistsAsync(id);
+            return await _uow.Bills.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

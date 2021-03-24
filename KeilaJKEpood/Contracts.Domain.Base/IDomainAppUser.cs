@@ -13,7 +13,9 @@ namespace Contracts.Domain.Base
     public interface IDomainAppUser<TKey, TAppUser>
         where TKey: IEquatable<TKey>
         where TAppUser: IdentityUser<TKey>
+        
     {
         TAppUser? AppUser { get; set; }
+        
     }
 }

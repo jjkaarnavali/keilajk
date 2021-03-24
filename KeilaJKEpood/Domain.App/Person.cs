@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Contracts.Domain.Base;
 using Domain.App.Identity;
 using Domain.Base;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.App
 {
-    public class Person : DomainEntityId
+    public class Person : DomainEntityId, IDomainAppUserId, IDomainAppUser<AppUser>
     {
         
         

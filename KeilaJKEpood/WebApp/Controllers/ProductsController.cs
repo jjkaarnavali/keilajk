@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -28,7 +29,7 @@ namespace WebApp.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Products.GetAllAsync();
+            var res =  await _uow.Products.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -42,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value);
+            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -81,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value);
+            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -129,7 +130,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value);
+            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -143,14 +144,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Products.RemoveAsync(id);
+            await _uow.Products.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductExists(Guid id)
         {
-            return await _uow.Products.ExistsAsync(id);
+            return await _uow.Products.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

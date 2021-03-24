@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         // GET: Warehouses
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Warehouses.GetAllAsync();
+            var res =  await _uow.Warehouses.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -127,7 +128,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (warehouse == null)
             {
                 return NotFound();
@@ -141,14 +142,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Warehouses.RemoveAsync(id);
+            await _uow.Warehouses.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> WarehouseExists(Guid id)
         {
-            return await _uow.Warehouses.ExistsAsync(id);
+            return await _uow.Warehouses.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

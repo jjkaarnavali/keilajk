@@ -11,7 +11,7 @@ namespace Contracts.DAL.Base.Repositories
         // common
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
-        TEntity Remove(TEntity entity);
+        TEntity Remove(TEntity entity, TKey? userId);
         
     }
 }

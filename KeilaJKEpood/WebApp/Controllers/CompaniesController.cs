@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,8 @@ namespace WebApp.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Companies.GetAllAsync();
+            
+            var res =  await _uow.Companies.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -80,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -131,7 +133,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value);
+            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -145,14 +147,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Bills.RemoveAsync(id);
+            await _uow.Bills.RemoveAsync(id,  User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> CompanyExists(Guid id)
         {
-            return await _uow.Companies.ExistsAsync(id);
+            return await _uow.Companies.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

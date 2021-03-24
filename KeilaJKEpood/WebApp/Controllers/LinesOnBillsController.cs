@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         // GET: LinesOnBills
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.LinesOnBills.GetAllAsync();
+            var res =  await _uow.LinesOnBills.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -131,7 +132,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (lineOnBill == null)
             {
                 return NotFound();
@@ -145,14 +146,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.LinesOnBills.RemoveAsync(id);
+            await _uow.LinesOnBills.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> LineOnBillExists(Guid id)
         {
-            return await _uow.LinesOnBills.ExistsAsync(id);
+            return await _uow.LinesOnBills.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

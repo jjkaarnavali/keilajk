@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         // GET: ProductsInOrders
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.ProductsInOrders.GetAllAsync();
+            var res =  await _uow.ProductsInOrders.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -128,7 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -142,14 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.ProductsInOrders.RemoveAsync(id);
+            await _uow.ProductsInOrders.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductInOrderExists(Guid id)
         {
-            return await _uow.ProductsInOrders.ExistsAsync(id);
+            return await _uow.ProductsInOrders.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         // GET: Discounts
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Discounts.GetAllAsync();
+            var res =  await _uow.Discounts.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -131,7 +132,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (discount == null)
             {
                 return NotFound();
@@ -145,14 +146,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Bills.RemoveAsync(id);
+            await _uow.Bills.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> DiscountExists(Guid id)
         {
-            return await _uow.Discounts.ExistsAsync(id);
+            return await _uow.Discounts.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

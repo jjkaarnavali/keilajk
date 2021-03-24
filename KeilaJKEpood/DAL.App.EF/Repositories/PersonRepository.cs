@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
@@ -14,15 +15,15 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public async Task DeleteAllByNameAsync(string name)
+        public async Task DeleteAllByNameAsync(string name, Guid userId)
         {
             foreach (var person in await RepoDbSet.Where(x => x.FirstName == name).ToListAsync())
             {
-                Remove(person);
+                Remove(person, userId);
             }
         }
         
-        public override async Task<IEnumerable<Person>> GetAllAsync(bool noTracking = true)
+        public override async Task<IEnumerable<Person>> GetAllAsync(Guid userId, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
 
@@ -31,16 +32,30 @@ namespace DAL.App.EF.Repositories
                 query = query.AsNoTracking();
             }
 
-            /*query = query
-                .Include(p => p.FirstName)
-                .Include(p => p.LastName)
-                .Include(p => p.PersonsIdCode);*/
+            query = query.Where(c => c.AppUserId == userId);
             var res = await query.ToListAsync();
 
             
             
             return res;
         }
+        
+        public override async Task<Person?> FirstOrDefaultAsync(Guid id, Guid userId, bool noTracking = true)
+        {
+            var query = RepoDbSet.AsQueryable();
+
+            if (noTracking)
+            {
+                query = query.AsNoTracking();
+            }
+            
+            
+            
+            var res = await query.FirstOrDefaultAsync(m => m.Id == id && m.AppUserId == userId);
+
+            return res;
+        }
+
 
     }
 }

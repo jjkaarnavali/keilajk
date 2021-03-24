@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         // GET: ProductsInWarehouses
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.ProductsInWarehouses.GetAllAsync();
+            var res =  await _uow.ProductsInWarehouses.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -128,7 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -142,14 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.ProductsInWarehouses.RemoveAsync(id);
+            await _uow.ProductsInWarehouses.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductInWarehouseExists(Guid id)
         {
-            return await _uow.ProductsInWarehouses.ExistsAsync(id);
+            return await _uow.ProductsInWarehouses.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

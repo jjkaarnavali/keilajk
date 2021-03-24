@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using DAL.Base.EF.Repositories;
@@ -18,7 +19,7 @@ namespace DAL.App.EF.Repositories
             throw new System.NotImplementedException();
         }
         
-        public override async Task<IEnumerable<Discount>> GetAllAsync(bool noTracking = true)
+        public override async Task<IEnumerable<Discount>> GetAllAsync(Guid userId, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
 

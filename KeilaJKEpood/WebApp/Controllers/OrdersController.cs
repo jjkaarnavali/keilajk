@@ -11,6 +11,7 @@ using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -28,7 +29,7 @@ namespace WebApp.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Orders.GetAllAsync();
+            var res =  await _uow.Orders.GetAllAsync(User.GetUserId()!.Value);
 
             await _uow.SaveChangesAsync();
             return View(res);
@@ -42,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (order == null)
             {
                 return NotFound();
@@ -81,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (order == null)
             {
                 return NotFound();
@@ -129,7 +130,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value);
+            var order = await _uow.Orders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (order == null)
             {
                 return NotFound();
@@ -143,14 +144,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Orders.RemoveAsync(id);
+            await _uow.Orders.RemoveAsync(id, User.GetUserId()!.Value);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> OrderExists(Guid id)
         {
-            return await _uow.Orders.ExistsAsync(id);
+            return await _uow.Orders.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }
