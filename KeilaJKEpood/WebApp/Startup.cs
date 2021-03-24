@@ -7,6 +7,7 @@ using Contracts.DAL.App.Repositories;
 using DAL.App.EF;
 using DAL.App.EF.AppDataInit;
 using DAL.App.EF.Repositories;
+using Domain.App;
 using Domain.App.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,10 +15,11 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApp.Areas.Admin.Controllers;
+using WebApp.Helpers;
 
 namespace WebApp
 {
@@ -34,18 +36,26 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDatabaseDeveloperPageExceptionFilter();
+                options
+                    .UseSqlServer(
+                        Configuration.GetConnectionString("DefaultConnection"))
+                    .EnableDetailedErrors()
+                    .EnableSensitiveDataLogging()
+            );
+
 
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+
+            
+
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
                 .AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
             
             services.AddControllersWithViews();
         }
@@ -53,6 +63,9 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            SetupAppData(app, Configuration);
+            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,6 +77,7 @@ namespace WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -76,18 +90,21 @@ namespace WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
-        
+
         private static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
         {
             using var serviceScope =
                 app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
-
             if (ctx != null)
             {
                 if (configuration.GetValue<bool>("AppData:DropDatabase"))
@@ -106,7 +123,17 @@ namespace WebApp
 
                 if (configuration.GetValue<bool>("AppData:SeedIdentity"))
                 {
-                    // TODO
+                    using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+                    using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
+
+                    if (userManager != null && roleManager != null)
+                    {
+                        DataInit.SeedIdentity(userManager, roleManager);
+                    }
+                    else
+                    {
+                        Console.Write($"No user manager {(userManager == null ? "null" : "ok")} or role manager {(roleManager == null ? "null" : "ok")}!" );
+                    }
                 }
 
                 if (configuration.GetValue<bool>("AppData:SeedData"))
@@ -119,6 +146,5 @@ namespace WebApp
 
             //C# will dispose all the usings here
         }
-
     }
 }
