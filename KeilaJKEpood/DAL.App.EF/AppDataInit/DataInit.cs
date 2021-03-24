@@ -58,6 +58,7 @@ namespace DAL.App.EF.AppDataInit
 
             result = userManager.AddToRoleAsync(user, "Admin").Result;
             
+            
             if (!result.Succeeded)
             {
                 foreach (var identityError in result.Errors)

@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Domain.App.Identity
+@model System.Collections.Generic.List<Domain.App.Identity.AppRole>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h1>Roles</h1>
+@for (int i = 0; i < Model.Count; i++)
+{
+    <div>
+        <h4>AppRole</h4>
+        <hr/>
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model[i].Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model[i].Name)
+            </dd>
+
+        </dl>
+
+
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model[i].Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}

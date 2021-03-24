@@ -22,12 +22,16 @@ namespace WebApp.Areas.Admin.Controllers
     {
         
         private readonly AppDbContext _context;
+        private UserManager<AppUser> _userManager;
+        private RoleManager<AppRole> _roleManager;
         
         
 
-        public UsersController(AppDbContext context)
+        public UsersController(AppDbContext context, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         
 
@@ -55,8 +59,9 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            //var roleId = await _context.UserRoles.
+            
+            var userRoles = await _userManager.GetRolesAsync(appUser);
+            
             
             
 
@@ -64,6 +69,31 @@ namespace WebApp.Areas.Admin.Controllers
 
             return View(appUser);
         }
+        public async Task<ViewResult> Roles(Guid? id)
+        {
+            
+            
+            
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            
+            
+            var userRoles = await _userManager.GetRolesAsync(appUser);
+            List<AppRole> roles = new List<AppRole>();
+            for (int i = 0; i < userRoles.Count; i++)
+            {
+                roles.Add(await _roleManager.FindByNameAsync(userRoles[i]));
+            }
+            
+            
+
+            
+
+            return View(roles);
+        }
+        
+        
 
         
 
@@ -80,6 +110,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            
             var appRole = await _context.Roles.FindAsync(id);
             if (appRole == null)
             {

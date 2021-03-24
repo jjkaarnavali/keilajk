@@ -15,7 +15,9 @@ namespace Domain.App.Identity
         public string UserLevel { get; set; } = default!;
 
         public ICollection<Person>? Persons { get; set; }
-     
+
+        
+
         /*
         public string FullName => FirstName + " " + LastName;
         public string FullNameEmail => FullName + " (" + Email + ")";*/
