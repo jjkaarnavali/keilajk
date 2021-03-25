@@ -80,11 +80,12 @@ namespace WebApp.Areas.Admin.Controllers
             
             
             var userRoles = await _userManager.GetRolesAsync(appUser);
-            List<AppRole> roles = new List<AppRole>();
+            List<String> roles = new List<string>();
             for (int i = 0; i < userRoles.Count; i++)
             {
-                roles.Add(await _roleManager.FindByNameAsync(userRoles[i]));
+                roles.Add(userRoles[i]);
             }
+            roles.Add(appUser.Id.ToString());
             
             
 
@@ -230,6 +231,40 @@ namespace WebApp.Areas.Admin.Controllers
             
 
             return View(appUser);
+        }
+        
+        public async Task<IActionResult> AddToCustomerRole(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            await _userManager.AddToRoleAsync(appUser, "customer");
+            
+            
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task<IActionResult> RemoveFromRole(Guid? id, string role)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            await _userManager.RemoveFromRoleAsync(appUser, role.ToUpper());
+            
+            
+
+            return RedirectToAction(nameof(Index));
         }
     }
     
