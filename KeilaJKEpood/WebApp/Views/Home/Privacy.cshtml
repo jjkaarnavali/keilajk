@@ -32,4 +32,7 @@
     </tbody>
 </table>
 
+<h4>JWT</h4>
+
+@Html.Raw(Extensions.Base.IdentityExtensions.GenerateJwt(User.Claims, "kadfj,hvd_fkw3  894tASBVC6e786tdfjnbjkd..fbn", "itcollege.taltech.ee", "itcollege.taltech.ee", DateTime.Now.AddDays(30)))
 <h4>Request info</h4>

@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Base.EF", "DAL.Base.EF\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Base", "DAL.Base\DAL.Base.csproj", "{5500A6E1-8256-4E94-B441-1C4C82DEB816}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.Base", "Extensions.Base\Extensions.Base.csproj", "{51F65801-9FCF-435F-AF95-D796A81FE1EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO.App", "DTO.App\DTO.App.csproj", "{BAD5D0A5-BC80-4CCB-A81B-AAA21C80DB45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,5 +66,13 @@ Global
 		{5500A6E1-8256-4E94-B441-1C4C82DEB816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5500A6E1-8256-4E94-B441-1C4C82DEB816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5500A6E1-8256-4E94-B441-1C4C82DEB816}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F65801-9FCF-435F-AF95-D796A81FE1EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F65801-9FCF-435F-AF95-D796A81FE1EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F65801-9FCF-435F-AF95-D796A81FE1EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F65801-9FCF-435F-AF95-D796A81FE1EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD5D0A5-BC80-4CCB-A81B-AAA21C80DB45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD5D0A5-BC80-4CCB-A81B-AAA21C80DB45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD5D0A5-BC80-4CCB-A81B-AAA21C80DB45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD5D0A5-BC80-4CCB-A81B-AAA21C80DB45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

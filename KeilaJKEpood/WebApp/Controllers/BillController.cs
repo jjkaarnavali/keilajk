@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using DAL.App.EF.Repositories;
 using Domain.App;
+using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
 

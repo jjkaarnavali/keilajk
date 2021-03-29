@@ -33,11 +33,11 @@ namespace DAL.Base.EF.Repositories
             RepoDbSet = dbContext.Set<TEntity>();
         }
 
-        private IQueryable<TEntity> CreateQuery(TKey? userId, bool noTracking = true)
+        protected IQueryable<TEntity> CreateQuery(TKey? userId = default, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
                 
-            if (userId != null && typeof(IDomainAppUserId<TKey>).IsAssignableFrom(typeof(TEntity)))
+            if (userId != null && !userId.Equals(default) && typeof(IDomainAppUserId<TKey>).IsAssignableFrom(typeof(TEntity)))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 query = query.Where(e => ((IDomainAppUserId<TKey>) e).AppUserId.Equals(userId));
@@ -51,7 +51,7 @@ namespace DAL.Base.EF.Repositories
             return query;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(TKey? userId, bool noTracking = true)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(TKey? userId = default, bool noTracking = true)
         {
             var query = CreateQuery(userId, noTracking);
 
@@ -78,9 +78,9 @@ namespace DAL.Base.EF.Repositories
             return RepoDbSet.Update(entity).Entity;
         }
 
-        public virtual TEntity Remove(TEntity entity, TKey? userId)
+        public virtual TEntity Remove(TEntity entity, TKey? userId = default)
         {
-            if (userId != null && !((IDomainAppUserId<TKey>) entity).AppUserId.Equals(userId))
+            if (userId != null && typeof(IDomainAppUserId<TKey>).IsAssignableFrom(typeof(TEntity)) && !((IDomainAppUserId<TKey>) entity).AppUserId.Equals(userId))
             {
                 throw new AuthenticationException("Bad user id inside entity to be deleted.");
                 // TODO: load entity from the db, check that userId inside entity is correct.
@@ -88,6 +88,7 @@ namespace DAL.Base.EF.Repositories
 
             return RepoDbSet.Remove(entity).Entity;
         }
+
 
         public virtual async Task<TEntity> RemoveAsync(TKey id, TKey? userId)
         {

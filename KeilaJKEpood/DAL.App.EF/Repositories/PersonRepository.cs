@@ -25,14 +25,18 @@ namespace DAL.App.EF.Repositories
         
         public override async Task<IEnumerable<Person>> GetAllAsync(Guid userId, bool noTracking = true)
         {
-            var query = RepoDbSet.AsQueryable();
+            var query = CreateQuery(userId, noTracking);
 
-            if (noTracking)
+            /*if (noTracking)
             {
                 query = query.AsNoTracking();
+            }*/
+            if (userId != default)
+            {
+                query = query.Where(c => c.AppUserId == userId);
             }
 
-            query = query.Where(c => c.AppUserId == userId);
+            
             var res = await query.ToListAsync();
 
             

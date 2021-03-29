@@ -9,6 +9,6 @@ namespace Domain.App
        
 
         [MaxLength(32)]
-        public string PaymentTypeName { get; set; } = default!; // Through bank, credit/debit card, paypal
+        public string? PaymentTypeName { get; set; } // Through bank, credit/debit card, paypal
     }
 }
