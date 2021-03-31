@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LinesOnBillsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public LinesOnBillsController(AppDbContext context)
+        public LinesOnBillsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/LinesOnBills
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LineOnBill>>> GetLinesOnBills()
         {
-            return await _context.LinesOnBills.ToListAsync();
+            return Ok(await _uow.LinesOnBills.GetAllAsync());
         }
 
         // GET: api/LinesOnBills/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LineOnBill>> GetLineOnBill(Guid id)
         {
-            var lineOnBill = await _context.LinesOnBills.FindAsync(id);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id);
 
             if (lineOnBill == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(lineOnBill).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LineOnBillExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.LinesOnBills.Update(lineOnBill);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<LineOnBill>> PostLineOnBill(LineOnBill lineOnBill)
         {
-            _context.LinesOnBills.Add(lineOnBill);
-            await _context.SaveChangesAsync();
+            _uow.LinesOnBills.Add(lineOnBill);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetLineOnBill", new { id = lineOnBill.Id }, lineOnBill);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLineOnBill(Guid id)
         {
-            var lineOnBill = await _context.LinesOnBills.FindAsync(id);
+            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id);
             if (lineOnBill == null)
             {
                 return NotFound();
             }
 
-            _context.LinesOnBills.Remove(lineOnBill);
-            await _context.SaveChangesAsync();
+            _uow.LinesOnBills.Remove(lineOnBill);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool LineOnBillExists(Guid id)
-        {
-            return _context.LinesOnBills.Any(e => e.Id == id);
         }
     }
 }

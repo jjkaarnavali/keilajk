@@ -8,19 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        
         private readonly IAppUnitOfWork _uow;
+        
 
-        public PersonsController(AppDbContext context, IAppUnitOfWork uow)
+        public PersonsController(IAppUnitOfWork uow)
         {
-            _context = context;
             _uow = uow;
         }
 
@@ -35,7 +38,7 @@ namespace WebApp.ApiControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person =  await _uow.Persons.FirstOrDefaultAsync(id);
 
             if (person == null)
             {
@@ -55,23 +58,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(person).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.Persons.Update(person);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -81,8 +70,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            _context.Persons.Add(person);
-            await _context.SaveChangesAsync();
+            _uow.Persons.Add(person);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
@@ -91,21 +80,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _uow.Persons.FirstOrDefaultAsync(id);
             if (person == null)
             {
                 return NotFound();
             }
 
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync();
+            _uow.Persons.Remove(person);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool PersonExists(Guid id)
-        {
-            return _context.Persons.Any(e => e.Id == id);
         }
     }
 }

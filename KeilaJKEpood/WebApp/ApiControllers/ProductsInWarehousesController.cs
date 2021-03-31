@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsInWarehousesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductsInWarehousesController(AppDbContext context)
+        public ProductsInWarehousesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/ProductsInWarehouses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductInWarehouse>>> GetProductsInWarehouses()
         {
-            return await _context.ProductsInWarehouses.ToListAsync();
+            return Ok(await _uow.ProductsInWarehouses.GetAllAsync());
         }
 
         // GET: api/ProductsInWarehouses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductInWarehouse>> GetProductInWarehouse(Guid id)
         {
-            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id);
 
             if (productInWarehouse == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(productInWarehouse).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductInWarehouseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.ProductsInWarehouses.Update(productInWarehouse);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ProductInWarehouse>> PostProductInWarehouse(ProductInWarehouse productInWarehouse)
         {
-            _context.ProductsInWarehouses.Add(productInWarehouse);
-            await _context.SaveChangesAsync();
+            _uow.ProductsInWarehouses.Add(productInWarehouse);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetProductInWarehouse", new { id = productInWarehouse.Id }, productInWarehouse);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductInWarehouse(Guid id)
         {
-            var productInWarehouse = await _context.ProductsInWarehouses.FindAsync(id);
+            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id);
             if (productInWarehouse == null)
             {
                 return NotFound();
             }
 
-            _context.ProductsInWarehouses.Remove(productInWarehouse);
-            await _context.SaveChangesAsync();
+            _uow.ProductsInWarehouses.Remove(productInWarehouse);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ProductInWarehouseExists(Guid id)
-        {
-            return _context.ProductsInWarehouses.Any(e => e.Id == id);
         }
     }
 }

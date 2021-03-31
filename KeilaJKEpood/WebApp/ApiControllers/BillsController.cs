@@ -2,37 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BillsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public BillsController(AppDbContext context)
+        public BillsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
+            
         }
 
         // GET: api/Bills
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
         {
-            return await _context.Bills.ToListAsync();
+            return Ok(await _uow.Bills.GetAllAsync());
         }
 
         // GET: api/Bills/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBill(Guid id)
         {
-            var bill = await _context.Bills.FindAsync(id);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id);
 
             if (bill == null)
             {
@@ -52,23 +57,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(bill).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BillExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.Bills.Update(bill);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +69,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Bill>> PostBill(Bill bill)
         {
-            _context.Bills.Add(bill);
-            await _context.SaveChangesAsync();
+            _uow.Bills.Add(bill);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetBill", new { id = bill.Id }, bill);
         }
@@ -88,21 +79,18 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBill(Guid id)
         {
-            var bill = await _context.Bills.FindAsync(id);
+            var bill = await _uow.Bills.FirstOrDefaultAsync(id);
             if (bill == null)
             {
                 return NotFound();
             }
 
-            _context.Bills.Remove(bill);
-            await _context.SaveChangesAsync();
+            _uow.Bills.Remove(bill);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool BillExists(Guid id)
-        {
-            return _context.Bills.Any(e => e.Id == id);
-        }
+        
     }
 }

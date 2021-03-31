@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductTypesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductTypesController(AppDbContext context)
+        public ProductTypesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/ProductTypes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductType>>> GetProductTypes()
         {
-            return await _context.ProductTypes.ToListAsync();
+            return Ok(await _uow.ProductTypes.GetAllAsync());
         }
 
         // GET: api/ProductTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductType>> GetProductType(Guid id)
         {
-            var productType = await _context.ProductTypes.FindAsync(id);
+            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id);
 
             if (productType == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(productType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.ProductTypes.Update(productType);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ProductType>> PostProductType(ProductType productType)
         {
-            _context.ProductTypes.Add(productType);
-            await _context.SaveChangesAsync();
+            _uow.ProductTypes.Add(productType);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetProductType", new { id = productType.Id }, productType);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductType(Guid id)
         {
-            var productType = await _context.ProductTypes.FindAsync(id);
+            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id);
             if (productType == null)
             {
                 return NotFound();
             }
 
-            _context.ProductTypes.Remove(productType);
-            await _context.SaveChangesAsync();
+            _uow.ProductTypes.Remove(productType);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ProductTypeExists(Guid id)
-        {
-            return _context.ProductTypes.Any(e => e.Id == id);
         }
     }
 }

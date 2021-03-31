@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WarehousesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public WarehousesController(AppDbContext context)
+        public WarehousesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Warehouses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehouses()
         {
-            return await _context.Warehouses.ToListAsync();
+            return Ok(await _uow.Warehouses.GetAllAsync());
         }
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouse(Guid id)
         {
-            var warehouse = await _context.Warehouses.FindAsync(id);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id);
 
             if (warehouse == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(warehouse).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WarehouseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.Warehouses.Update(warehouse);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
-            _context.Warehouses.Add(warehouse);
-            await _context.SaveChangesAsync();
+            _uow.Warehouses.Add(warehouse);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWarehouse(Guid id)
         {
-            var warehouse = await _context.Warehouses.FindAsync(id);
+            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id);
             if (warehouse == null)
             {
                 return NotFound();
             }
 
-            _context.Warehouses.Remove(warehouse);
-            await _context.SaveChangesAsync();
+            _uow.Warehouses.Remove(warehouse);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool WarehouseExists(Guid id)
-        {
-            return _context.Warehouses.Any(e => e.Id == id);
         }
     }
 }

@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsInOrdersController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public ProductsInOrdersController(AppDbContext context)
+        private readonly IAppUnitOfWork _uow;
+        
+        public ProductsInOrdersController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/ProductsInOrders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductInOrder>>> GetProductsInOrders()
         {
-            return await _context.ProductsInOrders.ToListAsync();
+            return Ok(await _uow.ProductsInOrders.GetAllAsync());
         }
 
         // GET: api/ProductsInOrders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductInOrder>> GetProductInOrder(Guid id)
         {
-            var productInOrder = await _context.ProductsInOrders.FindAsync(id);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id);
 
             if (productInOrder == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(productInOrder).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductInOrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.ProductsInOrders.Update(productInOrder);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ProductInOrder>> PostProductInOrder(ProductInOrder productInOrder)
         {
-            _context.ProductsInOrders.Add(productInOrder);
-            await _context.SaveChangesAsync();
+            _uow.ProductsInOrders.Add(productInOrder);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetProductInOrder", new { id = productInOrder.Id }, productInOrder);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductInOrder(Guid id)
         {
-            var productInOrder = await _context.ProductsInOrders.FindAsync(id);
+            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id);
             if (productInOrder == null)
             {
                 return NotFound();
             }
 
-            _context.ProductsInOrders.Remove(productInOrder);
-            await _context.SaveChangesAsync();
+            _uow.ProductsInOrders.Remove(productInOrder);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ProductInOrderExists(Guid id)
-        {
-            return _context.ProductsInOrders.Any(e => e.Id == id);
         }
     }
 }

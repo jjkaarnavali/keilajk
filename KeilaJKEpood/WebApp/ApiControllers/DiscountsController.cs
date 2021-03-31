@@ -2,37 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DiscountsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public DiscountsController(AppDbContext context)
+        public DiscountsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Discounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Discount>>> GetDiscounts()
         {
-            return await _context.Discounts.ToListAsync();
+            return Ok(await _uow.Discounts.GetAllAsync());
         }
 
         // GET: api/Discounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Discount>> GetDiscount(Guid id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id);
 
             if (discount == null)
             {
@@ -52,23 +56,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(discount).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DiscountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.Discounts.Update(discount);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,8 +68,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Discount>> PostDiscount(Discount discount)
         {
-            _context.Discounts.Add(discount);
-            await _context.SaveChangesAsync();
+            _uow.Discounts.Add(discount);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
         }
@@ -88,21 +78,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscount(Guid id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _uow.Discounts.FirstOrDefaultAsync(id);
             if (discount == null)
             {
                 return NotFound();
             }
 
-            _context.Discounts.Remove(discount);
-            await _context.SaveChangesAsync();
+            _uow.Discounts.Remove(discount);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool DiscountExists(Guid id)
-        {
-            return _context.Discounts.Any(e => e.Id == id);
         }
     }
 }
