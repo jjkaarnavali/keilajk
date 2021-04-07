@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.Base.Repositories;
-using Domain.App;
+using DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IPersonRepository : IBaseRepository<Person>
+    public interface IPersonRepository : IBaseRepository<Person>, IPersonRepositoryCustom<Person>
     {
-        // add your Person custom method declarations here
-        Task DeleteAllByNameAsync(string name, Guid userId);
+        
     }
+
+    public interface IPersonRepositoryCustom<TEntity>
+    {       
+        // add your Person custom method declarations here
+        //Task<IEnumerable<TEntity>> GetAllWithContactCountsAsync(Guid userId, bool noTracking = true);
+        
+        Task<IEnumerable<TEntity>> GetAllNewAsync(Guid userId, bool noTracking = true);
+    }
+    
 }

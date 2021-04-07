@@ -4,6 +4,335 @@
     "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.EF\\DAL.App.EF.csproj": {}
   },
   "projects": {
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj",
+        "projectName": "BLL.App.DTO",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\BLL.App.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\BLL.App.csproj",
+        "projectName": "BLL.App",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\BLL.App.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\BLL.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\BLL.Base.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\Contracts.BLL.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\Contracts.BLL.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\BLL.Base.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\BLL.Base.csproj",
+        "projectName": "BLL.Base",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\BLL.Base.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.Base\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\Contracts.BLL.App.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\Contracts.BLL.App.csproj",
+        "projectName": "Contracts.BLL.App",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\Contracts.BLL.App.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.App\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\DTO.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\DTO.App.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj",
+        "projectName": "Contracts.BLL.Base",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\Contracts.BLL.Base.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.BLL.Base\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.Domain.Base\\Contracts.Domain.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.Domain.Base\\Contracts.Domain.Base.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -28,6 +357,9 @@
             "projectReferences": {
               "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
                 "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj"
               },
               "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj": {
                 "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj"
@@ -155,7 +487,72 @@
           "dependencies": {
             "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj",
+        "projectName": "DAL.App.DTO",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\DAL.App.DTO.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DAL.App.DTO\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.Base\\Domain.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.Base\\Domain.Base.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
             }
           },
           "imports": [
@@ -199,6 +596,9 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\BLL.App.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App\\BLL.App.csproj"
+              },
               "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj": {
                 "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Contracts.DAL.App\\Contracts.DAL.App.csproj"
               },
@@ -207,6 +607,9 @@
               },
               "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj": {
                 "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Domain.App\\Domain.App.csproj"
+              },
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj"
               }
             }
           }
@@ -221,13 +624,21 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
@@ -292,7 +703,7 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
@@ -410,7 +821,7 @@
           "dependencies": {
             "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
@@ -469,6 +880,120 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\DTO.App.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\DTO.App.csproj",
+        "projectName": "DTO.App",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\DTO.App.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\DTO.App\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj",
+        "projectName": "Extensions.Base",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj",
+        "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.10.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.10.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

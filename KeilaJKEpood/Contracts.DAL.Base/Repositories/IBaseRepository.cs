@@ -6,7 +6,7 @@ using Contracts.Domain.Base;
 namespace Contracts.DAL.Base.Repositories
 {
     public interface IBaseRepository<TEntity> : IBaseRepository<TEntity, Guid>
-        where TEntity : class, IDomainEntityId
+        where TEntity : class, IDomainEntityId<Guid> // any more rules? maybe ID?
     {
     }
 

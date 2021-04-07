@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
+
+
 
 namespace WebApp.Controllers
 {
@@ -19,19 +22,21 @@ namespace WebApp.Controllers
     {
         
         //private readonly AppDbContext _context;
-        private readonly IAppUnitOfWork _uow;
-
-        public PersonsController(IAppUnitOfWork uow)
+        //private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
+        
+        public PersonsController(IAppBLL bll)
         {
-            _uow = uow;
+            //_uow = uow;
+            _bll = bll;
         }
 
         // GET: Persons
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Persons.GetAllAsync(User.GetUserId()!.Value);
-            return View(res);
+            return View(await _bll.Persons.GetAllPersonsWithInfo(User.GetUserId()!.Value));
         }
+
 
         // GET: Persons/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -41,11 +46,19 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var person = await _uow.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var exists = await _bll.Persons.ExistsAsync(id.Value, User.GetUserId()!.Value);
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var person = await _bll.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+
             if (person == null)
             {
                 return NotFound();
             }
+
 
             return View(person);
         }
@@ -67,11 +80,13 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 person.AppUserId = User.GetUserId()!.Value;
-                _uow.Persons.Add(person);
-                await _uow.SaveChangesAsync();
+                _bll.Persons.Add(person);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(person);
+
         }
 
         // GET: Persons/Edit/5
@@ -82,7 +97,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var person = await _uow.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var person = await _bll.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (person == null)
             {
                 return NotFound();
@@ -102,12 +117,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid || !await _uow.Persons.ExistsAsync(person.Id, User.GetUserId()!.Value))
+            if (!ModelState.IsValid || !await _bll.Persons.ExistsAsync(person.Id, User.GetUserId()!.Value))
                 return View(person);
 
             person.AppUserId = User.GetUserId()!.Value;
-            _uow.Persons.Update(person);
-            await _uow.SaveChangesAsync();
+            _bll.Persons.Update(person);
+            await _bll.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
 
@@ -121,7 +136,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var person = await _uow.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var person = await _bll.Persons.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (person == null)
             {
                 return NotFound();
@@ -135,8 +150,8 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Persons.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.Persons.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

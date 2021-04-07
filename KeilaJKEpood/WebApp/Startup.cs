@@ -23,6 +23,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using WebApp.Areas.Admin.Controllers;
 using WebApp.Helpers;
+using BLL.App;
+using Contracts.BLL.App;
+
 
 namespace WebApp
 {
@@ -48,6 +51,7 @@ namespace WebApp
 
 
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            services.AddScoped<IAppBLL, AppBLL>();
 
             
 
@@ -83,6 +87,25 @@ namespace WebApp
                 .AddDefaultTokenProviders();
             
             services.AddControllersWithViews();
+            
+            services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsAllowAll", builder =>
+                    {
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyOrigin();
+                    });
+                }
+            );
+            
+            services.AddAutoMapper(
+                typeof(DAL.App.DTO.MappingProfiles.AutoMapperProfile),
+                typeof(BLL.App.DTO.MappingProfiles.AutoMapperProfile)
+            );
+
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

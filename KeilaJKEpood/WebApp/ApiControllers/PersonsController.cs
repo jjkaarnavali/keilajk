@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Person = BLL.App.DTO.Person;
 
 namespace WebApp.ApiControllers
 {
@@ -19,26 +22,28 @@ namespace WebApp.ApiControllers
     public class PersonsController : ControllerBase
     {
         
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
         
 
-        public PersonsController(IAppUnitOfWork uow)
+        public PersonsController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
+            
         }
 
         // GET: api/Persons
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
-            return Ok(await _uow.Persons.GetAllAsync());
+            return Ok(await _bll.Persons.GetAllAsync());
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            var person =  await _uow.Persons.FirstOrDefaultAsync(id);
+            
+            var person = await _bll.Persons.FirstOrDefaultAsync(id);
 
             if (person == null)
             {
@@ -58,9 +63,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Persons.Update(person);
+            _bll.Persons.Update(person);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -70,8 +75,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            _uow.Persons.Add(person);
-            await _uow.SaveChangesAsync();
+            _bll.Persons.Add(person);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
@@ -80,14 +85,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
-            var person = await _uow.Persons.FirstOrDefaultAsync(id);
+            var person = await _bll.Persons.FirstOrDefaultAsync(id);
             if (person == null)
             {
                 return NotFound();
             }
 
-            _uow.Persons.Remove(person);
-            await _uow.SaveChangesAsync();
+            _bll.Persons.Remove(person);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

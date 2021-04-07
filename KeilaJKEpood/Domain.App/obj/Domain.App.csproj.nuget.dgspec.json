@@ -40,7 +40,7 @@
           "dependencies": {
             "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
@@ -102,7 +102,7 @@
           "dependencies": {
             "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[5.0.5, )"
             }
           },
           "imports": [
