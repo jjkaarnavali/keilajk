@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using ProductType = BLL.App.DTO.ProductType;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductTypesController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public ProductTypesController(IAppUnitOfWork uow)
+        public ProductTypesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/ProductTypes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductType>>> GetProductTypes()
         {
-            return Ok(await _uow.ProductTypes.GetAllAsync());
+            return Ok(await _bll.ProductTypes.GetAllAsync());
         }
 
         // GET: api/ProductTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductType>> GetProductType(Guid id)
         {
-            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id);
+            var productType = await _bll.ProductTypes.FirstOrDefaultAsync(id);
 
             if (productType == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.ProductTypes.Update(productType);
+            _bll.ProductTypes.Update(productType);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ProductType>> PostProductType(ProductType productType)
         {
-            _uow.ProductTypes.Add(productType);
-            await _uow.SaveChangesAsync();
+            _bll.ProductTypes.Add(productType);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetProductType", new { id = productType.Id }, productType);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductType(Guid id)
         {
-            var productType = await _uow.ProductTypes.FirstOrDefaultAsync(id);
+            var productType = await _bll.ProductTypes.FirstOrDefaultAsync(id);
             if (productType == null)
             {
                 return NotFound();
             }
 
-            _uow.ProductTypes.Remove(productType);
-            await _uow.SaveChangesAsync();
+            _bll.ProductTypes.Remove(productType);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

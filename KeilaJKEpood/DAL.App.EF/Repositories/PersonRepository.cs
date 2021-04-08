@@ -51,7 +51,7 @@ namespace DAL.App.EF.Repositories
 
             
             
-            return res;
+            return res!;
         }
         
         public override async Task<DAL.App.DTO.Person?> FirstOrDefaultAsync(Guid id, Guid userId, bool noTracking = true)

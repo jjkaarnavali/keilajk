@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BLL.App.Mappers;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.Base.Repositories;
+using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
-using Domain.App;
+using DTO.App;
 using Microsoft.EntityFrameworkCore;
+using Domain.App;
+using WarehouseMapper = DAL.App.EF.Mappers.WarehouseMapper;
 
 namespace DAL.App.EF.Repositories
 {
-    public class WarehouseRepository : BaseRepository<Warehouse, AppDbContext>, IWarehouseRepository
+    public class WarehouseRepository : BaseRepository<DAL.App.DTO.Warehouse, Domain.App.Warehouse, AppDbContext>, IWarehouseRepository
     {
-        public WarehouseRepository(AppDbContext dbContext) : base(dbContext)
+        public WarehouseRepository(AppDbContext dbContext, IMapper mapper) : base(dbContext, new WarehouseMapper(mapper))
         {
-        }
-
-        public Task DeleteAllByNameAsync(string name)
-        {
-            throw new System.NotImplementedException();
         }
         
-        public override async Task<IEnumerable<Warehouse>> GetAllAsync(Guid userId, bool noTracking = true)
+        
+        public override async Task<IEnumerable<DAL.App.DTO.Warehouse>> GetAllAsync(Guid userId, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
 
@@ -33,11 +37,24 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.Email)
                 .Include(p => p.Phone)
                 .Include(p => p.WarehouseCode);*/
-            var res = await query.ToListAsync();
+            var res = await query.Select(x => Mapper.Map(x)).ToListAsync();
 
+            return res!;
+        }
+        
+        public override async Task<DAL.App.DTO.Warehouse?> FirstOrDefaultAsync(Guid id, Guid userId, bool noTracking = true)
+        {
+            var query = RepoDbSet.AsQueryable();
+
+            if (noTracking)
+            {
+                query = query.AsNoTracking();
+            }
             
             
-            return res;
+            var res = await query.FirstOrDefaultAsync(m => m.Id == id);
+
+            return Mapper.Map(res);
         }
     }
 }

@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Bill = BLL.App.DTO.Bill;
 
 namespace WebApp.ApiControllers
 {
@@ -18,26 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BillsController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public BillsController(IAppUnitOfWork uow)
+        public BillsController(IAppBLL bll)
         {
-            _uow = uow;
-            
+            _bll = bll;
         }
 
         // GET: api/Bills
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
         {
-            return Ok(await _uow.Bills.GetAllAsync());
+            return Ok(await _bll.Bills.GetAllAsync());
         }
 
         // GET: api/Bills/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBill(Guid id)
         {
-            var bill = await _uow.Bills.FirstOrDefaultAsync(id);
+            var bill = await _bll.Bills.FirstOrDefaultAsync(id);
 
             if (bill == null)
             {
@@ -57,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Bills.Update(bill);
+            _bll.Bills.Update(bill);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -69,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Bill>> PostBill(Bill bill)
         {
-            _uow.Bills.Add(bill);
-            await _uow.SaveChangesAsync();
+            _bll.Bills.Add(bill);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetBill", new { id = bill.Id }, bill);
         }
@@ -79,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBill(Guid id)
         {
-            var bill = await _uow.Bills.FirstOrDefaultAsync(id);
+            var bill = await _bll.Bills.FirstOrDefaultAsync(id);
             if (bill == null)
             {
                 return NotFound();
             }
 
-            _uow.Bills.Remove(bill);
-            await _uow.SaveChangesAsync();
+            _bll.Bills.Remove(bill);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
@@ -19,19 +18,19 @@ namespace WebApp.Controllers
     [Authorize]
     public class ProductsInWarehousesController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public ProductsInWarehousesController(IAppUnitOfWork uow)
+        public ProductsInWarehousesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: ProductsInWarehouses
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.ProductsInWarehouses.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.ProductsInWarehouses.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -43,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInWarehouse = await _bll.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -67,8 +66,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.ProductsInWarehouses.Add(productInWarehouse);
-                await _uow.SaveChangesAsync();
+                _bll.ProductsInWarehouses.Add(productInWarehouse);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(productInWarehouse);
@@ -82,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInWarehouse = await _bll.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -106,8 +105,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.ProductsInWarehouses.Update(productInWarehouse);
-                    await _uow.SaveChangesAsync();
+                    _bll.ProductsInWarehouses.Update(productInWarehouse);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInWarehouse = await _bll.ProductsInWarehouses.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInWarehouse == null)
             {
                 return NotFound();
@@ -144,14 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.ProductsInWarehouses.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.ProductsInWarehouses.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductInWarehouseExists(Guid id)
         {
-            return await _uow.ProductsInWarehouses.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.ProductsInWarehouses.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

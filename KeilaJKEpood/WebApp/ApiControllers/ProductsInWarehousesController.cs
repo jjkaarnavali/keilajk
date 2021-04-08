@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using ProductInWarehouse = BLL.App.DTO.ProductInWarehouse;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsInWarehousesController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public ProductsInWarehousesController(IAppUnitOfWork uow)
+        public ProductsInWarehousesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/ProductsInWarehouses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductInWarehouse>>> GetProductsInWarehouses()
         {
-            return Ok(await _uow.ProductsInWarehouses.GetAllAsync());
+            return Ok(await _bll.ProductsInWarehouses.GetAllAsync());
         }
 
         // GET: api/ProductsInWarehouses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductInWarehouse>> GetProductInWarehouse(Guid id)
         {
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id);
+            var productInWarehouse = await _bll.ProductsInWarehouses.FirstOrDefaultAsync(id);
 
             if (productInWarehouse == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.ProductsInWarehouses.Update(productInWarehouse);
+            _bll.ProductsInWarehouses.Update(productInWarehouse);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ProductInWarehouse>> PostProductInWarehouse(ProductInWarehouse productInWarehouse)
         {
-            _uow.ProductsInWarehouses.Add(productInWarehouse);
-            await _uow.SaveChangesAsync();
+            _bll.ProductsInWarehouses.Add(productInWarehouse);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetProductInWarehouse", new { id = productInWarehouse.Id }, productInWarehouse);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductInWarehouse(Guid id)
         {
-            var productInWarehouse = await _uow.ProductsInWarehouses.FirstOrDefaultAsync(id);
+            var productInWarehouse = await _bll.ProductsInWarehouses.FirstOrDefaultAsync(id);
             if (productInWarehouse == null)
             {
                 return NotFound();
             }
 
-            _uow.ProductsInWarehouses.Remove(productInWarehouse);
-            await _uow.SaveChangesAsync();
+            _bll.ProductsInWarehouses.Remove(productInWarehouse);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
@@ -20,19 +19,19 @@ namespace WebApp.Controllers
     [Authorize]
     public class PricesController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public PricesController(IAppUnitOfWork uow)
+        public PricesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: Prices
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Prices.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.Prices.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -44,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _uow.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var price = await _bll.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (price == null)
             {
                 return NotFound();
@@ -68,8 +67,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.Prices.Add(price);
-                await _uow.SaveChangesAsync();
+                _bll.Prices.Add(price);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(price);
@@ -83,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _uow.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var price = await _bll.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (price == null)
             {
                 return NotFound();
@@ -107,8 +106,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.Prices.Update(price);
-                    await _uow.SaveChangesAsync();
+                    _bll.Prices.Update(price);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +130,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _uow.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var price = await _bll.Prices.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (price == null)
             {
                 return NotFound();
@@ -145,14 +144,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Prices.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.Prices.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> PriceExists(Guid id)
         {
-            return await _uow.Prices.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.Prices.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

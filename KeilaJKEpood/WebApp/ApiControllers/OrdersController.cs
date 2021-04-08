@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Order = BLL.App.DTO.Order;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,24 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
-
-        public OrdersController(IAppUnitOfWork uow)
+        private readonly IAppBLL _bll;
+        public OrdersController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/Orders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return Ok(await _uow.Orders.GetAllAsync());
+            return Ok(await _bll.Orders.GetAllAsync());
         }
 
         // GET: api/Orders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
-            var order = await _uow.Orders.FirstOrDefaultAsync(id);
+            var order = await _bll.Orders.FirstOrDefaultAsync(id);
 
             if (order == null)
             {
@@ -56,9 +58,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Orders.Update(order);
+            _bll.Orders.Update(order);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +70,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-            _uow.Orders.Add(order);
-            await _uow.SaveChangesAsync();
+            _bll.Orders.Add(order);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetOrder", new { id = order.Id }, order);
         }
@@ -78,15 +80,15 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            var order = await _uow.Orders.FirstOrDefaultAsync(id);
+            var order = await _bll.Orders.FirstOrDefaultAsync(id);
             
             if (order == null)
             {
                 return NotFound();
             }
 
-            _uow.Orders.Remove(order);
-            await _uow.SaveChangesAsync();
+            _bll.Orders.Remove(order);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

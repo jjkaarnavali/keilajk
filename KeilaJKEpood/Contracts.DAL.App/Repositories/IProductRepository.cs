@@ -1,12 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Contracts.DAL.Base.Repositories;
 using Domain.App;
+using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IProductRepository : IBaseRepository<Product>
+    public interface IProductRepository: IBaseRepository<DALAppDTO.Product>, IProductRepositoryCustom<DALAppDTO.Product>
     {
-        // add your Product custom method declarations here
-        Task DeleteAllByNameAsync(string name);
+       
     }
+
+    public interface IProductRepositoryCustom<TEntity>
+    {
+    }
+
 }

@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
@@ -20,19 +19,19 @@ namespace WebApp.Controllers
     [Authorize]
     public class PaymentTypesController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public PaymentTypesController(IAppUnitOfWork uow)
+        public PaymentTypesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.PaymentTypes.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.PaymentTypes.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -44,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var paymentType = await _uow.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (paymentType == null)
             {
                 return NotFound();
@@ -68,8 +67,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.PaymentTypes.Add(paymentType);
-                await _uow.SaveChangesAsync();
+                _bll.PaymentTypes.Add(paymentType);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(paymentType);
@@ -83,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var paymentType = await _uow.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (paymentType == null)
             {
                 return NotFound();
@@ -107,8 +106,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.PaymentTypes.Update(paymentType);
-                    await _uow.SaveChangesAsync();
+                    _bll.PaymentTypes.Update(paymentType);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +130,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var paymentType = await _uow.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (paymentType == null)
             {
                 return NotFound();
@@ -145,14 +144,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.PaymentTypes.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.PaymentTypes.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> PaymentTypeExists(Guid id)
         {
-            return await _uow.PaymentTypes.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.PaymentTypes.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using LineOnBill = BLL.App.DTO.LineOnBill;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LinesOnBillsController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public LinesOnBillsController(IAppUnitOfWork uow)
+        public LinesOnBillsController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/LinesOnBills
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LineOnBill>>> GetLinesOnBills()
         {
-            return Ok(await _uow.LinesOnBills.GetAllAsync());
+            return Ok(await _bll.LinesOnBills.GetAllAsync());
         }
 
         // GET: api/LinesOnBills/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LineOnBill>> GetLineOnBill(Guid id)
         {
-            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id);
+            var lineOnBill = await _bll.LinesOnBills.FirstOrDefaultAsync(id);
 
             if (lineOnBill == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.LinesOnBills.Update(lineOnBill);
+            _bll.LinesOnBills.Update(lineOnBill);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<LineOnBill>> PostLineOnBill(LineOnBill lineOnBill)
         {
-            _uow.LinesOnBills.Add(lineOnBill);
-            await _uow.SaveChangesAsync();
+            _bll.LinesOnBills.Add(lineOnBill);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetLineOnBill", new { id = lineOnBill.Id }, lineOnBill);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLineOnBill(Guid id)
         {
-            var lineOnBill = await _uow.LinesOnBills.FirstOrDefaultAsync(id);
+            var lineOnBill = await _bll.LinesOnBills.FirstOrDefaultAsync(id);
             if (lineOnBill == null)
             {
                 return NotFound();
             }
 
-            _uow.LinesOnBills.Remove(lineOnBill);
-            await _uow.SaveChangesAsync();
+            _bll.LinesOnBills.Remove(lineOnBill);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

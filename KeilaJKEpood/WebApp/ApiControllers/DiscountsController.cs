@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Discount = BLL.App.DTO.Discount;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DiscountsController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public DiscountsController(IAppUnitOfWork uow)
+        public DiscountsController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/Discounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Discount>>> GetDiscounts()
         {
-            return Ok(await _uow.Discounts.GetAllAsync());
+            return Ok(await _bll.Discounts.GetAllAsync());
         }
 
         // GET: api/Discounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Discount>> GetDiscount(Guid id)
         {
-            var discount = await _uow.Discounts.FirstOrDefaultAsync(id);
+            var discount = await _bll.Discounts.FirstOrDefaultAsync(id);
 
             if (discount == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Discounts.Update(discount);
+            _bll.Discounts.Update(discount);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Discount>> PostDiscount(Discount discount)
         {
-            _uow.Discounts.Add(discount);
-            await _uow.SaveChangesAsync();
+            _bll.Discounts.Add(discount);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscount(Guid id)
         {
-            var discount = await _uow.Discounts.FirstOrDefaultAsync(id);
+            var discount = await _bll.Discounts.FirstOrDefaultAsync(id);
             if (discount == null)
             {
                 return NotFound();
             }
 
-            _uow.Discounts.Remove(discount);
-            await _uow.SaveChangesAsync();
+            _bll.Discounts.Remove(discount);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

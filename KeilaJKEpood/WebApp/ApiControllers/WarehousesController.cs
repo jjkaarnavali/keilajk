@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Warehouse = BLL.App.DTO.Warehouse;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WarehousesController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public WarehousesController(IAppUnitOfWork uow)
+        public WarehousesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/Warehouses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehouses()
         {
-            return Ok(await _uow.Warehouses.GetAllAsync());
+            return Ok(await _bll.Warehouses.GetAllAsync());
         }
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouse(Guid id)
         {
-            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id);
+            var warehouse = await _bll.Warehouses.FirstOrDefaultAsync(id);
 
             if (warehouse == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Warehouses.Update(warehouse);
+            _bll.Warehouses.Update(warehouse);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
-            _uow.Warehouses.Add(warehouse);
-            await _uow.SaveChangesAsync();
+            _bll.Warehouses.Add(warehouse);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWarehouse(Guid id)
         {
-            var warehouse = await _uow.Warehouses.FirstOrDefaultAsync(id);
+            var warehouse = await _bll.Warehouses.FirstOrDefaultAsync(id);
             if (warehouse == null)
             {
                 return NotFound();
             }
 
-            _uow.Warehouses.Remove(warehouse);
-            await _uow.SaveChangesAsync();
+            _bll.Warehouses.Remove(warehouse);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

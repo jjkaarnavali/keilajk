@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
@@ -20,19 +19,19 @@ namespace WebApp.Controllers
     [Authorize]
     public class ProductsController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public ProductsController(IAppUnitOfWork uow)
+        public ProductsController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.Products.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.Products.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -44,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var product = await _bll.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -68,8 +67,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.Products.Add(product);
-                await _uow.SaveChangesAsync();
+                _bll.Products.Add(product);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -83,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var product = await _bll.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -107,8 +106,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.Products.Update(product);
-                    await _uow.SaveChangesAsync();
+                    _bll.Products.Update(product);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +130,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _uow.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var product = await _bll.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (product == null)
             {
                 return NotFound();
@@ -145,14 +144,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Products.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.Products.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductExists(Guid id)
         {
-            return await _uow.Products.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.Products.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

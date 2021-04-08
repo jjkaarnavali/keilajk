@@ -1,12 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Contracts.DAL.Base.Repositories;
 using Domain.App;
+using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IPaymentTypeRepository : IBaseRepository<PaymentType>
+    public interface IPaymentTypeRepository: IBaseRepository<DALAppDTO.PaymentType>, IPaymentTypeRepositoryCustom<DALAppDTO.PaymentType>
     {
-        // add your PaymentType custom method declarations here
-        Task DeleteAllByNameAsync(string name);
+       
     }
+
+    public interface IPaymentTypeRepositoryCustom<TEntity>
+    {
+    }
+
 }

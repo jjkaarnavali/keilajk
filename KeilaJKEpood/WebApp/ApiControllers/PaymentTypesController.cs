@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using PaymentType = BLL.App.DTO.PaymentType;
 
 namespace WebApp.ApiControllers
 {
@@ -19,11 +22,11 @@ namespace WebApp.ApiControllers
     public class PaymentTypesController : ControllerBase
     {
         
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public PaymentTypesController(IAppUnitOfWork uow)
+        public PaymentTypesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/PaymentTypes
@@ -31,7 +34,7 @@ namespace WebApp.ApiControllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PaymentType>>> GetPaymentTypes()
         {
-            return Ok(await _uow.PaymentTypes.GetAllAsync());
+            return Ok(await _bll.PaymentTypes.GetAllAsync());
         }
 
         // GET: api/PaymentTypes/5
@@ -39,7 +42,7 @@ namespace WebApp.ApiControllers
         [AllowAnonymous]
         public async Task<ActionResult<PaymentType>> GetPaymentType(Guid id)
         {
-            var paymentType = await _uow.PaymentTypes.FirstOrDefaultAsync(id);
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id);
 
             if (paymentType == null)
             {
@@ -59,9 +62,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.PaymentTypes.Update(paymentType);
+            _bll.PaymentTypes.Update(paymentType);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             
             
 
@@ -73,8 +76,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<PaymentType>> PostPaymentType(PaymentType paymentType)
         {
-            _uow.PaymentTypes.Add(paymentType);
-            await _uow.SaveChangesAsync();
+            _bll.PaymentTypes.Add(paymentType);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPaymentType", new { id = paymentType.Id }, paymentType);
         }
@@ -84,14 +87,14 @@ namespace WebApp.ApiControllers
         public async Task<IActionResult> DeletePaymentType(Guid id)
         {
             
-            var paymentType = await _uow.PaymentTypes.FirstOrDefaultAsync(id);
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id);
             if (paymentType == null)
             {
                 return NotFound();
             }
 
-            _uow.PaymentTypes.Remove(paymentType);
-            await _uow.SaveChangesAsync();
+            _bll.PaymentTypes.Remove(paymentType);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

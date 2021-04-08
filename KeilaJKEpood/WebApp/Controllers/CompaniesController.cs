@@ -2,37 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
-
 namespace WebApp.Controllers
 {
     [Authorize]
     public class CompaniesController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public CompaniesController(IAppUnitOfWork uow)
+        public CompaniesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
+            
         }
 
         // GET: Companies
         public async Task<IActionResult> Index()
         {
             
-            var res =  await _uow.Companies.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.Companies.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -44,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var company = await _bll.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -68,8 +67,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.Companies.Add(company);
-                await _uow.SaveChangesAsync();
+                _bll.Companies.Add(company);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -83,7 +82,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var company = await _bll.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -107,8 +106,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.Companies.Update(company);
-                    await _uow.SaveChangesAsync();
+                    _bll.Companies.Update(company);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,7 +133,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var company = await _uow.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var company = await _bll.Companies.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (company == null)
             {
                 return NotFound();
@@ -148,14 +147,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Bills.RemoveAsync(id,  User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.Bills.RemoveAsync(id,  User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> CompanyExists(Guid id)
         {
-            return await _uow.Companies.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.Companies.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }

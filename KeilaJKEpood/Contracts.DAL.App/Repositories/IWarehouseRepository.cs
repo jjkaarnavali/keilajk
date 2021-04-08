@@ -1,12 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Contracts.DAL.Base.Repositories;
 using Domain.App;
+using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IWarehouseRepository : IBaseRepository<Warehouse>
+    public interface IWarehouseRepository: IBaseRepository<DALAppDTO.Warehouse>, IWarehouseRepositoryCustom<DALAppDTO.Warehouse>
     {
-        // add your Warehouse custom method declarations here
-        Task DeleteAllByNameAsync(string name);
+       
     }
+
+    public interface IWarehouseRepositoryCustom<TEntity>
+    {
+    }
+
 }

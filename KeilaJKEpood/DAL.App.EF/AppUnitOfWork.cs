@@ -38,31 +38,31 @@ namespace DAL.App.EF
             GetRepository(() => new PersonRepository(UowDbContext, Mapper));
 
         public IBillRepository Bills => 
-            GetRepository(() => new BillRepository(UowDbContext));
+            GetRepository(() => new BillRepository(UowDbContext, Mapper));
         public ICompanyRepository Companies => 
-            GetRepository(() => new CompanyRepository(UowDbContext));
+            GetRepository(() => new CompanyRepository(UowDbContext, Mapper));
         public IDiscountRepository Discounts => 
-            GetRepository(() => new DiscountRepository(UowDbContext));
+            GetRepository(() => new DiscountRepository(UowDbContext, Mapper));
         public ILineOnBillRepository LinesOnBills => 
-            GetRepository(() => new LineOnBillRepository(UowDbContext));
+            GetRepository(() => new LineOnBillRepository(UowDbContext, Mapper));
         public IOrderRepository Orders => 
-            GetRepository(() => new OrderRepository(UowDbContext));
+            GetRepository(() => new OrderRepository(UowDbContext, Mapper));
         public IPaymentRepository Payments => 
-            GetRepository(() => new PaymentRepository(UowDbContext));
+            GetRepository(() => new PaymentRepository(UowDbContext, Mapper));
         public IPaymentTypeRepository PaymentTypes => 
-            GetRepository(() => new PaymentTypeRepository(UowDbContext));
+            GetRepository(() => new PaymentTypeRepository(UowDbContext, Mapper));
         public IPriceRepository Prices => 
-            GetRepository(() => new PriceRepository(UowDbContext));
+            GetRepository(() => new PriceRepository(UowDbContext, Mapper));
         public IProductRepository Products => 
-            GetRepository(() => new ProductRepository(UowDbContext));
+            GetRepository(() => new ProductRepository(UowDbContext, Mapper));
         public IProductInOrderRepository ProductsInOrders => 
-            GetRepository(() => new ProductInOrderRepository(UowDbContext));
+            GetRepository(() => new ProductInOrderRepository(UowDbContext, Mapper));
         public IProductTypeRepository ProductTypes => 
-            GetRepository(() => new ProductTypeRepository(UowDbContext));
+            GetRepository(() => new ProductTypeRepository(UowDbContext, Mapper));
         public IWarehouseRepository Warehouses => 
-            GetRepository(() => new WarehouseRepository(UowDbContext));
+            GetRepository(() => new WarehouseRepository(UowDbContext, Mapper));
         public IProductInWarehouseRepository ProductsInWarehouses => 
-            GetRepository(() => new ProductInWarehouseRepository(UowDbContext));
+            GetRepository(() => new ProductInWarehouseRepository(UowDbContext, Mapper));
         
 
         

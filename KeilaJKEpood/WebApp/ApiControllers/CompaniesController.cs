@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Company = BLL.App.DTO.Company;
 
 namespace WebApp.ApiControllers
 {
@@ -18,25 +21,25 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CompaniesController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public CompaniesController(IAppUnitOfWork uow)
+        public CompaniesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/Companies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
         {
-            return Ok(await _uow.Companies.GetAllAsync());
+            return Ok(await _bll.Companies.GetAllAsync());
         }
 
         // GET: api/Companies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(Guid id)
         {
-            var company = await _uow.Companies.FirstOrDefaultAsync(id);
+            var company = await _bll.Companies.FirstOrDefaultAsync(id);
 
             if (company == null)
             {
@@ -56,9 +59,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.Companies.Update(company);
+            _bll.Companies.Update(company);
             
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -68,8 +71,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
-            _uow.Companies.Add(company);
-            await _uow.SaveChangesAsync();
+            _bll.Companies.Add(company);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetCompany", new { id = company.Id }, company);
         }
@@ -78,14 +81,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(Guid id)
         {
-            var company = await _uow.Companies.FirstOrDefaultAsync(id);
+            var company = await _bll.Companies.FirstOrDefaultAsync(id);
             if (company == null)
             {
                 return NotFound();
             }
 
-            _uow.Companies.Remove(company);
-            await _uow.SaveChangesAsync();
+            _bll.Companies.Remove(company);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }

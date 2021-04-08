@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain.App;
+using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
@@ -19,19 +18,19 @@ namespace WebApp.Controllers
     [Authorize]
     public class ProductsInOrdersController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public ProductsInOrdersController(IAppUnitOfWork uow)
+        public ProductsInOrdersController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: ProductsInOrders
         public async Task<IActionResult> Index()
         {
-            var res =  await _uow.ProductsInOrders.GetAllAsync(User.GetUserId()!.Value);
+            var res =  await _bll.ProductsInOrders.GetAllAsync(User.GetUserId()!.Value);
 
-            await _uow.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return View(res);
         }
 
@@ -43,7 +42,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInOrder = await _bll.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -67,8 +66,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _uow.ProductsInOrders.Add(productInOrder);
-                await _uow.SaveChangesAsync();
+                _bll.ProductsInOrders.Add(productInOrder);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(productInOrder);
@@ -82,7 +81,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInOrder = await _bll.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -106,8 +105,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _uow.ProductsInOrders.Update(productInOrder);
-                    await _uow.SaveChangesAsync();
+                    _bll.ProductsInOrders.Update(productInOrder);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInOrder = await _uow.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            var productInOrder = await _bll.ProductsInOrders.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
             if (productInOrder == null)
             {
                 return NotFound();
@@ -144,14 +143,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.ProductsInOrders.RemoveAsync(id, User.GetUserId()!.Value);
-            await _uow.SaveChangesAsync();
+            await _bll.ProductsInOrders.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProductInOrderExists(Guid id)
         {
-            return await _uow.ProductsInOrders.ExistsAsync(id, User.GetUserId()!.Value);
+            return await _bll.ProductsInOrders.ExistsAsync(id, User.GetUserId()!.Value);
         }
     }
 }
