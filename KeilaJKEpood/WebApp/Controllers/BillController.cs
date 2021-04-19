@@ -12,6 +12,7 @@ using BLL.App.DTO;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.Helpers;
+#pragma warning disable 1591
 
 namespace WebApp.Controllers
 {
@@ -53,8 +54,9 @@ namespace WebApp.Controllers
         }
 
         // GET: Bill/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
+           
             return View();
         }
 

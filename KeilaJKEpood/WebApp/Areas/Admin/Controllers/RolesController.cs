@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App.Identity;
 using Microsoft.AspNetCore.Authorization;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Admin.Controllers
 {

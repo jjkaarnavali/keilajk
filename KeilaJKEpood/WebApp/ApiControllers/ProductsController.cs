@@ -1,42 +1,63 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
-using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Product = BLL.App.DTO.Product;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// API controller for Products
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : ControllerBase
     {
         private readonly IAppBLL _bll;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="bll"></param>
         public ProductsController(IAppBLL bll)
         {
             _bll = bll;
         }
 
         // GET: api/Products
+        /// <summary>
+        /// Get all Products
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return Ok(await _bll.Products.GetAllAsync());
         }
 
         // GET: api/Products/5
+        /// <summary>
+        /// Get one Product. Based on parameter: Id
+        /// </summary>
+        /// <param name="id">Id of object to retrieve, Guid</param>
+        /// <returns>BLL.App.DTO.Product</returns>
         [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
             var product = await _bll.Products.FirstOrDefaultAsync(id);
@@ -51,7 +72,20 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update a Product thats already in the DB
+        /// </summary>
+        /// <param name="id">Id of the Product</param>
+        /// <param name="product">The updated Product</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> PutProduct(Guid id, Product product)
         {
             if (id != product.Id)
@@ -68,7 +102,19 @@ namespace WebApp.ApiControllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Add a new Product
+        /// </summary>
+        /// <param name="product">Entity of type BLL.App.DTO.Product</param>
+        /// <returns></returns>
         [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             _bll.Products.Add(product);
@@ -78,7 +124,15 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Products/5
+        /// <summary>
+        /// Delete a Product from the DB.
+        /// </summary>
+        /// <param name="id">Id of the Product to be deleted.</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var product = await _bll.Products.FirstOrDefaultAsync(id);

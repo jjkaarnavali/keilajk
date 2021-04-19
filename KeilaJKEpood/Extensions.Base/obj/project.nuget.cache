@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "T6CaVvbYimHY5C5ov2eXyS7dR5Vu7te8qQnVg8FCMRFjkp6X/rNJqIT5R6bw7HhFNQ3LIrGdXVzBWGjHs5t6Vg==",
+  "dgSpecHash": "LUQs2p7lfPw/ou0CWLWjO7z5zFB120JznbQS13tN7xC36SzrgD0gronzx/n9vHnJ/c+gJMZbWmQRii9H9pGtXg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jan\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
-    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\6.10.0\\microsoft.identitymodel.jsonwebtokens.6.10.0.nupkg.sha512",
-    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.logging\\6.10.0\\microsoft.identitymodel.logging.6.10.0.nupkg.sha512",
-    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.0\\microsoft.identitymodel.tokens.6.10.0.nupkg.sha512",
-    "C:\\Users\\Jan\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.10.0\\system.identitymodel.tokens.jwt.6.10.0.nupkg.sha512",
+    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\6.10.2\\microsoft.identitymodel.jsonwebtokens.6.10.2.nupkg.sha512",
+    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.logging\\6.10.2\\microsoft.identitymodel.logging.6.10.2.nupkg.sha512",
+    "C:\\Users\\Jan\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.2\\microsoft.identitymodel.tokens.6.10.2.nupkg.sha512",
+    "C:\\Users\\Jan\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.10.2\\system.identitymodel.tokens.jwt.6.10.2.nupkg.sha512",
     "C:\\Users\\Jan\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512"
   ],
   "logs": []

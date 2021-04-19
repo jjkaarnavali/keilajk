@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -77,7 +78,7 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string? returnUrl = null)
         {
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl!;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 

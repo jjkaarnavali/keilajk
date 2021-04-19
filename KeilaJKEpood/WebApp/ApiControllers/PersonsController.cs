@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
-using BLL.App.DTO;
+using Extensions.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Person = BLL.App.DTO.Person;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// API controller for Persons
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonsController : ControllerBase
@@ -25,6 +24,10 @@ namespace WebApp.ApiControllers
         private readonly IAppBLL _bll;
         
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="bll"></param>
         public PersonsController(IAppBLL bll)
         {
             _bll = bll;
@@ -32,14 +35,33 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Persons
+        /// <summary>
+        /// Get all Persons
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Person>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
             return Ok(await _bll.Persons.GetAllAsync());
         }
 
         // GET: api/Persons/5
+        /// <summary>
+        /// Get one Person. Based on parameter: Id
+        /// </summary>
+        /// <param name="id">Id of object to retrieve, Guid</param>
+        /// <returns>BLL.App.DTO.Person</returns>
         [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Person), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
             
@@ -55,7 +77,20 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Persons/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update a Person thats already in the DB
+        /// </summary>
+        /// <param name="id">Id of the Person</param>
+        /// <param name="person">The updated Person</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Person), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> PutPerson(Guid id, Person person)
         {
             if (id != person.Id)
@@ -72,17 +107,59 @@ namespace WebApp.ApiControllers
 
         // POST: api/Persons
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Add a new Person
+        /// </summary>
+        /// <param name="person">Entity of type BLL.App.DTO.Person</param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Person), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<DTO.App.PersonDTO>> PostPerson(DTO.App.PersonAdd person)
         {
-            _bll.Persons.Add(person);
+            
+            var bllPerson = new Person()
+            {
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                PersonsIdCode = person.PersonsIdCode
+            };
+
+            bllPerson.AppUserId = User.GetUserId()!.Value;
+            
+            var addedPerson = _bll.Persons.Add(bllPerson);
+            
+            // bll will call dal.SaveChangesAsync => will call EF.SaveChangesAsync()
+            // ef will update entities with new ID-s
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
+            var returnPerson = new DTO.App.PersonDTO()
+            {
+                Id = addedPerson.Id,
+                FirstName = addedPerson.FirstName,
+                LastName = addedPerson.LastName,
+                PersonsIdCode = addedPerson.PersonsIdCode
+            };
+
+            return CreatedAtAction("GetPerson", new {id = returnPerson.Id}, returnPerson);
+
         }
 
         // DELETE: api/Persons/5
+        /// <summary>
+        /// Delete a Person from the DB.
+        /// </summary>
+        /// <param name="id">Id of the Person to be deleted.</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
             var person = await _bll.Persons.FirstOrDefaultAsync(id);

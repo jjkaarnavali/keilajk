@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-
+#pragma warning disable 1591
 namespace WebApp.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration

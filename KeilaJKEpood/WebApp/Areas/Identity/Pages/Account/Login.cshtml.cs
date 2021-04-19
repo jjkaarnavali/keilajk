@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -69,7 +70,7 @@ namespace WebApp.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl!;
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -53,7 +54,7 @@ namespace WebApp.Areas.Identity.Pages.Account
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
 
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl!;
             RememberMe = rememberMe;
 
             return Page();

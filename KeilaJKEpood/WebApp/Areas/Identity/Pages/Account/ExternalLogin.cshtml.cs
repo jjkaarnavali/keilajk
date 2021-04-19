@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -163,7 +164,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             }
 
             ProviderDisplayName = info.ProviderDisplayName;
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl!;
             return Page();
         }
     }

@@ -1,41 +1,62 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
-using BLL.App.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Order = BLL.App.DTO.Order;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// API controller for OrdersController
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="bll"></param>
         public OrdersController(IAppBLL bll)
         {
             _bll = bll;
         }
 
         // GET: api/Orders
+        /// <summary>
+        /// Get all the Orders
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Order>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return Ok(await _bll.Orders.GetAllAsync());
         }
 
         // GET: api/Orders/5
+        /// <summary>
+        /// Get one Order. Based on parameter: Id
+        /// </summary>
+        /// <param name="id">Id of object to retrieve, Guid</param>
+        /// <returns>BLL.App.DTO.Order</returns>
         [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
             var order = await _bll.Orders.FirstOrDefaultAsync(id);
@@ -50,7 +71,20 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update a Order thats already in the DB
+        /// </summary>
+        /// <param name="id">Id of the Order</param>
+        /// <param name="order">The updated Order</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> PutOrder(Guid id, Order order)
         {
             if (id != order.Id)
@@ -67,7 +101,19 @@ namespace WebApp.ApiControllers
 
         // POST: api/Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Add a new Order
+        /// </summary>
+        /// <param name="order">Entity of type BLL.App.DTO.Order</param>
+        /// <returns></returns>
         [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             _bll.Orders.Add(order);
@@ -77,7 +123,15 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Orders/5
+        /// <summary>
+        /// Delete a Order from the DB.
+        /// </summary>
+        /// <param name="id">Id of the Order to be deleted.</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
             var order = await _bll.Orders.FirstOrDefaultAsync(id);

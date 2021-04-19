@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApp.Areas.Identity.Pages.Account;
+#pragma warning disable 1591
 
 namespace WebApp.ApiControllers.Identity
 {
