@@ -14,10 +14,10 @@ namespace WebApp.ApiControllers
     /// <summary>
     /// API controller for Persons
     /// </summary>
+    [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonsController : ControllerBase
     {
         
@@ -64,9 +64,20 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            
+
+            var persons = await _bll.Persons.GetAllAsync();
+            var userid = User;
             var person = await _bll.Persons.FirstOrDefaultAsync(id);
 
+            foreach (var per in persons)
+            {
+                if (per.Id == id)
+                {
+                    person = per;
+                } 
+            }
+            
+            
             if (person == null)
             {
                 return NotFound();

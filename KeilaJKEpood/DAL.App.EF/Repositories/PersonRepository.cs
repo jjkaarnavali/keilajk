@@ -54,20 +54,15 @@ namespace DAL.App.EF.Repositories
             return res!;
         }
         
-        public override async Task<DAL.App.DTO.Person?> FirstOrDefaultAsync(Guid id, Guid userId, bool noTracking = true)
+        public override async Task<DAL.App.DTO.Person?> FirstOrDefaultAsync(Guid id, Guid userId = default, bool noTracking = true)
         {
-            var query = RepoDbSet.AsQueryable();
+            var query = CreateQuery(userId, noTracking);
+            
 
-            if (noTracking)
-            {
-                query = query.AsNoTracking();
-            }
-            
-            
-            
             var res = await query.FirstOrDefaultAsync(m => m.Id == id && m.AppUserId == userId);
 
             return Mapper.Map(res);
+
         }
 
         public async Task<IEnumerable<DAL.App.DTO.Person>> GetAllNewAsync(Guid userId, bool noTracking = true)

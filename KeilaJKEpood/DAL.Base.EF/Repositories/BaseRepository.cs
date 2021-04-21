@@ -62,6 +62,7 @@ namespace DAL.Base.EF.Repositories
 
             return query;
         }
+        
 
         public virtual async Task<IEnumerable<TDalEntity>> GetAllAsync(TKey? userId = default, bool noTracking = true)
         {
@@ -76,9 +77,11 @@ namespace DAL.Base.EF.Repositories
             bool noTracking = true)
         {
             var query = CreateQuery(userId, noTracking);
-
-            return await query.Select(d => Mapper.Map(d)).FirstOrDefaultAsync(e => e!.Id.Equals(id));
+            return Mapper.Map(await query.FirstOrDefaultAsync(e => e!.Id.Equals(id)));
         }
+
+        
+
 
         public virtual TDalEntity Add(TDalEntity entity)
         {

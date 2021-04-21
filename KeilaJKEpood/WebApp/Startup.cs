@@ -158,6 +158,7 @@ namespace WebApp
 
             app.UseRouting();
 
+            app.UseCors("CorsAllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
             

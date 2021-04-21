@@ -65,6 +65,7 @@ namespace BLL.Base.Services
             return Mapper.Map(await ServiceRepository.FirstOrDefaultAsync(id, userId, noTracking));
         }
 
+
         public async Task<bool> ExistsAsync(TKey id, TKey? userId = default)
         {
             return await ServiceRepository.ExistsAsync(id, userId);
