@@ -17,7 +17,7 @@ namespace WebApp.ApiControllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Authorize(Roles = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonsController : ControllerBase
     {
         
@@ -45,6 +45,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
             return Ok(await _bll.Persons.GetAllAsync());
@@ -108,7 +109,22 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
+            
+            var persons = await _bll.Persons.GetAllAsync();
+            var perso = await _bll.Persons.FirstOrDefaultAsync(id);
 
+            foreach (var per in persons)
+            {
+                if (per.Id == id)
+                {
+                    perso = per;
+                } 
+            }
+
+            person.AppUserId = perso!.AppUserId;
+
+            
+            
             _bll.Persons.Update(person);
             
             await _bll.SaveChangesAsync();
@@ -173,7 +189,17 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
+            var persons = await _bll.Persons.GetAllAsync();
+            var userid = User;
             var person = await _bll.Persons.FirstOrDefaultAsync(id);
+
+            foreach (var per in persons)
+            {
+                if (per.Id == id)
+                {
+                    person = per;
+                } 
+            }
             if (person == null)
             {
                 return NotFound();
