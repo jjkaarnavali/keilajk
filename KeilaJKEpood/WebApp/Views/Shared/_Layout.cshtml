@@ -21,7 +21,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Resources.Base.Common.Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="Index">@Resources.BLL.App.DTO.Bill.EntityName</a>
@@ -66,19 +66,19 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Warehouses" asp-action="Index">@Resources.BLL.App.DTO.Warehouse.EntityName</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Resources.Base.Common.Privacy</a>
                     </li>
                     
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Users
+                                @Resources.Base.Common.Users
                                 </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Roles" asp-action="Index">Roles</a>
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Roles" asp-action="Index">User and Roles</a>
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index">@Resources.Base.Common.Users</a>
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Roles" asp-action="Index">@Resources.Base.Common.Roles</a>
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Roles" asp-action="Index">@Resources.Base.Common.User_and_roles</a>
                                 </div>
                             </li>
                                             

@@ -49,29 +49,29 @@ namespace WebApp.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "Email")]
             public string? Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "Password")]
             public string? Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "ConfimPassword")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string? ConfirmPassword { get; set; }
 
-            [Display(Name = "First name")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "FirstName")]
             [StringLength(128, MinimumLength = 1)]
             public string FirstName { get; set; } = default!;
             
-            [Display(Name = "Last name")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "LastName")]
             [StringLength(128, MinimumLength = 1)]
             public string LastName { get; set; } = default!;
             
-            [Display(Name = "User level")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "UserLevel")]
             [StringLength(2, MinimumLength = 1)]
             public string UserLevel { get; set; } = default!;
         }

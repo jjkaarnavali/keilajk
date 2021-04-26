@@ -33,4 +33,40 @@
     <data name="Delete" xml:space="preserve">
         <value>Delete</value>
     </data>
+    <data name="Back" xml:space="preserve">
+        <value>Back to List</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="AskForDeleteConfirmation" xml:space="preserve">
+        <value>Are you sure you want to delete this?</value>
+    </data>
+    <data name="Users" xml:space="preserve">
+        <value>Users</value>
+    </data>
+    <data name="Roles" xml:space="preserve">
+        <value>Roles</value>
+    </data>
+    <data name="User and roles" xml:space="preserve">
+        <value>User and roles</value>
+    </data>
+    <data name="Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="Privacy" xml:space="preserve">
+        <value>Privacy</value>
+    </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Hello</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="Logout" xml:space="preserve">
+        <value>Logout</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Register</value>
+    </data>
 </root>

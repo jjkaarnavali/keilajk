@@ -46,13 +46,15 @@ namespace WebApp.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Login), Name = "Email")]
             public string? Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Login), Name = "Password")]
             public string? Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Login), Name = "RememberMe")]
             public bool RememberMe { get; set; }
         }
 

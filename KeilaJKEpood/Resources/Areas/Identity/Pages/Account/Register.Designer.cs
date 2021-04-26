@@ -22,14 +22,14 @@ namespace Resources.Areas.Identity.Pages.Account {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Login {
+    public class Register {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Login() {
+        internal Register() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources.Areas.Identity.Pages.Account {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.Areas.Identity.Pages.Account.Login", typeof(Login).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.Areas.Identity.Pages.Account.Register", typeof(Register).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,6 +61,24 @@ namespace Resources.Areas.Identity.Pages.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm Password.
+        /// </summary>
+        public static string ConfimPassword {
+            get {
+                return ResourceManager.GetString("ConfimPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new account..
+        /// </summary>
+        public static string CreateNewAccount {
+            get {
+                return ResourceManager.GetString("CreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -70,11 +88,20 @@ namespace Resources.Areas.Identity.Pages.Account {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forgot your password?.
+        ///   Looks up a localized string similar to First Name.
         /// </summary>
-        public static string ForgotPassword {
+        public static string FirstName {
             get {
-                return ResourceManager.GetString("ForgotPassword", resourceCulture);
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
             }
         }
         
@@ -88,38 +115,20 @@ namespace Resources.Areas.Identity.Pages.Account {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register as a new user.
+        ///   Looks up a localized string similar to Register.
         /// </summary>
-        public static string Register {
+        public static string RegisterNew {
             get {
-                return ResourceManager.GetString("Register", resourceCulture);
+                return ResourceManager.GetString("RegisterNew", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remember Me.
+        ///   Looks up a localized string similar to User level.
         /// </summary>
-        public static string RememberMe {
+        public static string UserLevel {
             get {
-                return ResourceManager.GetString("RememberMe", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Resend email confirmation.
-        /// </summary>
-        public static string ResendConfirmation {
-            get {
-                return ResourceManager.GetString("ResendConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use a local account to log in..
-        /// </summary>
-        public static string UseLocalAccount {
-            get {
-                return ResourceManager.GetString("UseLocalAccount", resourceCulture);
+                return ResourceManager.GetString("UserLevel", resourceCulture);
             }
         }
     }

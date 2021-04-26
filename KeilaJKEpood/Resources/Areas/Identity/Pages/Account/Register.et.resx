@@ -11,8 +11,8 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="UseLocalAccount" xml:space="preserve">
-        <value>Logi sisse kohaliku kontoga.</value>
+    <data name="RegisterNew" xml:space="preserve">
+        <value>Registreeri</value>
     </data>
     <data name="Email" xml:space="preserve">
         <value>Email</value>
@@ -20,16 +20,19 @@
     <data name="Password" xml:space="preserve">
         <value>Parool</value>
     </data>
-    <data name="RememberMe" xml:space="preserve">
-        <value>Jäta kasutaja meelde</value>
+    <data name="ConfimPassword" xml:space="preserve">
+        <value>Kinnita parool</value>
     </data>
-    <data name="ForgotPassword" xml:space="preserve">
-        <value>Unustasid parooli?</value>
+    <data name="FirstName" xml:space="preserve">
+        <value>Eesnimi</value>
     </data>
-    <data name="Register" xml:space="preserve">
-        <value>Registreeri uus kasutaja</value>
+    <data name="LastName" xml:space="preserve">
+        <value>Perekonnanimi</value>
     </data>
-    <data name="ResendConfirmation" xml:space="preserve">
-        <value>Saada emaili kinnitus uuesti</value>
+    <data name="UserLevel" xml:space="preserve">
+        <value>Kasutaja tase</value>
+    </data>
+    <data name="CreateNewAccount" xml:space="preserve">
+        <value>Loo uus kasutaja.</value>
     </data>
 </root>

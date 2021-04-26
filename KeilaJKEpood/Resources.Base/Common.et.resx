@@ -33,4 +33,40 @@
     <data name="Edit" xml:space="preserve">
         <value>Muuda</value>
     </data>
+    <data name="Back" xml:space="preserve">
+        <value>Tagasi</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>Salvesta</value>
+    </data>
+    <data name="AskForDeleteConfirmation" xml:space="preserve">
+        <value>Kas Te olete kindel, et tahate seda kustutada?</value>
+    </data>
+    <data name="Roles" xml:space="preserve">
+        <value>Rollid</value>
+    </data>
+    <data name="Users" xml:space="preserve">
+        <value>Kasutajad</value>
+    </data>
+    <data name="User and roles" xml:space="preserve">
+        <value>Kasutaja ja rollid</value>
+    </data>
+    <data name="Home" xml:space="preserve">
+        <value>Pealeht</value>
+    </data>
+    <data name="Privacy" xml:space="preserve">
+        <value>Privaatsus</value>
+    </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Tere</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Logi sisse</value>
+    </data>
+    <data name="Logout" xml:space="preserve">
+        <value>Logi välja</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Registreeri</value>
+    </data>
 </root>
