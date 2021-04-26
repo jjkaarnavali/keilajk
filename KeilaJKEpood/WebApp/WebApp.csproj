@@ -40,6 +40,7 @@
       <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
       <ProjectReference Include="..\DTO.App\DTO.App.csproj" />
       <ProjectReference Include="..\Extensions.Base\Extensions.Base.csproj" />
+      <ProjectReference Include="..\Resources\Resources.csproj" />
     </ItemGroup>
 
 </Project>

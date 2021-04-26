@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.App.DTO", "BLL.App.DTO\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.App.DTO", "DAL.App.DTO\DAL.App.DTO.csproj", "{EE293C9B-7CCE-470B-B00B-0859314B9FBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{6AF65C5D-83E8-49BB-8A81-DF74AC28827D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources.Base", "Resources.Base\Resources.Base.csproj", "{56888C80-5D68-42C6-99B1-7DD832DC9012}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,5 +114,13 @@ Global
 		{EE293C9B-7CCE-470B-B00B-0859314B9FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE293C9B-7CCE-470B-B00B-0859314B9FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE293C9B-7CCE-470B-B00B-0859314B9FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AF65C5D-83E8-49BB-8A81-DF74AC28827D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AF65C5D-83E8-49BB-8A81-DF74AC28827D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AF65C5D-83E8-49BB-8A81-DF74AC28827D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AF65C5D-83E8-49BB-8A81-DF74AC28827D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56888C80-5D68-42C6-99B1-7DD832DC9012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56888C80-5D68-42C6-99B1-7DD832DC9012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56888C80-5D68-42C6-99B1-7DD832DC9012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56888C80-5D68-42C6-99B1-7DD832DC9012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -9,10 +9,15 @@ namespace DAL.App.DTO
 {
     public class Person : DomainEntityId, IDomainAppUserId, IDomainAppUser<AppUser>
     {
-        [MaxLength(64)] public string FirstName { get; set; } = default!;
+        [MaxLength(64)]
+        [Display(ResourceType = typeof(Resources.DAL.App.DTO.Person), Name = "FirstName")]
+        public string FirstName { get; set; } = default!;
 
-        [MaxLength(64)] public string LastName { get; set; } = default!;
+        [MaxLength(64)] 
+        [Display(ResourceType = typeof(Resources.DAL.App.DTO.Person), Name = "LastName")]
+        public string LastName { get; set; } = default!;
         
+        [Display(ResourceType = typeof(Resources.DAL.App.DTO.Person), Name = "PersonsIdCode")]
         public string PersonsIdCode { get; set; }  = default!;
         
         

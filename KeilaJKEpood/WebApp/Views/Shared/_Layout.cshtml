@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+@using System.Threading
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -81,6 +83,8 @@
                             </li>
                                             
                     }
+                    
+                    <partial name="_LanguageSelection"/>
 
                 </ul>
                 <partial name="_LoginPartial"/>
@@ -96,7 +100,9 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2021 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2021 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> | UICulture: @Thread.CurrentThread.CurrentCulture.Name (@CultureInfo.CurrentCulture.Name) | Culture: @Thread.CurrentThread.CurrentUICulture.Name (@CultureInfo.CurrentUICulture.Name)
+        @(DateTime.Now.ToShortDateString())
+        @((123.45).ToString())
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

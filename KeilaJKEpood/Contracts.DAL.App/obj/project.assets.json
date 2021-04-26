@@ -193,7 +193,8 @@
         "dependencies": {
           "AutoMapper": "10.1.1",
           "Domain.App": "1.0.0",
-          "Domain.Base": "1.0.0"
+          "Domain.Base": "1.0.0",
+          "Resources": "1.0.0"
         },
         "compile": {
           "bin/placeholder/DAL.App.DTO.dll": {}
@@ -227,6 +228,16 @@
         },
         "runtime": {
           "bin/placeholder/Domain.Base.dll": {}
+        }
+      },
+      "Resources/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Resources.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Resources.dll": {}
         }
       }
     }
@@ -621,6 +632,11 @@
       "type": "project",
       "path": "../Domain.Base/Domain.Base.csproj",
       "msbuildProject": "../Domain.Base/Domain.Base.csproj"
+    },
+    "Resources/1.0.0": {
+      "type": "project",
+      "path": "../Resources/Resources.csproj",
+      "msbuildProject": "../Resources/Resources.csproj"
     }
   },
   "projectFileDependencyGroups": {

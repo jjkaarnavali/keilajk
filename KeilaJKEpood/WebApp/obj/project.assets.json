@@ -3707,7 +3707,8 @@
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "8.1.1",
           "DAL.App.DTO": "1.0.0",
-          "Microsoft.Extensions.Identity.Stores": "5.0.5"
+          "Microsoft.Extensions.Identity.Stores": "5.0.5",
+          "Resources.Base": "1.0.0"
         },
         "compile": {
           "bin/placeholder/BLL.App.DTO.dll": {}
@@ -3809,7 +3810,8 @@
         "dependencies": {
           "AutoMapper": "10.1.1",
           "Domain.App": "1.0.0",
-          "Domain.Base": "1.0.0"
+          "Domain.Base": "1.0.0",
+          "Resources": "1.0.0"
         },
         "compile": {
           "bin/placeholder/DAL.App.DTO.dll": {}
@@ -3916,6 +3918,26 @@
         },
         "runtime": {
           "bin/placeholder/Extensions.Base.dll": {}
+        }
+      },
+      "Resources/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Resources.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Resources.dll": {}
+        }
+      },
+      "Resources.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Resources.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Resources.Base.dll": {}
         }
       }
     }
@@ -11336,6 +11358,16 @@
       "type": "project",
       "path": "../Extensions.Base/Extensions.Base.csproj",
       "msbuildProject": "../Extensions.Base/Extensions.Base.csproj"
+    },
+    "Resources/1.0.0": {
+      "type": "project",
+      "path": "../Resources/Resources.csproj",
+      "msbuildProject": "../Resources/Resources.csproj"
+    },
+    "Resources.Base/1.0.0": {
+      "type": "project",
+      "path": "../Resources.Base/Resources.Base.csproj",
+      "msbuildProject": "../Resources.Base/Resources.Base.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -11356,6 +11388,7 @@
       "Microsoft.EntityFrameworkCore.Sqlite >= 5.0.5",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.5",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
+      "Resources >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.1.2"
     ]
   },
@@ -11398,6 +11431,9 @@
             },
             "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj": {
               "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Extensions.Base\\Extensions.Base.csproj"
+            },
+            "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources\\Resources.csproj": {
+              "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources\\Resources.csproj"
             }
           }
         }

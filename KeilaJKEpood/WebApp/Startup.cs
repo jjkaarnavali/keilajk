@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Contracts.DAL.App;
@@ -15,9 +17,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using BLL.App;
 using Contracts.BLL.App;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using WebApp.Helpers;
+
 #pragma warning disable 1591
 
 
@@ -117,6 +123,27 @@ namespace WebApp
             services.AddSwaggerGen();
 
 
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                // TODO: should be in appsettings.json
+                var appSupportedCultures = new[]
+                {
+                    new CultureInfo("et"),
+                    new CultureInfo("en-GB"),
+                };
+
+                options.SupportedCultures = appSupportedCultures;
+                options.SupportedUICultures = appSupportedCultures;
+                options.DefaultRequestCulture = new RequestCulture("en-GB", "en-GB");
+                options.SetDefaultCulture("en-GB");
+                options.RequestCultureProviders = new List<IRequestCultureProvider>()
+                {
+                    new QueryStringRequestCultureProvider(),
+                    new CookieRequestCultureProvider()
+                };
+            });
+
+            services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureModelBindingLocalization>();
 
         }
 
@@ -157,6 +184,12 @@ namespace WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
+            
+            app.UseRequestLocalization(
+                app.ApplicationServices
+                    .GetService<IOptions<RequestLocalizationOptions>>()?.Value
+            );
+
 
             app.UseCors("CorsAllowAll");
             app.UseAuthentication();
@@ -176,6 +209,8 @@ namespace WebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            
+            
         }
 
         private static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
