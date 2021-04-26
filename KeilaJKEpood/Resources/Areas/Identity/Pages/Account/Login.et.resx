@@ -32,4 +32,16 @@
     <data name="ResendConfirmation" xml:space="preserve">
         <value>Saada emaili kinnitus uuesti</value>
     </data>
+    <data name="LoginThirdParty" xml:space="preserve">
+        <value>Logi sisse kasutades</value>
+    </data>
+    <data name="NoThirdParty" xml:space="preserve">
+        <value>Väliseid autentijaid pole lisatud.</value>
+    </data>
+    <data name="LogIn" xml:space="preserve">
+        <value>Sisene</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>Kasutajanimi/parool ei ole korrektsed.</value>
+    </data>
 </root>

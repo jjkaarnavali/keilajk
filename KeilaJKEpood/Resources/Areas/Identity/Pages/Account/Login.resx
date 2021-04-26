@@ -39,4 +39,16 @@
     <data name="ResendConfirmation" xml:space="preserve">
         <value>Resend email confirmation</value>
     </data>
+    <data name="LoginThirdParty" xml:space="preserve">
+        <value>Use another service to log in.</value>
+    </data>
+    <data name="NoThirdParty" xml:space="preserve">
+        <value>There are no external authentication services configured.</value>
+    </data>
+    <data name="LogIn" xml:space="preserve">
+        <value>Log in</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>Invalid login attempt.</value>
+    </data>
 </root>

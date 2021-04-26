@@ -20,9 +20,6 @@
     <data name="Password" xml:space="preserve">
         <value>Parool</value>
     </data>
-    <data name="ConfimPassword" xml:space="preserve">
-        <value>Kinnita parool</value>
-    </data>
     <data name="FirstName" xml:space="preserve">
         <value>Eesnimi</value>
     </data>
@@ -35,4 +32,32 @@
     <data name="CreateNewAccount" xml:space="preserve">
         <value>Loo uus kasutaja.</value>
     </data>
+    <data name="ConfirmPassword" xml:space="preserve">
+        <value>Kinnita parool</value>
+    </data>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Registreerumine</value>
+    </data>
+    <data name="ButtonRegister" xml:space="preserve">
+        <value>Loo konto</value>
+    </data>
+    <data name="Register3rdParty" xml:space="preserve">
+        <value>Registreeru kasutades:</value>
+    </data>
+    <data name="DateOfBirth" xml:space="preserve">
+        <value>Sünniaeg</value>
+    </data>
+    <data name="Gender" xml:space="preserve">
+        <value>Sugu</value>
+    </data>
+    <data name="Mandatory" xml:space="preserve">
+        <value>Kohustuslikud</value>
+    </data>
+    <data name="PasswordsDontMatch" xml:space="preserve">
+        <value>Parool ja parooli kordus ei ühti.</value>
+    </data>
+    <data name="Register3rdPartyNotConfigured" xml:space="preserve">
+        <value>Välised autentimisteenused pole seadistatud.</value>
+    </data>
+
 </root>

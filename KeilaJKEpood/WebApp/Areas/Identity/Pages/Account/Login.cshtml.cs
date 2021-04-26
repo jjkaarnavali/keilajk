@@ -44,12 +44,14 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessageResourceType = typeof(Resources.Base.Common), ErrorMessageResourceName = "ErrorMessage_Required")]
+            [EmailAddress(ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_Email")]
+
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Login), Name = "Email")]
             public string? Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessageResourceType = typeof(Resources.Base.Common), ErrorMessageResourceName = "ErrorMessage_Required")]
             [DataType(DataType.Password)]
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Login), Name = "Password")]
             public string? Password { get; set; }
@@ -102,7 +104,7 @@ namespace WebApp.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, Resources.Areas.Identity.Pages.Account.Login.InvalidLoginAttempt);
                     return Page();
                 }
             }

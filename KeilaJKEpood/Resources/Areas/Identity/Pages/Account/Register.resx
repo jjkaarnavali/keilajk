@@ -27,7 +27,7 @@
     <data name="Password" xml:space="preserve">
         <value>Password</value>
     </data>
-    <data name="ConfimPassword" xml:space="preserve">
+    <data name="ConfirmPassword" xml:space="preserve">
         <value>Confirm Password</value>
     </data>
     <data name="FirstName" xml:space="preserve">
@@ -42,4 +42,29 @@
     <data name="CreateNewAccount" xml:space="preserve">
         <value>Create a new account.</value>
     </data>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Register</value>
+    </data>
+    <data name="ButtonRegister" xml:space="preserve">
+        <value>Register</value>
+    </data>
+    <data name="Register3rdParty" xml:space="preserve">
+        <value>Use another service to register.</value>
+    </data>
+    <data name="DateOfBirth" xml:space="preserve">
+        <value>Date of birth</value>
+    </data>
+    <data name="Gender" xml:space="preserve">
+        <value>Gender</value>
+    </data>
+    <data name="Mandatory" xml:space="preserve">
+        <value>Mandatory</value>
+    </data>
+    <data name="PasswordsDontMatch" xml:space="preserve">
+        <value>The password and confirmation password do not match.</value>
+    </data>
+    <data name="Register3rdPartyNotConfigured" xml:space="preserve">
+        <value>There are no external authentication services configured.</value>
+    </data>
+
 </root>

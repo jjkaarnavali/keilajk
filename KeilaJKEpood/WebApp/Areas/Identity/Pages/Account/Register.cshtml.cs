@@ -40,39 +40,70 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         [BindProperty]
         public InputModel Input { get; set; } = default!;
+        public PasswordRequirementsViewModel? PasswordRequirements { get; set; }
 
         public string ReturnUrl { get; set; } = default!;
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; } = default!;
+        
+        public class PasswordRequirementsViewModel
+        {
+            public bool RequireDigit { get; set; }
+            public int RequiredLength { get; set; }
+            public bool RequireLowercase { get; set; }
+            public bool RequireUppercase { get; set; }
+            public int RequiredUniqueChars { get; set; }
+            public bool RequireNonAlphanumeric { get; set; }
+        }
+
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_Required")]
+
+            [EmailAddress(ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_Email")]
+
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "Email")]
             public string? Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_Required")]
+
+            [StringLength(100, ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_StringLengthMinMax", MinimumLength = 6)]
+
             [DataType(DataType.Password)]
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "Password")]
             public string? Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "ConfimPassword")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "ConfirmPassword")]
+            [Compare("Password",
+                ErrorMessageResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register),
+                ErrorMessageResourceName = "PasswordsDontMatch")]
+
             public string? ConfirmPassword { get; set; }
 
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "FirstName")]
             [StringLength(128, MinimumLength = 1)]
+            [MaxLength(128, ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_MaxLength")] 
+
             public string FirstName { get; set; } = default!;
             
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "LastName")]
             [StringLength(128, MinimumLength = 1)]
+            [MaxLength(128, ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_MaxLength")]
+
             public string LastName { get; set; } = default!;
             
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "UserLevel")]
             [StringLength(2, MinimumLength = 1)]
+            [MaxLength(1, ErrorMessageResourceType = typeof(Resources.Base.Common),
+                ErrorMessageResourceName = "ErrorMessage_MaxLength")]
             public string UserLevel { get; set; } = default!;
         }
 
@@ -80,6 +111,17 @@ namespace WebApp.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl!;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
+            PasswordRequirements = new PasswordRequirementsViewModel()
+            {
+                RequireDigit = _userManager.Options.Password.RequireDigit,
+                RequiredLength = _userManager.Options.Password.RequiredLength,
+                RequireLowercase = _userManager.Options.Password.RequireLowercase,
+                RequireUppercase = _userManager.Options.Password.RequireUppercase,
+                RequiredUniqueChars = _userManager.Options.Password.RequiredUniqueChars,
+                RequireNonAlphanumeric = _userManager.Options.Password.RequireNonAlphanumeric
+            };
+
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)

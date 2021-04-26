@@ -10,7 +10,7 @@ namespace BLL.App.DTO
     public class Person : DomainEntityId, IDomainAppUserId, IDomainAppUser<AppUser>
     {
         [MinLength(2, ErrorMessageResourceType = typeof(Resources.Base.Common), ErrorMessageResourceName = "ErrorMessageMinLength")]
-        [MaxLength(64)]
+        [MaxLength(64, ErrorMessageResourceType = typeof(Resources.Base.Common), ErrorMessageResourceName = "ErrorMessageMaxLength")]
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Person), Name = "FirstName")]
         public string FirstName { get; set; } = default!;
 
