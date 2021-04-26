@@ -21,4 +21,16 @@
     <data name="ErrorMessageMinLength" xml:space="preserve">
         <value>Väli {0} peab olema vähemalt '{1}' pikkune.</value>
     </data>
+    <data name="Create" xml:space="preserve">
+        <value>Loo uus</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Kustuta</value>
+    </data>
+    <data name="Details" xml:space="preserve">
+        <value>Detailid</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Muuda</value>
+    </data>
 </root>
