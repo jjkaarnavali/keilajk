@@ -61,6 +61,15 @@ namespace Resources.BLL.App.DTO {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Persons.
+        /// </summary>
+        public static string EntityName {
+            get {
+                return ResourceManager.GetString("EntityName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Name.
         /// </summary>
         public static string FirstName {

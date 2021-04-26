@@ -27,4 +27,7 @@
     <data name="PersonsIdCode" xml:space="preserve">
         <value>ID code</value>
     </data>
+    <data name="EntityName" xml:space="preserve">
+        <value>Persons</value>
+    </data>
 </root>

@@ -20,4 +20,7 @@
     <data name="PersonsIdCode" xml:space="preserve">
         <value>ID kood</value>
     </data>
+    <data name="EntityName" xml:space="preserve">
+        <value>Isikud</value>
+    </data>
 </root>

@@ -18,8 +18,60 @@
         <LastGenOutput>Person.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="BLL.App.DTO\Person.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
+        <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Person.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Bill.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Bill.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Company.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Company.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Discount.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Discount.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\LineOnBill.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>LineOnBill.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Order.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Order.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Payment.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Payment.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\PaymentType.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>PaymentType.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Price.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Price.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Product.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Product.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\ProductInOrder.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProductInOrder.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\ProductInWarehouse.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProductInWarehouse.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\ProductType.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProductType.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="BLL.App.DTO\Warehouse.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Warehouse.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -43,6 +95,71 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Person.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Bill.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Bill.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Company.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Company.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Discount.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Discount.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\LineOnBill.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LineOnBill.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Order.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Order.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Payment.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Payment.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\PaymentType.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PaymentType.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Price.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Price.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Product.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Product.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\ProductInOrder.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProductInOrder.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\ProductInWarehouse.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProductInWarehouse.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\ProductType.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProductType.resx</DependentUpon>
+      </Compile>
+      <Compile Update="BLL.App.DTO\Warehouse.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Warehouse.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
