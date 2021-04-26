@@ -322,6 +322,24 @@ namespace Resources.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn about building Web apps with ASP.NET Core.
+        /// </summary>
+        public static string HomePageText {
+            get {
+                return ResourceManager.GetString("HomePageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome.
+        /// </summary>
+        public static string HomePageWelcome {
+            get {
+                return ResourceManager.GetString("HomePageWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
@@ -345,6 +363,60 @@ namespace Resources.Base {
         public static string Privacy {
             get {
                 return ResourceManager.GetString("Privacy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this page to detail your site&apos;s privacy policy..
+        /// </summary>
+        public static string PrivacyDescription {
+            get {
+                return ResourceManager.GetString("PrivacyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request Info.
+        /// </summary>
+        public static string PrivacyRequestInfo {
+            get {
+                return ResourceManager.GetString("PrivacyRequestInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string PrivacyType {
+            get {
+                return ResourceManager.GetString("PrivacyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Info.
+        /// </summary>
+        public static string PrivacyUserInfo {
+            get {
+                return ResourceManager.GetString("PrivacyUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string PrivacyValue {
+            get {
+                return ResourceManager.GetString("PrivacyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value Type.
+        /// </summary>
+        public static string PrivacyValueType {
+            get {
+                return ResourceManager.GetString("PrivacyValueType", resourceCulture);
             }
         }
         

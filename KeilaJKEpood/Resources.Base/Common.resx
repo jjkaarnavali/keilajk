@@ -129,5 +129,28 @@
     <data name="ErrorMessage_Email" xml:space="preserve">
         <value>The {0} field is not a valid e-mail address.</value>
     </data>
-
+    <data name="HomePageWelcome" xml:space="preserve">
+        <value>Welcome</value>
+    </data>
+    <data name="HomePageText" xml:space="preserve">
+        <value>Learn about building Web apps with ASP.NET Core</value>
+    </data>
+    <data name="PrivacyDescription" xml:space="preserve">
+        <value>Use this page to detail your site's privacy policy.</value>
+    </data>
+    <data name="PrivacyUserInfo" xml:space="preserve">
+        <value>User Info</value>
+    </data>
+    <data name="PrivacyType" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="PrivacyValue" xml:space="preserve">
+        <value>Value</value>
+    </data>
+    <data name="PrivacyValueType" xml:space="preserve">
+        <value>Value Type</value>
+    </data>
+    <data name="PrivacyRequestInfo" xml:space="preserve">
+        <value>Request Info</value>
+    </data>
 </root>

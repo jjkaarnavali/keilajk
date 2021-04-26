@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
+#pragma warning disable 1591
 
 namespace WebApp.Areas.Identity.IdentityErrorDescriber
 {

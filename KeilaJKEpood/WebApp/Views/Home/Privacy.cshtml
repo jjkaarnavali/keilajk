@@ -1,17 +1,17 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
+<h1>@Resources.Base.Common.Privacy</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<p>@Resources.Base.Common.PrivacyDescription</p>
 
-<h4>User info</h4>
+<h4>@Resources.Base.Common.PrivacyUserInfo</h4>
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>Type</th>
-        <th>Value</th>
-        <th>ValueType</th>
+        <th>@Resources.Base.Common.PrivacyType</th>
+        <th>@Resources.Base.Common.PrivacyValue</th>
+        <th>@Resources.Base.Common.PrivacyValueType</th>
     </tr>
     </thead>
     <tbody>
@@ -35,4 +35,4 @@
 <h4>JWT</h4>
 
 @Html.Raw(Extensions.Base.IdentityExtensions.GenerateJwt(User.Claims, "kadfj,hvd_fkw3  894tASBVC6e786tdfjnbjkd..fbn", "itcollege.taltech.ee", "itcollege.taltech.ee", DateTime.Now.AddDays(30)))
-<h4>Request info</h4>
+<h4>@Resources.Base.Common.PrivacyRequestInfo</h4>

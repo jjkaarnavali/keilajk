@@ -129,4 +129,28 @@
     <data name="ErrorMessage_Email" xml:space="preserve">
         <value>Väli {0} ei ole legaalne e-posti aadress.</value>
     </data>
+    <data name="HomePageWelcome" xml:space="preserve">
+        <value>Tere tulemast</value>
+    </data>
+    <data name="HomePageText" xml:space="preserve">
+        <value>Õpi kuidas arendada veebirakendusi kasutades ASP.NET Core-i</value>
+    </data>
+    <data name="PrivacyDescription" xml:space="preserve">
+        <value>Kasuta seda lehte, et näha oma veebilehe privaatsus seadeid.</value>
+    </data>
+    <data name="PrivacyUserInfo" xml:space="preserve">
+        <value>Kasutaja info</value>
+    </data>
+    <data name="PrivacyType" xml:space="preserve">
+        <value>Tüüp</value>
+    </data>
+    <data name="PrivacyValue" xml:space="preserve">
+        <value>Väärtus</value>
+    </data>
+    <data name="PrivacyValueType" xml:space="preserve">
+        <value>Väärtustüüp</value>
+    </data>
+    <data name="PrivacyRequestInfo" xml:space="preserve">
+        <value>Päringu info</value>
+    </data>
 </root>
