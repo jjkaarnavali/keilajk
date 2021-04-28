@@ -14,7 +14,6 @@ namespace DTO.App
         public string PersonsIdCode { get; set; }  = default!;
         
         
-
     }
     public class PersonAdd
     {
@@ -26,6 +25,4 @@ namespace DTO.App
         
         public string PersonsIdCode { get; set; }  = default!;
     }
-
-    
 }

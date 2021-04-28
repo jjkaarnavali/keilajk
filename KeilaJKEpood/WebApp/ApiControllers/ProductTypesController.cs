@@ -115,12 +115,25 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<ProductType>> PostProductType(ProductType productType)
+        public async Task<ActionResult<ProductType>> PostProductType(DTO.App.ProductTypeAdd productType)
         {
-            _bll.ProductTypes.Add(productType);
+            var bllProductType = new ProductType()
+            {
+                TypeName = productType.TypeName
+            };
+            var addedProductType = _bll.ProductTypes.Add(bllProductType);
+            
+            // bll will call dal.SaveChangesAsync => will call EF.SaveChangesAsync()
+            // ef will update entities with new ID-s
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetProductType", new { id = productType.Id }, productType);
+            var returnProductType = new DTO.App.ProductTypeDTO()
+            {
+                Id = addedProductType.Id,
+                TypeName = addedProductType.TypeName
+            };
+
+            return CreatedAtAction("GetProductType", new {id = returnProductType.Id}, returnProductType);
         }
 
         // DELETE: api/ProductTypes/5

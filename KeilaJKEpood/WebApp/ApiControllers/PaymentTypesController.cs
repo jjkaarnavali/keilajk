@@ -71,6 +71,25 @@ namespace WebApp.ApiControllers
             }
 
             return paymentType;
+            /*var paymentTypes = await _bll.PaymentTypes.GetAllAsync();
+            var userid = User;
+            var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id);
+
+            foreach (var per in paymentTypes)
+            {
+                if (per.Id == id)
+                {
+                    paymentType = per;
+                } 
+            }
+            
+            
+            if (paymentType == null)
+            {
+                return NotFound();
+            }
+
+            return paymentType;*/
         }
 
         // PUT: api/PaymentTypes/5
@@ -120,12 +139,25 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PaymentType>> PostPaymentType(PaymentType paymentType)
+        public async Task<ActionResult<PaymentType>> PostPaymentType(DTO.App.PaymentTypeAdd paymentType)
         {
-            _bll.PaymentTypes.Add(paymentType);
+            var bllPaymentType = new PaymentType()
+            {
+                PaymentTypeName = paymentType.PaymentTypeName
+            };
+            var addedPaymentType = _bll.PaymentTypes.Add(bllPaymentType);
+            
+            // bll will call dal.SaveChangesAsync => will call EF.SaveChangesAsync()
+            // ef will update entities with new ID-s
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetPaymentType", new { id = paymentType.Id }, paymentType);
+            var returnPaymentType = new DTO.App.PaymentTypeDTO()
+            {
+                Id = addedPaymentType.Id,
+                PaymentTypeName = addedPaymentType.PaymentTypeName!
+            };
+
+            return CreatedAtAction("GetPaymentType", new {id = returnPaymentType.Id}, returnPaymentType);
         }
 
         // DELETE: api/PaymentTypes/5
