@@ -13,6 +13,7 @@ namespace DAL.App.DTO
         public Guid UserId { get; set; }
         
         public Guid OrderId { get; set; }
+        public Guid BillNrId { get; set; }
         
         public string BillNr { get; set; }  = default!;
         

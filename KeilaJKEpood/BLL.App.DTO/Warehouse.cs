@@ -7,14 +7,21 @@ namespace BLL.App.DTO
     public class Warehouse : DomainEntityId
     {
        
+        public Guid AddressId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Warehouse), Name = "Address")]
         [MaxLength(64)]
         public string Address { get; set; }  = default!;
+        
+        public Guid PhoneId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Warehouse), Name = "Phone")]
         [MaxLength(64)]
         public string Phone { get; set; }  = default!;
+        
+        public Guid EmailId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Warehouse), Name = "Email")]
         public string Email { get; set; }  = default!;
+        
+        public Guid WarehouseCodeId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Warehouse), Name = "WarehouseCode")]
         public string WarehouseCode { get; set; }  = default!;
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Warehouse), Name = "From")]

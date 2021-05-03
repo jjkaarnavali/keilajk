@@ -12,6 +12,7 @@ using DAL.Base.EF.Repositories;
 using DTO.App;
 using Microsoft.EntityFrameworkCore;
 using Domain.App;
+using Discount = DAL.App.DTO.Discount;
 using DiscountMapper = DAL.App.EF.Mappers.DiscountMapper;
 
 namespace DAL.App.EF.Repositories
@@ -22,6 +23,36 @@ namespace DAL.App.EF.Repositories
         {
         }
 
+        public override Discount Update(Discount entity)
+        {
+            var domainEntity = Mapper.Map(entity);
+
+            // load the translations (will lose the dal mapper translations)
+            domainEntity!.DiscountName = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.DiscountNameId);
+            // set the value from dal entity back to list
+            domainEntity!.DiscountName.SetTranslation(entity.DiscountName);
+            
+            domainEntity!.RequiredUserLevel = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.RequiredUserLevelId);
+            // set the value from dal entity back to list
+            domainEntity!.RequiredUserLevel.SetTranslation(entity.RequiredUserLevel!);
+            
+            domainEntity!.DiscountPercentage = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.DiscountPercentageId);
+            // set the value from dal entity back to list
+            domainEntity!.DiscountPercentage.SetTranslation(entity.DiscountPercentage);
+            
+            var updatedEntity = RepoDbSet.Update(domainEntity!).Entity;
+            var dalEntity = Mapper.Map(updatedEntity);
+            return dalEntity!;
+        }
         
         
         public override async Task<IEnumerable<DAL.App.DTO.Discount>> GetAllAsync(Guid userId, bool noTracking = true)
@@ -32,6 +63,18 @@ namespace DAL.App.EF.Repositories
             {
                 query = query.AsNoTracking();
             }
+            
+            query = query
+                .Include(p => p.RequiredUserLevel)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.DiscountPercentage)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.DiscountName)
+                .ThenInclude(t => t!.Translations);
 
             /*query = query
                 .Include(p => p.DiscountName)
@@ -51,6 +94,18 @@ namespace DAL.App.EF.Repositories
             {
                 query = query.AsNoTracking();
             }
+            
+            query = query
+                .Include(p => p.RequiredUserLevel)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.DiscountPercentage)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.DiscountName)
+                .ThenInclude(t => t!.Translations);
             
             
             

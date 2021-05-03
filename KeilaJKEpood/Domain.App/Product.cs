@@ -12,14 +12,17 @@ namespace Domain.App
         
         public Guid ProductTypeId { get; set; }
         
+        public Guid ProductNameId { get; set; }
+        public LangString? ProductName { get; set; }
         
-        public string ProductName { get; set; }  = default!;
+        public Guid ProductSizeId { get; set; }
+        public LangString? ProductSize { get; set; }
         
-        public string ProductSize { get; set; }  = default!;
+        public Guid ProductSeasonId { get; set; }
+        public LangString? ProductSeason { get; set; }
         
-        public string ProductSeason { get; set; }  = default!;
-        
-        public string ProductCode { get; set; }  = default!;
+        public Guid ProductCodeId { get; set; }
+        public LangString? ProductCode { get; set; }
         
         public DateTime From { get; set; } // When was the product added
         

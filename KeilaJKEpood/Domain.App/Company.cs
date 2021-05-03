@@ -7,16 +7,19 @@ namespace Domain.App
     public class Company : DomainEntityId
     {
       
-        
+        public Guid CompanyNameId { get; set; }
         [MaxLength(64)]
-        public string CompanyName { get; set; }  = default!;
+        public LangString? CompanyName { get; set; }
         
+        public Guid RegistrationCodeId { get; set; }
         [MaxLength(64)]
-        public string RegistrationCode { get; set; }  = default!;
+        public LangString? RegistrationCode { get; set; }
         
-        public string Phone { get; set; }  = default!;
+        public Guid PhoneId { get; set; }
+        public LangString? Phone { get; set; }
         
-        public string Email { get; set; }  = default!;
+        public Guid EmailId { get; set; }
+        public LangString? Email { get; set; }
         
         public DateTime From { get; set; } // When was the companies products added to shop
         

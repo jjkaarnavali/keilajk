@@ -13,6 +13,9 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="RequiredUserLevelId" />
+            <input type="hidden" asp-for="DiscountPercentageId" />
+            <input type="hidden" asp-for="DiscountNameId" />
             <div class="form-group">
                 <label asp-for="RequiredUserLevel" class="control-label"></label>
                 <input asp-for="RequiredUserLevel" class="form-control" />

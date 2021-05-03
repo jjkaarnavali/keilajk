@@ -14,6 +14,8 @@ namespace BLL.App.DTO
         public Guid UserId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Bill), Name = "OrderId")]
         public Guid OrderId { get; set; }
+        
+        public Guid BillNrId { get; set; }
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Bill), Name = "BillNr")]
         public string BillNr { get; set; }  = default!;
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Bill), Name = "CreationTime")]

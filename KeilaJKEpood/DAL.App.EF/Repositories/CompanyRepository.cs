@@ -12,6 +12,7 @@ using DAL.Base.EF.Repositories;
 using DTO.App;
 using Microsoft.EntityFrameworkCore;
 using Domain.App;
+using Company = DAL.App.DTO.Company;
 using CompanyMapper = DAL.App.EF.Mappers.CompanyMapper;
 
 
@@ -23,6 +24,43 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        public override Company Update(Company entity)
+        {
+            var domainEntity = Mapper.Map(entity);
+
+            // load the translations (will lose the dal mapper translations)
+            domainEntity!.CompanyName = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.CompanyNameId);
+            // set the value from dal entity back to list
+            domainEntity!.CompanyName.SetTranslation(entity.CompanyName);
+            
+            domainEntity!.RegistrationCode = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.RegistrationCodeId);
+            // set the value from dal entity back to list
+            domainEntity!.RegistrationCode.SetTranslation(entity.RegistrationCode);
+            
+            domainEntity!.Phone = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.PhoneId);
+            // set the value from dal entity back to list
+            domainEntity!.Phone.SetTranslation(entity.Phone);
+            
+            domainEntity!.Email = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.EmailId);
+            // set the value from dal entity back to list
+            domainEntity!.Email.SetTranslation(entity.Email);
+            
+            var updatedEntity = RepoDbSet.Update(domainEntity!).Entity;
+            var dalEntity = Mapper.Map(updatedEntity);
+            return dalEntity!;
+        }
         
         public override async Task<IEnumerable<DAL.App.DTO.Company>> GetAllAsync(Guid userId, bool noTracking = true)
         {
@@ -32,6 +70,22 @@ namespace DAL.App.EF.Repositories
             {
                 query = query.AsNoTracking();
             }
+            
+            query = query
+                .Include(p => p.CompanyName)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.RegistrationCode)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.Phone)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.Email)
+                .ThenInclude(t => t!.Translations);
 
             /*query = query
                 .Include(p => p.Email)
@@ -48,6 +102,22 @@ namespace DAL.App.EF.Repositories
         public override async Task<DAL.App.DTO.Company?> FirstOrDefaultAsync(Guid id, Guid userId, bool noTracking = true)
         {
             var query = RepoDbSet.AsQueryable();
+            
+            query = query
+                .Include(p => p.CompanyName)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.RegistrationCode)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.Phone)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.Email)
+                .ThenInclude(t => t!.Translations);
 
             if (noTracking)
             {

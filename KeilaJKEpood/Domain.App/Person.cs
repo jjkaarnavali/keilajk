@@ -10,15 +10,15 @@ namespace Domain.App
     public class Person : DomainEntityId, IDomainAppUserId, IDomainAppUser<AppUser>
     {
         
-        
+        public Guid FirstNameId { get; set; }
         [MaxLength(64)]
-        public string FirstName { get; set; }  = default!;
-        
+        public LangString? FirstName { get; set; }
+        public Guid LastNameId { get; set; }
         [MaxLength(64)]
-        public string LastName { get; set; }  = default!;
-        
+        public LangString? LastName { get; set; }
+        public Guid PersonsIdCodeId { get; set; }
         [MaxLength(11)]
-        public string PersonsIdCode { get; set; }  = default!;
+        public LangString? PersonsIdCode { get; set; }
         
         public Guid AppUserId { get; set; }
         public AppUser? AppUser { get; set; }

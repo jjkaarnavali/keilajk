@@ -12,6 +12,7 @@ namespace BLL.App.DTO.MappingProfiles
             CreateMap<Person, DAL.App.DTO.Person>().ReverseMap();
             CreateMap<Bill, DAL.App.DTO.Bill>().ReverseMap();
             CreateMap<Company, DAL.App.DTO.Company>().ReverseMap();
+            CreateMap<Discount, DAL.App.DTO.Discount>().ReverseMap();
             CreateMap<LineOnBill, DAL.App.DTO.LineOnBill>().ReverseMap();
             CreateMap<Order, DAL.App.DTO.Order>().ReverseMap();
             CreateMap<Payment, DAL.App.DTO.Payment>().ReverseMap();

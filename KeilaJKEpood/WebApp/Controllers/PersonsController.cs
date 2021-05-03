@@ -34,7 +34,7 @@ namespace WebApp.Controllers
         // GET: Persons
         public async Task<IActionResult> Index()
         {
-            return View(await _bll.Persons.GetAllPersonsWithInfo(User.GetUserId()!.Value));
+            return View(await _bll.Persons.GetAllAsync(User.GetUserId()!.Value));
         }
 
 

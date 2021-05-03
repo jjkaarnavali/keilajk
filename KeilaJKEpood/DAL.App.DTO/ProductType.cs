@@ -7,6 +7,7 @@ namespace DAL.App.DTO
     {
       
         
-        public string TypeName { get; set; }  = default!;
+        public Guid TypeNameId { get; set; }
+        public string TypeName { get; set; } = default!;
     }
 }

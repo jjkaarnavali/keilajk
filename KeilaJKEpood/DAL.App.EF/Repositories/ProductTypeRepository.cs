@@ -12,6 +12,7 @@ using DAL.Base.EF.Repositories;
 using DTO.App;
 using Microsoft.EntityFrameworkCore;
 using Domain.App;
+using ProductType = DAL.App.DTO.ProductType;
 using ProductTypeMapper = DAL.App.EF.Mappers.ProductTypeMapper;
 
 namespace DAL.App.EF.Repositories
@@ -22,6 +23,22 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        public override ProductType Update(ProductType entity)
+        {
+            var domainEntity = Mapper.Map(entity);
+
+            // load the translations (will lose the dal mapper translations)
+            domainEntity!.TypeName = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.TypeNameId);
+            // set the value from dal entity back to list
+            domainEntity!.TypeName.SetTranslation(entity.TypeName);
+            
+            var updatedEntity = RepoDbSet.Update(domainEntity!).Entity;
+            var dalEntity = Mapper.Map(updatedEntity);
+            return dalEntity!;
+        }
         
         public override async Task<IEnumerable<DAL.App.DTO.ProductType>> GetAllAsync(Guid userId, bool noTracking = true)
         {
@@ -31,6 +48,10 @@ namespace DAL.App.EF.Repositories
             {
                 query = query.AsNoTracking();
             }
+            
+            query = query
+                .Include(p => p.TypeName)
+                .ThenInclude(t => t!.Translations);
 
             /*query = query
                 .Include(p => p.TypeName);*/
@@ -49,6 +70,10 @@ namespace DAL.App.EF.Repositories
             {
                 query = query.AsNoTracking();
             }
+            
+            query = query
+                .Include(p => p.TypeName)
+                .ThenInclude(t => t!.Translations);
             
             
             var res = await query.FirstOrDefaultAsync(m => m.Id == id);

@@ -12,6 +12,7 @@ using DAL.Base.EF.Repositories;
 using DTO.App;
 using Microsoft.EntityFrameworkCore;
 using Domain.App;
+using Product = DAL.App.DTO.Product;
 using ProductMapper = DAL.App.EF.Mappers.ProductMapper;
 
 namespace DAL.App.EF.Repositories
@@ -22,6 +23,43 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        public override Product Update(Product entity)
+        {
+            var domainEntity = Mapper.Map(entity);
+
+            // load the translations (will lose the dal mapper translations)
+            domainEntity!.ProductName = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.ProductNameId);
+            // set the value from dal entity back to list
+            domainEntity!.ProductName.SetTranslation(entity.ProductName);
+            
+            domainEntity!.ProductSize = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.ProductSizeId);
+            // set the value from dal entity back to list
+            domainEntity!.ProductSize.SetTranslation(entity.ProductSize);
+            
+            domainEntity!.ProductSeason = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.ProductSeasonId);
+            // set the value from dal entity back to list
+            domainEntity!.ProductSeason.SetTranslation(entity.ProductSeason);
+            
+            domainEntity!.ProductCode = 
+                RepoDbContext.LangStrings
+                    .Include(t => t.Translations)
+                    .First(x => x.Id == domainEntity.ProductCodeId);
+            // set the value from dal entity back to list
+            domainEntity!.ProductCode.SetTranslation(entity.ProductCode);
+            
+            var updatedEntity = RepoDbSet.Update(domainEntity!).Entity;
+            var dalEntity = Mapper.Map(updatedEntity);
+            return dalEntity!;
+        }
         
         public override async Task<IEnumerable<DAL.App.DTO.Product>> GetAllAsync(Guid userId, bool noTracking = true)
         {

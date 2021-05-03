@@ -13,8 +13,9 @@ namespace Domain.App
         public Guid UserId { get; set; }
         
         public Guid OrderId { get; set; }
+        public Guid BillNrId { get; set; }
         
-        public string BillNr { get; set; }  = default!;
+        public LangString? BillNr { get; set; }
         
         public DateTime CreationTime { get; set; } // When was the bill generated
         

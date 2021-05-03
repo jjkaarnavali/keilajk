@@ -39,8 +39,7 @@ namespace DAL.App.EF.Repositories
             var dalEntity = Mapper.Map(updatedEntity);
             return dalEntity!;
         }
-
-
+        
 
         public Task DeleteAllByNameAsync(string name)
         {

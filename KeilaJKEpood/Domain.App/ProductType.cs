@@ -6,7 +6,7 @@ namespace Domain.App
     public class ProductType : DomainEntityId
     {
       
-        
-        public string TypeName { get; set; }  = default!;
+        public Guid TypeNameId { get; set; }
+        public LangString? TypeName { get; set; }
     }
 }
