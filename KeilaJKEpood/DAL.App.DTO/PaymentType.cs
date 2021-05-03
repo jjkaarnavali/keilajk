@@ -7,8 +7,10 @@ namespace DAL.App.DTO
     public class PaymentType : DomainEntityId
     {
        
+        public Guid PaymentTypeNameId { get; set; }
 
         [MaxLength(32)]
-        public string? PaymentTypeName { get; set; } // Through bank, credit/debit card, paypal
+        //[Display(ResourceType = typeof(Resources.DAL.App.DTO.PaymentType), Name = nameof(PaymentTypeName))]
+        public string PaymentTypeName { get; set; } = default!; // Through bank, credit/debit card, paypal
     }
 }

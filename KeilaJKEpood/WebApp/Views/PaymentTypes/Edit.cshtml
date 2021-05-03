@@ -11,15 +11,16 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="PaymentTypeNameId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="PaymentTypeName" class="control-label"></label>
-                <input asp-for="PaymentTypeName" class="form-control" />
+                <input asp-for="PaymentTypeName" class="form-control"/>
                 <span asp-validation-for="PaymentTypeName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="@Resources.Base.Common.Save" class="btn btn-primary" />
+                <input type="submit" value="@Resources.Base.Common.Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>

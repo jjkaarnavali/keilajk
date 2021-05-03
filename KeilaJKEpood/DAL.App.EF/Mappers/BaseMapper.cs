@@ -11,12 +11,12 @@ namespace DAL.App.EF.Mappers
         {
             Mapper = mapper;
         }
-        public TLeftEntity? Map(TRightEntity? inObject)
+        public virtual TLeftEntity? Map(TRightEntity? inObject)
         {
             return Mapper.Map<TLeftEntity>(inObject);
         }
 
-        public TRightEntity? Map(TLeftEntity? inObject)
+        public virtual TRightEntity? Map(TLeftEntity? inObject)
         {
             return Mapper.Map<TRightEntity>(inObject);
         }

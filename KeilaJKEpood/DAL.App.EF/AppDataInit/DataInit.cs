@@ -23,6 +23,12 @@ namespace DAL.App.EF.AppDataInit
         public static void SeedAppData(AppDbContext ctx)
         {
             var p = new Person() {FirstName = "Foo", LastName = "Lmao", PersonsIdCode = "11111111111"};
+
+            var ptypeVisa = new PaymentType()
+            {
+                PaymentTypeName = "VISA"
+            };
+            ctx.PaymentTypes.Add(ptypeVisa);
             
             ctx.SaveChanges();
         }

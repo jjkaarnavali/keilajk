@@ -8,7 +8,11 @@ namespace Domain.App
     {
        
 
-        [MaxLength(32)]
-        public string? PaymentTypeName { get; set; } // Through bank, credit/debit card, paypal
+        //[MaxLength(32)]
+        //public string? PaymentTypeName { get; set; } // Through bank, credit/debit card, paypal
+        
+        public Guid PaymentTypeNameId { get; set; }
+        public LangString? PaymentTypeName { get; set; }
+
     }
 }

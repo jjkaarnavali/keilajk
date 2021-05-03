@@ -6,6 +6,7 @@ namespace DAL.App.DTO.MappingProfiles
     {
         public AutoMapperProfile()
         {
+            // CreateMap<string, Domain.Base.LangString>().ReverseMap();
             
             CreateMap<DAL.App.DTO.Person, Domain.App.Person>().ReverseMap();
             CreateMap<DAL.App.DTO.Bill, Domain.App.Bill>().ReverseMap();
