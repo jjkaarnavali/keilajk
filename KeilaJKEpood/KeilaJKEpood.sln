@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{D1FECD52-A43A-4737-8E3F-E612411FA639}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{CBE2C6E9-6BF2-455A-A374-0120E8ECADC4}"
+ProjectSection(SolutionItems) = preProject
+	.dockerignore = .dockerignore
+	Dockerfile.dockerfile = Dockerfile.dockerfile
+	ReadMe.md = ReadMe.md
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.App.EF", "DAL.App.EF\DAL.App.EF.csproj", "{38A68F81-AA59-4918-8D72-EAEDBE4B355A}"
 EndProject
