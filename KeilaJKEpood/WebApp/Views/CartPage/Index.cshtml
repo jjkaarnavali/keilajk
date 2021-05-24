@@ -5,81 +5,70 @@
     
 <body>
         
-<!-- Product section-->
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    
-            <div class="col-md-6">
-                  <table class="table">
-                      <thead>
-                          <tr>
-                              <th>
-                                  Product name
-                              </th>
-                              <th>
-                                  Product amount
-                              </th>
-                              <th>
-                                  Price
-                              </th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                      
-                          @foreach (BLL.App.DTO.Product product in Model.products)
-                          {
-                              <tr>
-                              <th>
-                                    <a>@product.ProductName</a>
-                              </th>
-                              <th>
-                                  @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
-                                  {
-                                      @if (productInOrder.ProductId == product.Id)
-                                      {
-                                          <a>@productInOrder.ProductAmount</a>
-                                      }
-                                  }
-                                  
-                              </th>
-                                  <th>
-                                      @foreach (BLL.App.DTO.Price price in Model.prices)
-                                      {
-                                          @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
-                                          {
-                                              @if (product.Id == price.ProductId && price.Until == null && productInOrder.ProductId == product.Id)
-                                              {
-                                                  <a>@(price.PriceInEur * productInOrder.ProductAmount)</a>
-                                              }
-                                          }
-                              
-                                      }
-                                  </th>
-                                  
-                                  <th>
-                                      @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
-                                                                        {
-                                                                            @if (productInOrder.ProductId == product.Id)
-                                                                            {
-                                                                                <a asp-action="Remove" asp-route-id="@productInOrder.Id">Remove</a>
-                                                                            }
-                                                                        }
-                                  </th>
-                                  
-                              </tr>
-                              
-                          }
-                      
 
-                      </tbody>
-                  </table>      
-                
-                
-            </div>
-        </div>
-    </div>
-</section>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Product name
+        </th>
+        <th>
+            Product amount
+        </th>
+        <th>
+            Price
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (BLL.App.DTO.Product product in Model.products)
+    {
+        <tr>
+            <th>
+                <a>@product.ProductName</a>
+            </th>
+            <th>
+                @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
+                {
+                    @if (productInOrder.ProductId == product.Id)
+                    {
+                        <a>@productInOrder.ProductAmount</a>
+                    }
+                }
+                                  
+            </th>
+            <th>
+                @foreach (BLL.App.DTO.Price price in Model.prices)
+                {
+                    @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
+                    {
+                        @if (product.Id == price.ProductId && price.Until == null && productInOrder.ProductId == product.Id)
+                        {
+                            <a>@(price.PriceInEur * productInOrder.ProductAmount)</a>
+                        }
+                    }
+                              
+                }
+            </th>
+                                  
+            <th>
+                @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
+                {
+                    @if (productInOrder.ProductId == product.Id)
+                    {
+                        <a asp-action="Remove" asp-route-id="@productInOrder.Id">Remove</a>
+                    }
+                }
+            </th>
+        </tr>
+                              
+    }
+    </tbody>
+</table>
+
+<a>Total price @Model.totalPrice</a>
+
+<a asp-controller="PurchasePage" asp-action="Index" asp-route-total="@Model.totalPrice">Purchase</a>
 </body>
 </html>

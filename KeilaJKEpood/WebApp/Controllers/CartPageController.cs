@@ -93,6 +93,22 @@ namespace WebApp.Controllers
             mymodel.productsInOrders = usersProductsInOrders;
             mymodel.products = usersProducts;
             mymodel.prices = productPrices;
+            mymodel.totalPrice = 0;
+            
+            foreach (BLL.App.DTO.Product product in mymodel.products)
+            {
+                foreach (BLL.App.DTO.Price price in mymodel.prices)
+                {
+                    foreach (BLL.App.DTO.ProductInOrder productInOrder in mymodel.productsInOrders)
+                    {
+                        if (product.Id == price.ProductId && price.Until == null && productInOrder.ProductId == product.Id)
+                        {
+                            mymodel.totalPrice += price.PriceInEur * productInOrder.ProductAmount;
+                        }
+                    }
+                              
+                }
+            }
             
             
             await _bll.SaveChangesAsync();
