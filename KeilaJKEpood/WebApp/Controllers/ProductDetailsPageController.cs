@@ -33,12 +33,24 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+            var products = await _bll.Products.GetAllAsync(User.GetUserId()!.Value);
+            var product = new BLL.App.DTO.Product();
+            
 
-            var product = await _bll.Products.FirstOrDefaultAsync(id.Value, User.GetUserId()!.Value);
+            foreach (var prod in products)
+            {
+                if (prod.Id == id)
+                {
+                    product = prod;
+                }
+            }
             if (product == null)
             {
                 return NotFound();
             }
+
+            var price = GetPrice(product.Id);
+            product.Price = await price;
 
             return View(product);
         }
