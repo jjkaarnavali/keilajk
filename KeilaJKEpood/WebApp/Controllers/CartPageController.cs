@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
@@ -28,27 +29,74 @@ namespace WebApp.Controllers
             _bll = bll;
         }
         
-
+        // https://www.c-sharpcorner.com/UploadFile/ff2f08/multiple-models-in-single-view-in-mvc/
         public async Task<IActionResult> Index()
         {
+            
+            dynamic mymodel = new ExpandoObject();
+            var orders = await _bll.Orders.GetAllAsync(User.GetUserId()!.Value);
+            
             var products = await _bll.Products.GetAllAsync(User.GetUserId()!.Value);
             
-            var productsWithPrices = new List<BLL.App.DTO.Product>();
-            //var prices = await _bll.Prices.GetAllAsync(User.GetUserId()!.Value);
+            var prices = await _bll.Prices.GetAllAsync(User.GetUserId()!.Value);
             
-            //CreateOrder();
+            var productsInOrders = await _bll.ProductsInOrders.GetAllAsync(User.GetUserId()!.Value);
+
+            var userId = User.GetUserId();
+            var usersOrder = new Order();
+            var usersProductsInOrders = new List<ProductInOrder>();
+            var usersProducts = new List<Product>();
+            var productPrices = new List<Price>();
             
+            // Find the users order
+            foreach (var order in orders)
+            {
+                if (order.UserId == userId && order.Until == null)
+                {
+                    usersOrder = order;
+                }
+            }
+            
+            // Find productsInOrder that are for the order
+            foreach (var prInOrder in productsInOrders)
+            {
+                if (prInOrder.OrderId == usersOrder.Id && prInOrder.Until == null)
+                {
+                    usersProductsInOrders.Add(prInOrder);
+                }
+            }
+            
+            // Find the products themselves
+            foreach (var usersPrInOrder in usersProductsInOrders)
+            {
+                foreach (var product in products)
+                {
+                    if (usersPrInOrder.ProductId == product.Id)
+                    {
+                        usersProducts.Add(product);
+                    }
+                }
+            }
+            
+            // Find the prices of the products
             foreach (var product in products)
             {
-                
-                var price =  GetPrice(product.Id);
-                product.Price = await price;
-                
-               
-                productsWithPrices.Add(product);
+                foreach (var price in prices)
+                {
+                    if (price.ProductId == product.Id && price.Until == null)
+                    {
+                        productPrices.Add(price);
+                    }
+                }
             }
+
+            mymodel.productsInOrders = usersProductsInOrders;
+            mymodel.products = usersProducts;
+            mymodel.prices = productPrices;
+            
+            
             await _bll.SaveChangesAsync();
-            return View(productsWithPrices);
+            return View(mymodel);
         }
         public async Task<decimal> GetPrice(Guid id)
         {
