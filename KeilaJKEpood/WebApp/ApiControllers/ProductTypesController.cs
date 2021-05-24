@@ -36,6 +36,7 @@ namespace WebApp.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<ProductType>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,6 +54,7 @@ namespace WebApp.ApiControllers
         /// <param name="id">Id of object to retrieve, Guid</param>
         /// <returns>BLL.App.DTO.ProductType</returns>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ProductType), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

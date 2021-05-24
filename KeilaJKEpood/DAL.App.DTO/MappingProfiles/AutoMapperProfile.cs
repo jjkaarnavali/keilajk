@@ -18,7 +18,7 @@ namespace DAL.App.DTO.MappingProfiles
             CreateMap<DAL.App.DTO.PaymentType, Domain.App.PaymentType>().ReverseMap();
             CreateMap<DAL.App.DTO.Price, Domain.App.Price>().ReverseMap();
             CreateMap<DAL.App.DTO.Product, Domain.App.Product>().ReverseMap();
-            CreateMap<DAL.App.DTO.ProductInOrder, Domain.App.ProductType>().ReverseMap();
+            CreateMap<DAL.App.DTO.ProductInOrder, Domain.App.ProductInOrder>().ReverseMap();
             CreateMap<DAL.App.DTO.ProductInWarehouse, Domain.App.ProductInWarehouse>().ReverseMap();
             CreateMap<DAL.App.DTO.ProductType, Domain.App.ProductType>().ReverseMap();
             CreateMap<DAL.App.DTO.Warehouse, Domain.App.Warehouse>().ReverseMap();

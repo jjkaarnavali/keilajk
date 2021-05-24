@@ -1,12 +1,10 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Domain.Base;
 
 namespace Domain.App
 {
     public class ProductInOrder : DomainEntityId
     {
-     
         
         public Guid ProductId { get; set; }
         

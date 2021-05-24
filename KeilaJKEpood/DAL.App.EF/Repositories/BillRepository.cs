@@ -58,6 +58,10 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.PriceToPay)
                 .Include(p => p.PriceWithoutTax)
                 .Include(p => p.SumOfTax);*/
+            
+            query = query
+                .Include(p => p.BillNr)
+                .ThenInclude(t => t!.Translations);
 
             var res = await query.Select(x => Mapper.Map(x)).ToListAsync();
 

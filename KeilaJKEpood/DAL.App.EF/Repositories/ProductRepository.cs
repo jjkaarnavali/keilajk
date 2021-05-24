@@ -77,6 +77,23 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.ProductSeason)
                 .Include(p => p.ProductSize)
                 .Include(p => p.ProductTypeId);*/
+            
+            query = query
+                .Include(p => p.ProductName)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.ProductSize)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.ProductCode)
+                .ThenInclude(t => t!.Translations);
+            
+            query = query
+                .Include(p => p.ProductSeason)
+                .ThenInclude(t => t!.Translations);
+            
             var res = await query.Select(x => Mapper.Map(x)).ToListAsync();
             
             

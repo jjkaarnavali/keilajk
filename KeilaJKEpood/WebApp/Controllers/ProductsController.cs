@@ -30,10 +30,12 @@ namespace WebApp.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var res =  await _bll.Products.GetAllAsync(User.GetUserId()!.Value);
+            /*var res =  await _bll.Products.GetAllAsync(User.GetUserId()!.Value);
 
             await _bll.SaveChangesAsync();
-            return View(res);
+            return View(res);*/
+            
+            return View(await _bll.Products.GetAllAsync(User.GetUserId()!.Value));
         }
 
         // GET: Products/Details/5
