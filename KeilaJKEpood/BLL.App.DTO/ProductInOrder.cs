@@ -18,4 +18,5 @@ namespace BLL.App.DTO
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.ProductInOrder), Name = "Until")]
         public DateTime? Until { get; set; } // When was the product removed from the order
     }
+    
 }

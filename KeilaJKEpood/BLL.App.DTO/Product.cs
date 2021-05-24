@@ -37,6 +37,10 @@ namespace BLL.App.DTO
         public DateTime From { get; set; } // When was the product added
         [Display(ResourceType = typeof(Resources.BLL.App.DTO.Product), Name = "Until")]
         public DateTime? Until { get; set; } // When the product was removed
+        
+        public decimal Price { get; set; }  = default!;
 
     }
+    
 }
+

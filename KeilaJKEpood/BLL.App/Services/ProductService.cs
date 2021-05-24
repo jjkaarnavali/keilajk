@@ -16,6 +16,8 @@ namespace BLL.App.Services
     {
         public ProductService(IAppUnitOfWork serviceUow, IProductRepository serviceRepository, IMapper mapper) : base(serviceUow, serviceRepository, new ProductMapper(mapper))
         {
+            
         }
     }
+    
 }
