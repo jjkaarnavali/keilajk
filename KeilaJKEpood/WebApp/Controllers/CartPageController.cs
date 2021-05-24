@@ -17,13 +17,13 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     
-    public class ProductsPageController : Controller
+    public class CartPageController : Controller
     {
         
         
         private readonly IAppBLL _bll;
 
-        public ProductsPageController(IAppBLL bll)
+        public CartPageController(IAppBLL bll)
         {
             _bll = bll;
         }
@@ -70,18 +70,13 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AddToCart(int amount, Guid productId)
         {
             var orders = await _bll.Orders.GetAllAsync(User.GetUserId()!.Value);
-            var productsInOrders = await _bll.ProductsInOrders.GetAllAsync(User.GetUserId()!.Value);
             var userId = User.GetUserId();
             var activeOrder = false;
-            Guid activeOrderId = Guid.Empty;
-            var orderContainsProduct = false;
-            var productWasUpdated = false;
             foreach (var order in orders)
             {
                 if (order.UserId == userId && order.Until == null)
                 {
                     activeOrder = true;
-                    activeOrderId = order.Id;
                 }
             }
 
@@ -96,39 +91,22 @@ namespace WebApp.Controllers
                 orders = await _bll.Orders.GetAllAsync(User.GetUserId()!.Value);
             }
             
-            foreach (var productInOrder in productsInOrders)
+            foreach (var order in orders)
             {
-                if (productInOrder.ProductId == productId && productInOrder.OrderId == activeOrderId && productInOrder.Until == null )
+                if (order.UserId == userId && order.Until == null)
                 {
-                    var updatedProduct = productInOrder;
-                    updatedProduct.ProductAmount += amount;
-                    _bll.ProductsInOrders.Update(updatedProduct);
+                    var itemInOrder = new ProductInOrder();
+                    itemInOrder.Id = Guid.NewGuid();
+                    itemInOrder.OrderId = order.Id;
+                    itemInOrder.ProductAmount = amount;
+                    itemInOrder.ProductId = productId;
+                    itemInOrder.From = DateTime.Now;
+                    _bll.ProductsInOrders.Add(itemInOrder);
                     await _bll.SaveChangesAsync();
-                    productWasUpdated = true;
-
-                }
-            }
-
-            if (!productWasUpdated)
-            {
-                foreach (var order in orders)
-                {
-                    if (order.UserId == userId && order.Until == null)
-                    {
-                        var itemInOrder = new ProductInOrder();
-                        itemInOrder.Id = Guid.NewGuid();
-                        itemInOrder.OrderId = order.Id;
-                        itemInOrder.ProductAmount = amount;
-                        itemInOrder.ProductId = productId;
-                        itemInOrder.From = DateTime.Now;
-                        _bll.ProductsInOrders.Add(itemInOrder);
-                        await _bll.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                     
-                    }
                 }
             }
-            
             return RedirectToAction(nameof(Index));
            
         }
