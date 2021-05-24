@@ -54,6 +54,8 @@ namespace WebApp.Controllers
 
             return View(product);
         }
+        
+        
 
         public async Task<decimal> GetPrice(Guid id)
         {
