@@ -44,20 +44,31 @@
                                   }
                                   
                               </th>
-                      <th>
-                          @foreach (BLL.App.DTO.Price price in Model.prices)
-                          {
-                              @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
-                              {
-                                  @if (product.Id == price.ProductId && price.Until == null && productInOrder.ProductId == product.Id)
-                                  {
-                                      <a>@(price.PriceInEur * productInOrder.ProductAmount)</a>
-                                  }
-                              }
+                                  <th>
+                                      @foreach (BLL.App.DTO.Price price in Model.prices)
+                                      {
+                                          @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
+                                          {
+                                              @if (product.Id == price.ProductId && price.Until == null && productInOrder.ProductId == product.Id)
+                                              {
+                                                  <a>@(price.PriceInEur * productInOrder.ProductAmount)</a>
+                                              }
+                                          }
                               
-                          }
-                      </th>
-                      </tr>
+                                      }
+                                  </th>
+                                  
+                                  <th>
+                                      @foreach (BLL.App.DTO.ProductInOrder productInOrder in Model.productsInOrders)
+                                                                        {
+                                                                            @if (productInOrder.ProductId == product.Id)
+                                                                            {
+                                                                                <a asp-action="Remove" asp-route-id="@productInOrder.Id">Remove</a>
+                                                                            }
+                                                                        }
+                                  </th>
+                                  
+                              </tr>
                               
                           }
                       

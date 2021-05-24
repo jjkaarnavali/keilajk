@@ -114,6 +114,13 @@ namespace WebApp.Controllers
             return 0;
         }
         
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            await _bll.ProductsInOrders.RemoveAsync(id, User.GetUserId()!.Value);
+            await _bll.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        
 
         public async Task<IActionResult> AddToCart(int amount, Guid productId)
         {
