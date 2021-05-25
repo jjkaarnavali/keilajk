@@ -162,4 +162,10 @@
     <data name="ThanksForOrdering" xml:space="preserve">
         <value>Täname tellimuse eest!</value>
     </data>
+    <data name="Products" xml:space="preserve">
+        <value>Tooted</value>
+    </data>
+    <data name="Cart" xml:space="preserve">
+        <value>Ostukorv</value>
+    </data>
 </root>

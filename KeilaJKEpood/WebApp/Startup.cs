@@ -86,7 +86,11 @@ namespace WebApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new CustomFloatingPointBinderProvider());
+            });
+
             
             services.AddCors(options =>
                 {
@@ -129,12 +133,12 @@ namespace WebApp
                 var appSupportedCultures = new[]
                 {
                     new CultureInfo("et"),
-                    new CultureInfo("en-GB"),
+                    new CultureInfo("en"),
                 };
 
                 options.SupportedCultures = appSupportedCultures;
                 options.SupportedUICultures = appSupportedCultures;
-                options.DefaultRequestCulture = new RequestCulture("en-GB", "en-GB");
+                options.DefaultRequestCulture = new RequestCulture("en", "en");
                 options.SetDefaultCulture("en-GB");
                 options.RequestCultureProviders = new List<IRequestCultureProvider>()
                 {

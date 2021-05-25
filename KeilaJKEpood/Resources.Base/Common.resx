@@ -162,4 +162,10 @@
     <data name="ThanksForOrdering" xml:space="preserve">
         <value>Thanks for ordering from us!</value>
     </data>
+    <data name="Products" xml:space="preserve">
+        <value>Products</value>
+    </data>
+    <data name="Cart" xml:space="preserve">
+        <value>Cart</value>
+    </data>
 </root>

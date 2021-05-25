@@ -586,7 +586,11 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources\\Resources.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources\\Resources.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
