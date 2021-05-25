@@ -1,5 +1,5 @@
 ﻿@using Domain.App
-@model dynamic
+@model IEnumerable<BLL.App.DTO.PaymentType>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -8,23 +8,24 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            Product name
-        </th>
-        <th>
-            Product amount
-        </th>
-        <th>
-            Price
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentTypeName)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-    
-                    
-    
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentTypeName)
+            </td>
+            <td>
+                <a asp-controller="PurchaseReceivedPage" asp-action="Index" asp-route-id="@item.Id">@Resources.Base.Common.Buy</a> 
+            </td>
+        </tr>
+}
     </tbody>
 </table>
 

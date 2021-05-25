@@ -79,6 +79,15 @@ namespace Resources.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Buy using this.
+        /// </summary>
+        public static string Buy {
+            get {
+                return ResourceManager.GetString("Buy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create New.
         /// </summary>
         public static string Create {
@@ -444,6 +453,24 @@ namespace Resources.Base {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        public static string Select {
+            get {
+                return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanks for ordering from us!.
+        /// </summary>
+        public static string ThanksForOrdering {
+            get {
+                return ResourceManager.GetString("ThanksForOrdering", resourceCulture);
             }
         }
         

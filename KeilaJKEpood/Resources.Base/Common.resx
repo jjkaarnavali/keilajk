@@ -153,4 +153,13 @@
     <data name="PrivacyRequestInfo" xml:space="preserve">
         <value>Request Info</value>
     </data>
+    <data name="Select" xml:space="preserve">
+        <value>Select</value>
+    </data>
+    <data name="Buy" xml:space="preserve">
+        <value>Buy using this</value>
+    </data>
+    <data name="ThanksForOrdering" xml:space="preserve">
+        <value>Thanks for ordering from us!</value>
+    </data>
 </root>

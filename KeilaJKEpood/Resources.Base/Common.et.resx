@@ -153,4 +153,13 @@
     <data name="PrivacyRequestInfo" xml:space="preserve">
         <value>Päringu info</value>
     </data>
+    <data name="Select" xml:space="preserve">
+        <value>Vali</value>
+    </data>
+    <data name="Buy" xml:space="preserve">
+        <value>Osta sellega</value>
+    </data>
+    <data name="ThanksForOrdering" xml:space="preserve">
+        <value>Täname tellimuse eest!</value>
+    </data>
 </root>
