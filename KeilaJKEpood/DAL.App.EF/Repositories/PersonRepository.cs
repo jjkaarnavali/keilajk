@@ -38,7 +38,7 @@ namespace DAL.App.EF.Repositories
             var domainEntity = Mapper.Map(entity);
 
             // load the translations (will lose the dal mapper translations)
-            domainEntity!.FirstName = 
+            /*domainEntity!.FirstName = 
                 RepoDbContext.LangStrings
                     .Include(t => t.Translations)
                     .First(x => x.Id == domainEntity.FirstNameId);
@@ -57,7 +57,7 @@ namespace DAL.App.EF.Repositories
                     .Include(t => t.Translations)
                     .First(x => x.Id == domainEntity.PersonsIdCodeId);
             // set the value from dal entity back to list
-            domainEntity!.PersonsIdCode.SetTranslation(entity.PersonsIdCode);
+            domainEntity!.PersonsIdCode.SetTranslation(entity.PersonsIdCode);*/
             
             var updatedEntity = RepoDbSet.Update(domainEntity!).Entity;
             var dalEntity = Mapper.Map(updatedEntity);
