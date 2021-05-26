@@ -110,8 +110,8 @@ namespace TestProject.IntegrationTests
                 ["Input_Email"] = "test@user.ee",
                 ["Input_Password"] = "Foo.bar1",
                 ["Input_ConfirmPassword"] = "Foo.bar1",
-                ["Input_FirstName"] = "Test",
-                ["Input_LastName"] = "User",
+                ["Input_Firstname"] = "Test",
+                ["Input_Lastname"] = "User"
             };
 
             var regPostResponse = await _client.SendAsync(regForm, regFormValues);

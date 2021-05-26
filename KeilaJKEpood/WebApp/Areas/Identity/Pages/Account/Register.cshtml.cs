@@ -91,14 +91,14 @@ namespace WebApp.Areas.Identity.Pages.Account
             [MaxLength(128, ErrorMessageResourceType = typeof(Resources.Base.Common),
                 ErrorMessageResourceName = "ErrorMessage_MaxLength")] 
 
-            public string FirstName { get; set; } = default!;
+            public string Firstname { get; set; } = default!;
             
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "LastName")]
             [StringLength(128, MinimumLength = 1)]
             [MaxLength(128, ErrorMessageResourceType = typeof(Resources.Base.Common),
                 ErrorMessageResourceName = "ErrorMessage_MaxLength")]
 
-            public string LastName { get; set; } = default!;
+            public string Lastname { get; set; } = default!;
             
             [Display(ResourceType = typeof(Resources.Areas.Identity.Pages.Account.Register), Name = "UserLevel")]
             [StringLength(2, MinimumLength = 1)]
@@ -130,7 +130,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, UserLevel = Input.UserLevel};
+                var user = new AppUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.Firstname, LastName = Input.Lastname, UserLevel = Input.UserLevel};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
