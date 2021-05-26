@@ -20,6 +20,11 @@ namespace BLL.Base.Services
         public BaseEntityService(TUnitOfWork serviceUow, TRepository serviceRepository, IBaseMapper<TBllEntity, TDalentity> mapper) : base(serviceUow, serviceRepository, mapper)
         {
         }
+
+        public async Task GetAllNewAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class BaseEntityService<TUnitOfWork, TRepository, TBllEntity, TDalentity, TKey> : IBaseEntityService<TBllEntity, TDalentity, TKey>

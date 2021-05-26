@@ -119,7 +119,12 @@ namespace DAL.App.EF.Repositories
 
         public async Task<IEnumerable<DAL.App.DTO.Person>> GetAllNewAsync(Guid userId, bool noTracking = true)
         {
-            var query = CreateQuery(userId, noTracking);
+            var query = RepoDbSet.AsQueryable();
+
+            if (noTracking)
+            {
+                query = query.AsNoTracking();
+            }
             query = query
                 .Include(p => p.FirstName)
                 .ThenInclude(t => t!.Translations);
@@ -131,17 +136,9 @@ namespace DAL.App.EF.Repositories
             query = query
                 .Include(p => p.PersonsIdCode)
                 .ThenInclude(t => t!.Translations);
-            var resQuery = query.Select(p => new DAL.App.DTO.Person()
-                {
-                    Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    PersonsIdCode = p.PersonsIdCode
-                })
-                .OrderBy(x => x.LastName)
-                .ThenBy(x => x.FirstName);
+            var res = await query.Select(x => Mapper.Map(x)).ToListAsync();
 
-            return await resQuery.ToListAsync();
+            return res!;
 
         }
     }

@@ -17,6 +17,7 @@ namespace BLL.App.Services
     {
         public PersonService(IAppUnitOfWork serviceUow, IPersonRepository serviceRepository, IMapper mapper) : base(serviceUow, serviceRepository, new PersonMapper(mapper) )
         {
+            
         }
 
         public async Task<IEnumerable<BLLAppDTO.Person>> GetAllNewAsync(Guid userId, bool noTracking = true)
@@ -28,10 +29,9 @@ namespace BLL.App.Services
         {
             var res = (await ServiceUow.Persons
                 .GetAllNewAsync(userId)).Select(x => Mapper.Map(x)).ToList();
-
             
-
             return res!;
         }
+        
     }
 }

@@ -11,5 +11,6 @@ namespace Contracts.BLL.App.Services
     public interface IPersonService: IBaseEntityService<BLLAppDTO.Person, DALAppDTO.Person>, IPersonRepositoryCustom<BLLAppDTO.Person>
     {
         Task<IEnumerable<BLLAppDTO.Person>> GetAllPersonsWithInfo(Guid userId);
+  
     }
 }

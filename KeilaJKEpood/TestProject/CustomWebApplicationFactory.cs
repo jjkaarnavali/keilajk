@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DAL.App.EF;
 using Domain.App;
+using Domain.App.Identity;
 using Domain.Base;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -41,6 +42,15 @@ namespace TestProject
                 {
                     PaymentTypeName = new LangString("Type 0")
                 });
+                /*db.Users.Add(new AppUser()
+                {
+                    UserName = "test",
+                    UserLevel = "0",
+                    Email = "test@test.ee",
+                    FirstName = "test",
+                    LastName = "test",
+                    PasswordHash = ''
+                })*/
             });
         }
     }
