@@ -67,7 +67,6 @@ namespace WebApp.ApiControllers
         {
 
             var persons = await _bll.Persons.GetAllAsync();
-            var userid = User;
             var person = await _bll.Persons.FirstOrDefaultAsync(id);
 
             foreach (var per in persons)

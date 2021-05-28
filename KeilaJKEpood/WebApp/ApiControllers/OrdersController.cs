@@ -59,8 +59,19 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
+
+            var orders = await _bll.Orders.GetAllAsync();
             var order = await _bll.Orders.FirstOrDefaultAsync(id);
 
+            foreach (var ord in orders)
+            {
+                if (ord.Id == id)
+                {
+                    order = ord;
+                } 
+            }
+            
+            
             if (order == null)
             {
                 return NotFound();

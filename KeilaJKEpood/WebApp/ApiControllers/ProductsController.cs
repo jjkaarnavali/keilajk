@@ -60,8 +60,18 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
+            var products = await _bll.Products.GetAllAsync();
             var product = await _bll.Products.FirstOrDefaultAsync(id);
 
+            foreach (var prod in products)
+            {
+                if (prod.Id == id)
+                {
+                    product = prod;
+                } 
+            }
+            
+            
             if (product == null)
             {
                 return NotFound();
