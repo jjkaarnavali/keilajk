@@ -83,16 +83,32 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> PutBill(Guid id, Bill bill)
+        public async Task<IActionResult> PutBill(string id, DTO.App.BillUpdate bill)
         {
             if (id != bill.Id)
             {
                 return BadRequest();
             }
 
-            _bll.Bills.Update(bill);
+            var bills = await _bll.Bills.GetAllAsync();
+            foreach (var billI in bills)
+            {
+                if (billI.Id == Guid.Parse(bill.Id))
+                {
+                    billI.PersonId = Guid.Parse(bill.PersonId);
+                    billI.UserId = Guid.Parse(bill.UserId);
+                    billI.OrderId = Guid.Parse(bill.OrderId);
+                    billI.PriceWithoutTax = bill.PriceWithoutTax;
+                    billI.SumOfTax = bill.SumOfTax;
+                    billI.PriceToPay = bill.PriceToPay;
+                    billI.BillNr = bill.Id;
+                    billI.CreationTime = DateTime.Now;
+                    
+                    _bll.Bills.Update(billI);
             
-            await _bll.SaveChangesAsync();
+                    await _bll.SaveChangesAsync();
+                }
+            }
 
             return NoContent();
         }
@@ -112,19 +128,33 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<Bill>> PostBill(Bill bill)
+        public async Task<ActionResult<Bill>> PostBill(DTO.App.BillAdd bill)
         {
-            _bll.Bills.Add(bill);
+            
+            var bllBill = new Bill()
+            {
+                PersonId = Guid.Parse(bill.PersonId),
+                UserId = Guid.Parse(bill.UserId),
+                OrderId = Guid.Parse(bill.OrderId),
+                PriceWithoutTax = bill.PriceWithoutTax,
+                SumOfTax = bill.SumOfTax,
+                PriceToPay = bill.PriceToPay
+            };
+            bllBill.Id = Guid.NewGuid();
+            bllBill.BillNr = bllBill.Id.ToString();
+            bllBill.CreationTime = DateTime.Now;
+            
+            _bll.Bills.Add(bllBill);
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction(
                 "GetBill",
                 new
                 {
-                    id = bill.Id,
+                    id = bllBill.Id,
                     version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"
                 },
-                bill);
+                bllBill);
         }
 
         // DELETE: api/Bills/5

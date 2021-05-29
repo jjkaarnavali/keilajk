@@ -116,12 +116,25 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<LineOnBill>> PostLineOnBill(LineOnBill lineOnBill)
+        public async Task<ActionResult<LineOnBill>> PostLineOnBill(DTO.App.LineOnBillAdd lineOnBill)
         {
-            _bll.LinesOnBills.Add(lineOnBill);
+            var bllLineOnBill = new LineOnBill()
+            {
+                BillId = Guid.Parse(lineOnBill.BillId),
+                PriceId = Guid.Parse(lineOnBill.PriceId),
+                ProductId = Guid.Parse(lineOnBill.ProductId),
+                Amount = lineOnBill.Amount,
+                TaxPercentage = lineOnBill.TaxPercentage,
+                PriceWithoutTax = lineOnBill.PriceWithoutTax,
+                SumOfTax = lineOnBill.SumOfTax,
+                PriceToPay = lineOnBill.PriceToPay
+            };
+            bllLineOnBill.Id = Guid.NewGuid();
+
+            _bll.LinesOnBills.Add(bllLineOnBill);
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetLineOnBill", new { id = lineOnBill.Id }, lineOnBill);
+            return CreatedAtAction("GetLineOnBill", new { id = bllLineOnBill.Id }, lineOnBill);
         }
 
         // DELETE: api/LinesOnBills/5

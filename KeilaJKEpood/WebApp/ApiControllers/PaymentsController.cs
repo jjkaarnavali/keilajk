@@ -114,12 +114,20 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<Payment>> PostPayment(Payment payment)
+        public async Task<ActionResult<Payment>> PostPayment(DTO.App.PaymentAdd payment)
         {
-            _bll.Payments.Add(payment);
+            var bllPayment = new Payment()
+            {
+                PaymentTypeId = Guid.Parse(payment.PaymentTypeId),
+                BillId = Guid.Parse(payment.BillId),
+                PersonId = Guid.Parse(payment.PersonId),
+            };
+            bllPayment.Id = Guid.NewGuid();
+            bllPayment.PaymentTime = DateTime.Now;
+            _bll.Payments.Add(bllPayment);
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetPayment", new { id = payment.Id }, payment);
+            return CreatedAtAction("GetPayment", new { id = bllPayment.Id }, payment);
         }
 
         // DELETE: api/Payments/5

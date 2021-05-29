@@ -96,16 +96,20 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> PutOrder(Guid id, Order order)
+        public async Task<IActionResult> PutOrder(Guid id, DTO.App.OrderAdd order)
         {
-            if (id != order.Id)
+            var orders = await _bll.Orders.GetAllAsync();
+            foreach (var ord in orders)
             {
-                return BadRequest();
-            }
-
-            _bll.Orders.Update(order);
+                if (ord.Id == Guid.Parse(order.id))
+                {
+                    ord.Until = DateTime.Now;
+                    
+                    _bll.Orders.Update(ord);
             
-            await _bll.SaveChangesAsync();
+                    await _bll.SaveChangesAsync();
+                }
+            }
 
             return NoContent();
         }
