@@ -3297,7 +3297,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "Resources": "1.0.0"
+          "Resources": "1.0.0",
+          "Resources.Base": "1.0.0"
         },
         "compile": {
           "bin/placeholder/DTO.App.dll": {}

@@ -40,6 +40,10 @@ namespace WebApp.ApiControllers
             return Ok(new LangResources());
         }
         
-
+        [HttpGet]
+        public  ActionResult<LangResources> GetBaseLangResources()
+        {
+            return Ok(new BaseLangResources());
+        }
     }
 }

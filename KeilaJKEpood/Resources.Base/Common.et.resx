@@ -168,4 +168,49 @@
     <data name="Cart" xml:space="preserve">
         <value>Ostukorv</value>
     </data>
+    <data name="Purchase" xml:space="preserve">
+        <value>Osta</value>
+    </data>
+    <data name="Remove" xml:space="preserve">
+        <value>Eemalda</value>
+    </data>
+    <data name="Shop" xml:space="preserve">
+        <value>Pood</value>
+    </data>
+    <data name="AddToCart" xml:space="preserve">
+        <value>Lisa ostukorvi</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>Vaata</value>
+    </data>
+    <data name="TotalPrice" xml:space="preserve">
+        <value>Hind kokku</value>
+    </data>
+    <data name="ProductName" xml:space="preserve">
+        <value>Toote nimi</value>
+    </data>
+    <data name="ProductAmount" xml:space="preserve">
+        <value>Toote kogus</value>
+    </data>
+    <data name="Price" xml:space="preserve">
+        <value>Hind</value>
+    </data>
+    <data name="FirstName" xml:space="preserve">
+        <value>Eesnimi</value>
+    </data>
+    <data name="LastName" xml:space="preserve">
+        <value>Perekonnanimi</value>
+    </data>
+    <data name="IdCode" xml:space="preserve">
+        <value>ID kood</value>
+    </data>
+    <data name="Person" xml:space="preserve">
+        <value>Isik</value>
+    </data>
+    <data name="CreatePerson" xml:space="preserve">
+        <value>Lisa uus isik</value>
+    </data>
+    <data name="PaymentTypeName" xml:space="preserve">
+        <value>Makseviis</value>
+    </data>
 </root>

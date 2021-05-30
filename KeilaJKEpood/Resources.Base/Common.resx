@@ -168,4 +168,49 @@
     <data name="Cart" xml:space="preserve">
         <value>Cart</value>
     </data>
+    <data name="Purchase" xml:space="preserve">
+        <value>Purchase</value>
+    </data>
+    <data name="Remove" xml:space="preserve">
+        <value>Remove</value>
+    </data>
+    <data name="Shop" xml:space="preserve">
+        <value>Shop</value>
+    </data>
+    <data name="AddToCart" xml:space="preserve">
+        <value>Add to cart</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>View</value>
+    </data>
+    <data name="TotalPrice" xml:space="preserve">
+        <value>Total price</value>
+    </data>
+    <data name="ProductName" xml:space="preserve">
+        <value>Product name</value>
+    </data>
+    <data name="ProductAmount" xml:space="preserve">
+        <value>Product amount</value>
+    </data>
+    <data name="Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="FirstName" xml:space="preserve">
+        <value>First name</value>
+    </data>
+    <data name="LastName" xml:space="preserve">
+        <value>Last name</value>
+    </data>
+    <data name="IdCode" xml:space="preserve">
+        <value>ID Code</value>
+    </data>
+    <data name="Person" xml:space="preserve">
+        <value>Person</value>
+    </data>
+    <data name="CreatePerson" xml:space="preserve">
+        <value>Add new person</value>
+    </data>
+    <data name="PaymentTypeName" xml:space="preserve">
+        <value>Payment type</value>
+    </data>
 </root>

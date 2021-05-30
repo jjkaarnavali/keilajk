@@ -25,10 +25,10 @@
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a asp-controller="ProductDetailsPage" asp-action="Index" asp-route-id="@item.Id">View</a></div>
+                                <div class="text-center"><a asp-controller="ProductDetailsPage" asp-action="Index" asp-route-id="@item.Id">@Resources.Base.Common.View</a></div>
                             </div>
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a asp-action="AddToCart" asp-route-amount="1" asp-route-productId="@item.Id">Add to cart</a></div>
+                                <div class="text-center"><a asp-action="AddToCart" asp-route-amount="1" asp-route-productId="@item.Id">@Resources.Base.Common.AddToCart</a></div>
                             </div>
                         </div>
                     </div>

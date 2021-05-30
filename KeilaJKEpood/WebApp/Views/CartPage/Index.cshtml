@@ -10,13 +10,13 @@
     <thead>
     <tr>
         <th>
-            Product name
+            @Resources.Base.Common.ProductName
         </th>
         <th>
-            Product amount
+            @Resources.Base.Common.ProductAmount
         </th>
         <th>
-            Price
+            @Resources.Base.Common.Price
         </th>
         <th></th>
     </tr>
@@ -57,7 +57,7 @@
                 {
                     @if (productInOrder.ProductId == product.Id)
                     {
-                        <a asp-action="Remove" asp-route-id="@productInOrder.Id">Remove</a>
+                        <a asp-action="Remove" asp-route-id="@productInOrder.Id">@Resources.Base.Common.Remove</a>
                     }
                 }
             </th>
@@ -67,8 +67,8 @@
     </tbody>
 </table>
 
-<a>Total price @Model.totalPrice</a>
+<a>@Resources.Base.Common.TotalPrice @Model.totalPrice</a>
 
-<a asp-controller="SelectPersonPage" asp-action="Index">Purchase</a>
+<a asp-controller="SelectPersonPage" asp-action="Index">@Resources.Base.Common.Purchase</a>
 </body>
 </html>
