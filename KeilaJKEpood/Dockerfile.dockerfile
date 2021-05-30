@@ -15,6 +15,7 @@ COPY DAL.Base.EF/*.csproj ./DAL.Base.EF/
 COPY Domain.Base/*.csproj ./Domain.Base/
 COPY Extensions.Base/*.csproj ./Extensions.Base/
 COPY Resources.Base/*.csproj ./Resources.Base/
+COPY TestProject/*.csproj ./TestProject/
 
 # App projects
 COPY BLL.App/*.csproj ./BLL.App/
@@ -42,6 +43,7 @@ COPY DAL.Base.EF/. ./DAL.Base.EF/
 COPY Domain.Base/. ./Domain.Base/
 COPY Extensions.Base/. ./Extensions.Base/
 COPY Resources.Base/. ./Resources.Base/
+COPY TestProject/. ./TestProject/
 
 # App projects
 COPY BLL.App/. ./BLL.App/

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -23,12 +24,18 @@ namespace TestProject.IntegrationTests
         {
             _factory = factory;
             _testOutputHelper = testOutputHelper;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions()
+            _client = factory
+                .WithWebHostBuilder(builder =>
                 {
-                    // dont follow redirects
-                    AllowAutoRedirect = false
-                }
-            );
+                    builder.UseSetting("test_database_name", Guid.NewGuid().ToString());
+                })
+                .CreateClient(new WebApplicationFactoryClientOptions()
+                    {
+                        // dont follow redirects
+                        AllowAutoRedirect = false
+                    }
+                );
+
         }
 
         [Fact]
@@ -111,7 +118,8 @@ namespace TestProject.IntegrationTests
                 ["Input_Password"] = "Foo.bar1",
                 ["Input_ConfirmPassword"] = "Foo.bar1",
                 ["Input_Firstname"] = "Test",
-                ["Input_Lastname"] = "User"
+                ["Input_Lastname"] = "User",
+                ["Input_UserLevel"] = "0"
             };
 
             var regPostResponse = await _client.SendAsync(regForm, regFormValues);
