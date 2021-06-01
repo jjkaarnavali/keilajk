@@ -1,5 +1,8 @@
 ﻿@using System.Globalization
 @using System.Threading
+@using Domain.App.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,46 +25,43 @@
     <!-- Navigation-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container px-4 px-lg-5">
-                    <a class="navbar-brand" href="#!">Pood</a>
+                    <a class="navbar-brand" href="#!">@Resources.Base.Common.Shop</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                             <li class="nav-item">
                                 <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">@Resources.Base.Common.Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="ProductsPage" asp-action="Index">@Resources.Base.Common.Products</a>
-                            </li>
-                            
-                            
-                                    
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Shop
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="Index">@Resources.BLL.App.DTO.Bill.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">@Resources.BLL.App.DTO.Company.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Discounts" asp-action="Index">@Resources.BLL.App.DTO.Discount.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="LinesOnBills" asp-action="Index">@Resources.BLL.App.DTO.LineOnBill.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">@Resources.BLL.App.DTO.Order.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Payments" asp-action="Index">@Resources.BLL.App.DTO.Payment.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="PaymentTypes" asp-action="Index">@Resources.BLL.App.DTO.PaymentType.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Persons" asp-action="Index">@Resources.BLL.App.DTO.Person.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">@Resources.BLL.App.DTO.Price.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">@Resources.BLL.App.DTO.Product.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProductTypes" asp-action="Index">@Resources.BLL.App.DTO.ProductType.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProductsInOrders" asp-action="Index">@Resources.BLL.App.DTO.ProductInOrder.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProductsInWarehouses" asp-action="Index">@Resources.BLL.App.DTO.ProductInWarehouse.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Warehouses" asp-action="Index">@Resources.BLL.App.DTO.Warehouse.EntityName</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Resources.Base.Common.Privacy</a>
-                                </div>
-                            </li>
-                                   
-                                    
-                            
-                                                        
-                                    
+                            @if(SignInManager.IsSignedIn(User)){
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="ProductsPage" asp-action="Index">@Resources.Base.Common.Products</a>
+                                </li>
+                            }
+                            @if(User.IsInRole("Admin")){
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @Resources.Base.Common.Shop
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="Index">@Resources.BLL.App.DTO.Bill.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">@Resources.BLL.App.DTO.Company.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Discounts" asp-action="Index">@Resources.BLL.App.DTO.Discount.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="LinesOnBills" asp-action="Index">@Resources.BLL.App.DTO.LineOnBill.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">@Resources.BLL.App.DTO.Order.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Payments" asp-action="Index">@Resources.BLL.App.DTO.Payment.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="PaymentTypes" asp-action="Index">@Resources.BLL.App.DTO.PaymentType.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Persons" asp-action="Index">@Resources.BLL.App.DTO.Person.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">@Resources.BLL.App.DTO.Price.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">@Resources.BLL.App.DTO.Product.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="ProductTypes" asp-action="Index">@Resources.BLL.App.DTO.ProductType.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="ProductsInOrders" asp-action="Index">@Resources.BLL.App.DTO.ProductInOrder.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="ProductsInWarehouses" asp-action="Index">@Resources.BLL.App.DTO.ProductInWarehouse.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Warehouses" asp-action="Index">@Resources.BLL.App.DTO.Warehouse.EntityName</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Resources.Base.Common.Privacy</a>
+                                    </div>
+                                </li>
+                            }
+
                             <partial name="_LanguageSelection"/>
                             <partial name="_LoginPartial"/>
                                                         
