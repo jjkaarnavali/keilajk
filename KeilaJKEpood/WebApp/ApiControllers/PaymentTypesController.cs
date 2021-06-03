@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using PaymentType = BLL.App.DTO.PaymentType;
+using PaymentType = DTO.App.PaymentTypeDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -21,14 +22,16 @@ namespace WebApp.ApiControllers
     {
         
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public PaymentTypesController(IAppBLL bll)
+        public PaymentTypesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/PaymentTypes
@@ -70,7 +73,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return paymentType;
+            return Mapper.Map(paymentType, new DTO.App.PaymentTypeDTO());
             /*var paymentTypes = await _bll.PaymentTypes.GetAllAsync();
             var userid = User;
             var paymentType = await _bll.PaymentTypes.FirstOrDefaultAsync(id);
@@ -115,7 +118,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.PaymentTypes.Update(paymentType);
+            _bll.PaymentTypes.Update(Mapper.Map(paymentType, new BLL.App.DTO.PaymentType()));
             
             await _bll.SaveChangesAsync();
             
@@ -145,7 +148,7 @@ namespace WebApp.ApiControllers
             {
                 PaymentTypeName = paymentType.PaymentTypeName
             };
-            var addedPaymentType = _bll.PaymentTypes.Add(bllPaymentType);
+            var addedPaymentType = _bll.PaymentTypes.Add(Mapper.Map(bllPaymentType, new BLL.App.DTO.PaymentType()));
             
             // bll will call dal.SaveChangesAsync => will call EF.SaveChangesAsync()
             // ef will update entities with new ID-s

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using ProductType = BLL.App.DTO.ProductType;
+using ProductType = DTO.App.ProductTypeDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class ProductTypesController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public ProductTypesController(IAppBLL bll)
+        public ProductTypesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/ProductTypes
@@ -69,7 +72,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return productType;
+            return Mapper.Map(productType, new DTO.App.ProductTypeDTO());
         }
 
         // PUT: api/ProductTypes/5
@@ -95,7 +98,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.ProductTypes.Update(productType);
+            _bll.ProductTypes.Update(Mapper.Map(productType, new BLL.App.DTO.ProductType()));
             
             await _bll.SaveChangesAsync();
 
@@ -123,7 +126,7 @@ namespace WebApp.ApiControllers
             {
                 TypeName = productType.TypeName
             };
-            var addedProductType = _bll.ProductTypes.Add(bllProductType);
+            var addedProductType = _bll.ProductTypes.Add(Mapper.Map(productType, new BLL.App.DTO.ProductType()));
             
             // bll will call dal.SaveChangesAsync => will call EF.SaveChangesAsync()
             // ef will update entities with new ID-s

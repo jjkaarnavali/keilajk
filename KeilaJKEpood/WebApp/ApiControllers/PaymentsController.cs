@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Payment = BLL.App.DTO.Payment;
+using Payment = DTO.App.PaymentDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,13 +21,15 @@ namespace WebApp.ApiControllers
     public class PaymentsController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public PaymentsController(IAppBLL bll)
+        public PaymentsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Payments
@@ -66,7 +69,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return payment;
+            return Mapper.Map(payment, new DTO.App.PaymentDTO());
         }
 
         // PUT: api/Payments/5
@@ -92,7 +95,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Payments.Update(payment);
+            _bll.Payments.Update(Mapper.Map(payment, new BLL.App.DTO.Payment()));
             
             await _bll.SaveChangesAsync();
 
@@ -124,7 +127,7 @@ namespace WebApp.ApiControllers
             };
             bllPayment.Id = Guid.NewGuid();
             bllPayment.PaymentTime = DateTime.Now;
-            _bll.Payments.Add(bllPayment);
+            _bll.Payments.Add(Mapper.Map(bllPayment, new BLL.App.DTO.Payment()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPayment", new { id = bllPayment.Id }, payment);

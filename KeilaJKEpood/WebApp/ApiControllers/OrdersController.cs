@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Order = BLL.App.DTO.Order;
+using Order = DTO.App.OrderDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,13 +21,15 @@ namespace WebApp.ApiControllers
     public class OrdersController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public OrdersController(IAppBLL bll)
+        public OrdersController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Orders
@@ -77,7 +80,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return order;
+            return Mapper.Map(order, new DTO.App.OrderDTO());
         }
 
         // PUT: api/Orders/5
@@ -131,7 +134,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-            _bll.Orders.Add(order);
+            _bll.Orders.Add(Mapper.Map(order, new BLL.App.DTO.Order()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetOrder", new { id = order.Id }, order);

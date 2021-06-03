@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Bill = BLL.App.DTO.Bill;
+using Bill = DTO.App.BillDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -18,14 +19,16 @@ namespace WebApp.ApiControllers
     public class BillsController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public BillsController(IAppBLL bll)
+        public BillsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Bills
@@ -35,11 +38,11 @@ namespace WebApp.ApiControllers
         /// <returns></returns>
         [HttpGet]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<Bill>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<DTO.App.BillDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
+        public async Task<ActionResult<IEnumerable<DTO.App.BillDTO>>> GetBills()
         {
             return Ok(await _bll.Bills.GetAllAsync());
         }
@@ -51,18 +54,32 @@ namespace WebApp.ApiControllers
         /// <returns>Bill entity from db</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(Bill), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DTO.App.BillDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<Bill>> GetBill(Guid id)
+        public async Task<ActionResult<DTO.App.BillDTO>> GetBill(Guid id)
         {
-            var bill = await _bll.Bills.FirstOrDefaultAsync(id);
+            var billBll = await _bll.Bills.FirstOrDefaultAsync(id);
 
-            if (bill == null)
+            if (billBll == null)
             {
                 return NotFound();
             }
+
+            var bill = new DTO.App.BillDTO()
+            {
+                Id = billBll.Id,
+                PersonId = billBll.PersonId,
+                UserId = billBll.UserId,
+                OrderId = billBll.OrderId,
+                BillNrId = billBll.BillNrId,
+                BillNr = billBll.BillNr,
+                CreationTime = billBll.CreationTime,
+                PriceWithoutTax = billBll.PriceWithoutTax,
+                SumOfTax = billBll.SumOfTax,
+                PriceToPay = billBll.PriceToPay
+            };
 
             return bill;
         }
@@ -78,7 +95,7 @@ namespace WebApp.ApiControllers
         [HttpPut("{id}")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(Bill), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DTO.App.BillDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -123,12 +140,12 @@ namespace WebApp.ApiControllers
         [HttpPost]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(Bill), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DTO.App.BillDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<Bill>> PostBill(DTO.App.BillAdd bill)
+        public async Task<ActionResult<DTO.App.BillDTO>> PostBill(DTO.App.BillAdd bill)
         {
             
             var bllBill = new Bill()
@@ -144,7 +161,7 @@ namespace WebApp.ApiControllers
             bllBill.BillNr = bllBill.Id.ToString();
             bllBill.CreationTime = DateTime.Now;
             
-            _bll.Bills.Add(bllBill);
+            _bll.Bills.Add(Mapper.Map(bllBill, new BLL.App.DTO.Bill()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction(

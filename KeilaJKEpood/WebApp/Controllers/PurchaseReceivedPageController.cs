@@ -33,9 +33,10 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index(Guid id)
         {
             // Create payment
-            var bills = await _bll.Bills.GetAllAsync(User.GetUserId()!.Value);
-            var orders = await _bll.Orders.GetAllAsync(User.GetUserId()!.Value);
             var userId = User.GetUserId();
+            await _bll.PurchaseReceivedPageService.CreatePayment(id, userId!.Value);
+            /*var bills = await _bll.Bills.GetAllAsync(User.GetUserId()!.Value);
+            var orders = await _bll.Orders.GetAllAsync(User.GetUserId()!.Value);
             BLL.App.DTO.Order orderToPay = new BLL.App.DTO.Order();
             BLL.App.DTO.Bill billToPay = new BLL.App.DTO.Bill();;
             foreach (var order in orders)
@@ -65,7 +66,7 @@ namespace WebApp.Controllers
             // Mark orders  as completed
             orderToPay.Until = DateTime.Now;
             _bll.Orders.Update(orderToPay);
-            await _bll.SaveChangesAsync();
+            await _bll.SaveChangesAsync();*/
 
             return View();
         }

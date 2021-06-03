@@ -927,6 +927,9 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
+              "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj": {
+                "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\BLL.App.DTO\\BLL.App.DTO.csproj"
+              },
               "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources.Base\\Resources.Base.csproj": {
                 "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\KeilaJKEpood\\Resources.Base\\Resources.Base.csproj"
               },
@@ -945,6 +948,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

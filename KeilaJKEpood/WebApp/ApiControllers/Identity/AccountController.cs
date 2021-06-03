@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain.App.Identity;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
 using WebApp.Areas.Identity.Pages.Account;
 #pragma warning disable 1591
 
@@ -22,14 +24,16 @@ namespace WebApp.ApiControllers.Identity
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IMapper Mapper;
 
         public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager,
-            ILogger<AccountController> logger, IConfiguration configuration)
+            ILogger<AccountController> logger, IConfiguration configuration, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _configuration = configuration;
+            Mapper = mapper;
         }
 
         [HttpPost]

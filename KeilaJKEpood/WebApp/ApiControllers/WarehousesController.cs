@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Warehouse = BLL.App.DTO.Warehouse;
+using Warehouse = DTO.App.WarehouseDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class WarehousesController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public WarehousesController(IAppBLL bll)
+        public WarehousesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Warehouses
@@ -67,7 +70,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return warehouse;
+            return Mapper.Map(warehouse, new DTO.App.WarehouseDTO());
         }
 
         // PUT: api/Warehouses/5
@@ -93,7 +96,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Warehouses.Update(warehouse);
+            _bll.Warehouses.Update(Mapper.Map(warehouse, new BLL.App.DTO.Warehouse()));
             
             await _bll.SaveChangesAsync();
 
@@ -117,7 +120,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
         {
-            _bll.Warehouses.Add(warehouse);
+            _bll.Warehouses.Add(Mapper.Map(warehouse, new BLL.App.DTO.Warehouse()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);

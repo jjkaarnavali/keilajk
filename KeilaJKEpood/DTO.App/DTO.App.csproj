@@ -5,8 +5,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj" />
       <ProjectReference Include="..\Resources.Base\Resources.Base.csproj" />
       <ProjectReference Include="..\Resources\Resources.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
     </ItemGroup>
 
 </Project>

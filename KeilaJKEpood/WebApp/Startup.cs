@@ -105,8 +105,11 @@ namespace WebApp
             
             services.AddAutoMapper(
                 typeof(DAL.App.DTO.MappingProfiles.AutoMapperProfile),
-                typeof(BLL.App.DTO.MappingProfiles.AutoMapperProfile)
+                typeof(BLL.App.DTO.MappingProfiles.AutoMapperProfile),
+                typeof(DTO.App.MappingProfiles.AutoMapperProfile)
             );
+            
+
 
             // add support for api versioning
             services.AddApiVersioning(options =>

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Company = BLL.App.DTO.Company;
+using Company = DTO.App.CompanyDTO;
 
 
 namespace WebApp.ApiControllers
@@ -21,14 +22,16 @@ namespace WebApp.ApiControllers
     public class CompaniesController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public CompaniesController(IAppBLL bll)
+        public CompaniesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Companies
@@ -67,8 +70,8 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
-
-            return company;
+            
+            return Mapper.Map(company, new DTO.App.CompanyDTO());
         }
 
         // PUT: api/Companies/5
@@ -93,8 +96,8 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
-
-            _bll.Companies.Update(company);
+            
+            _bll.Companies.Update(Mapper.Map(company, new BLL.App.DTO.Company()));
             
             await _bll.SaveChangesAsync();
 
@@ -118,7 +121,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
-            _bll.Companies.Add(company);
+            _bll.Companies.Add(Mapper.Map(company, new BLL.App.DTO.Company()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetCompany", new { id = company.Id }, company);

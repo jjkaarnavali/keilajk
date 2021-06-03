@@ -23,6 +23,8 @@ namespace Contracts.BLL.App
         IProductTypeService ProductTypes { get; }
         IWarehouseService Warehouses { get; }
         
+        IPurchaseReceivedPageService PurchaseReceivedPageService { get; }
+
         //IContactService Contacts { get; }
         //IContactTypeService ContactTypes { get; }
 

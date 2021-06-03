@@ -293,6 +293,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
+          "AutoMapper": "10.1.1",
+          "BLL.App.DTO": "1.0.0",
           "Resources": "1.0.0",
           "Resources.Base": "1.0.0"
         },

@@ -7,6 +7,8 @@ namespace DTO.App
     {   
         public Guid Id { get; set; }
         
+        public Guid AppUserId { get; set; }
+        
         [MaxLength(64)] public string FirstName { get; set; } = default!;
 
         [MaxLength(64)] public string LastName { get; set; } = default!;

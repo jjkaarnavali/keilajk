@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Product = BLL.App.DTO.Product;
+using Product = DTO.App.ProductDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class ProductsController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public ProductsController(IAppBLL bll)
+        public ProductsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Products
@@ -78,7 +81,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return product;
+            return Mapper.Map(product, new DTO.App.ProductDTO());
         }
 
         // PUT: api/Products/5
@@ -104,7 +107,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Products.Update(product);
+            _bll.Products.Update(Mapper.Map(product, new BLL.App.DTO.Product()));
             
             await _bll.SaveChangesAsync();
 
@@ -128,7 +131,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _bll.Products.Add(product);
+            _bll.Products.Add(Mapper.Map(product, new BLL.App.DTO.Product()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);

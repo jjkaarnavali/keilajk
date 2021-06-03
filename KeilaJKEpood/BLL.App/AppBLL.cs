@@ -16,9 +16,11 @@ namespace BLL.App
     public class AppBLL : BaseBLL<IAppUnitOfWork>, IAppBLL
     {
         protected IMapper Mapper;
+        
         public AppBLL(IAppUnitOfWork uow, IMapper mapper) : base(uow)
         {
             Mapper = mapper;
+            
         }
 
 
@@ -64,7 +66,10 @@ namespace BLL.App
         public IWarehouseService Warehouses =>
             GetService<IWarehouseService>(() => new WarehouseService(Uow, Uow.Warehouses, Mapper));
 
-        
+        public IPurchaseReceivedPageService PurchaseReceivedPageService =>
+            GetService<IPurchaseReceivedPageService>(() => new PurchaseReceivedPageService(Uow, Mapper));
+
+
 
         /*public IContactService Contacts =>
             GetService<IContactService>(() => new ContactService(Uow, Uow.Contacts));

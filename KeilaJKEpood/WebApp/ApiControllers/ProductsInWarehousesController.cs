@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using ProductInWarehouse = BLL.App.DTO.ProductInWarehouse;
+using ProductInWarehouse = DTO.App.ProductInWarehouseDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class ProductsInWarehousesController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public ProductsInWarehousesController(IAppBLL bll)
+        public ProductsInWarehousesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/ProductsInWarehouses
@@ -67,7 +70,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return productInWarehouse;
+            return Mapper.Map(productInWarehouse, new DTO.App.ProductInWarehouseDTO());
         }
 
         // PUT: api/ProductsInWarehouses/5
@@ -93,7 +96,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.ProductsInWarehouses.Update(productInWarehouse);
+            _bll.ProductsInWarehouses.Update(Mapper.Map(productInWarehouse, new BLL.App.DTO.ProductInWarehouse()));
             
             await _bll.SaveChangesAsync();
 
@@ -117,7 +120,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<ProductInWarehouse>> PostProductInWarehouse(ProductInWarehouse productInWarehouse)
         {
-            _bll.ProductsInWarehouses.Add(productInWarehouse);
+            _bll.ProductsInWarehouses.Add(Mapper.Map(productInWarehouse, new BLL.App.DTO.ProductInWarehouse()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetProductInWarehouse", new { id = productInWarehouse.Id }, productInWarehouse);

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Extensions.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Person = BLL.App.DTO.Person;
+using Person = DTO.App.PersonDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -22,16 +23,17 @@ namespace WebApp.ApiControllers
     {
         
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
         
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public PersonsController(IAppBLL bll)
+        public PersonsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
-            
+            Mapper = mapper;
         }
 
         // GET: api/Persons
@@ -46,7 +48,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<DTO.App.PersonDTO>>> GetPersons()
         {
             return Ok(await _bll.Persons.GetAllAsync());
         }
@@ -63,7 +65,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<Person>> GetPerson(Guid id)
+        public async Task<ActionResult<DTO.App.PersonDTO>> GetPerson(Guid id)
         {
 
             var persons = await _bll.Persons.GetAllAsync();
@@ -83,7 +85,8 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return person;
+            
+            return Mapper.Map(person, new DTO.App.PersonDTO());
         }
 
         // PUT: api/Persons/5
@@ -121,10 +124,11 @@ namespace WebApp.ApiControllers
             }
 
             person.AppUserId = perso!.AppUserId;
+            
 
             
             
-            _bll.Persons.Update(person);
+            _bll.Persons.Update(Mapper.Map(person, new BLL.App.DTO.Person()));
             
             await _bll.SaveChangesAsync();
 
@@ -149,7 +153,7 @@ namespace WebApp.ApiControllers
         public async Task<ActionResult<DTO.App.PersonDTO>> PostPerson(DTO.App.PersonAdd person)
         {
             
-            var bllPerson = new Person()
+            var bllPerson = new BLL.App.DTO.Person()
             {
                 FirstName = person.FirstName,
                 LastName = person.LastName,

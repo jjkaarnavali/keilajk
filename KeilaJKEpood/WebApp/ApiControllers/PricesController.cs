@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Price = BLL.App.DTO.Price;
+using Price = DTO.App.PriceDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class PricesController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public PricesController(IAppBLL bll)
+        public PricesController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Prices
@@ -67,7 +70,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return price;
+            return Mapper.Map(price, new DTO.App.PriceDTO());
         }
 
         // PUT: api/Prices/5
@@ -93,7 +96,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Prices.Update(price);
+            _bll.Prices.Update(Mapper.Map(price, new BLL.App.DTO.Price()));
             
             await _bll.SaveChangesAsync();
 
@@ -117,7 +120,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Price>> PostPrice(Price price)
         {
-            _bll.Prices.Add(price);
+            _bll.Prices.Add(Mapper.Map(price, new BLL.App.DTO.Price()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPrice", new { id = price.Id }, price);

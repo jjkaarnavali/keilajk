@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using BLL.App.Mappers;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using LineOnBill = BLL.App.DTO.LineOnBill;
+using DTO.App.MappingProfiles;
+using LineOnBill = DTO.App.LineOnBillDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,15 +23,16 @@ namespace WebApp.ApiControllers
     public class LinesOnBillsController : ControllerBase
     {
         private readonly IAppBLL _bll;
-        
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public LinesOnBillsController(IAppBLL bll)
+        public LinesOnBillsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/LinesOnBills
@@ -67,8 +71,9 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            
 
-            return lineOnBill;
+            return Mapper.Map(lineOnBill, new DTO.App.LineOnBillDTO());
         }
 
         // PUT: api/LinesOnBills/5
@@ -94,7 +99,10 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.LinesOnBills.Update(lineOnBill);
+            var bllLineOnBill = new BLL.App.DTO.LineOnBill();
+            bllLineOnBill = Mapper.Map(lineOnBill, new BLL.App.DTO.LineOnBill());
+
+            _bll.LinesOnBills.Update(bllLineOnBill);
             
             await _bll.SaveChangesAsync();
 
@@ -118,7 +126,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<LineOnBill>> PostLineOnBill(DTO.App.LineOnBillAdd lineOnBill)
         {
-            var bllLineOnBill = new LineOnBill()
+            var bllLineOnBill = new BLL.App.DTO.LineOnBill()
             {
                 BillId = Guid.Parse(lineOnBill.BillId),
                 PriceId = Guid.Parse(lineOnBill.PriceId),
@@ -134,7 +142,7 @@ namespace WebApp.ApiControllers
             _bll.LinesOnBills.Add(bllLineOnBill);
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetLineOnBill", new { id = bllLineOnBill.Id }, lineOnBill);
+            return CreatedAtAction("GetLineOnBill", new { id = bllLineOnBill.Id }, Mapper.Map(lineOnBill, new DTO.App.LineOnBillDTO()));
         }
 
         // DELETE: api/LinesOnBills/5

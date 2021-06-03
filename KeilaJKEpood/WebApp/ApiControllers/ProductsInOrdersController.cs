@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using ProductInOrder = BLL.App.DTO.ProductInOrder;
+using ProductInOrder = DTO.App.ProductInOrderDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,13 +21,15 @@ namespace WebApp.ApiControllers
     public class ProductsInOrdersController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public ProductsInOrdersController(IAppBLL bll)
+        public ProductsInOrdersController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/ProductsInOrders
@@ -66,7 +69,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return productInOrder;
+            return Mapper.Map(productInOrder, new DTO.App.ProductInOrderDTO());
         }
 
         // PUT: api/ProductsInOrders/5
@@ -92,7 +95,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.ProductsInOrders.Update(productInOrder);
+            _bll.ProductsInOrders.Update(Mapper.Map(productInOrder, new BLL.App.DTO.ProductInOrder()));
             
             await _bll.SaveChangesAsync();
 
@@ -116,7 +119,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<ProductInOrder>> PostProductInOrder(ProductInOrder productInOrder)
         {
-            _bll.ProductsInOrders.Add(productInOrder);
+            _bll.ProductsInOrders.Add(Mapper.Map(productInOrder, new BLL.App.DTO.ProductInOrder()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetProductInOrder", new { id = productInOrder.Id }, productInOrder);

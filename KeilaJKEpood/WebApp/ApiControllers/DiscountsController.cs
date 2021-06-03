@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Discount = BLL.App.DTO.Discount;
+using Discount = DTO.App.DiscountDTO;
 
 namespace WebApp.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace WebApp.ApiControllers
     public class DiscountsController : ControllerBase
     {
         private readonly IAppBLL _bll;
+        private readonly IMapper Mapper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="bll"></param>
-        public DiscountsController(IAppBLL bll)
+        public DiscountsController(IAppBLL bll, IMapper mapper)
         {
             _bll = bll;
+            Mapper = mapper;
         }
 
         // GET: api/Discounts
@@ -67,7 +70,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            return discount;
+            return Mapper.Map(discount, new DTO.App.DiscountDTO());
         }
 
         // PUT: api/Discounts/5
@@ -93,7 +96,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Discounts.Update(discount);
+            _bll.Discounts.Update(Mapper.Map(discount, new BLL.App.DTO.Discount()));
             
             await _bll.SaveChangesAsync();
 
@@ -117,7 +120,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<Discount>> PostDiscount(Discount discount)
         {
-            _bll.Discounts.Add(discount);
+            _bll.Discounts.Add(Mapper.Map(discount, new BLL.App.DTO.Discount()));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
