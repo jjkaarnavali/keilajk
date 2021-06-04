@@ -1,0 +1,23 @@
+﻿@model WebApp.Models.QuizGameViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@Model.Quiz!.Name</h1>
+
+<hr />
+@{
+    if (!Model.Quiz!.Name!.ToLower().Contains("poll"))
+    {
+        <h4>Your score: @Html.DisplayFor(modelItem => modelItem.Game!.Score)%</h4>
+        <h4>Average score: @Html.DisplayFor(modelItem => modelItem.Quiz!.AverageScore)%</h4>
+    }
+    else
+    {
+        <h2>Thanks for participating in the poll!</h2>
+    }
+}
+<div>
+    <a asp-controller="SelectQuizPage" asp-action="Index">Back to List</a>
+</div>

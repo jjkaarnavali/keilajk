@@ -17,8 +17,9 @@
                 <select asp-for="Quiz!.CategoryId" class ="form-control" asp-items="Model.CategorySelectList"></select>
             </div>
             <div class="form-group">
+                <h6>If You are creating a poll, then the name must contain the word "poll"!</h6>
                 <label asp-for="Quiz!.Name" class="control-label"></label>
-                <input asp-for="Quiz!.Name" class="form-control" />
+                <input asp-for="Quiz!.Name" class="form-control"/>
                 <span asp-validation-for="Quiz!.Name" class="text-danger"></span>
             </div>
             <div class="form-group">

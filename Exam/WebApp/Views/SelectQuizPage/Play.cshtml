@@ -1,0 +1,37 @@
+﻿@model WebApp.Models.QuizDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>@Model.Quiz!.Name</h1>
+
+<h4>@Model.Quiz!.Description</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PlayQuiz" asp-route-id="@Model.Quiz!.Id">
+
+            @foreach (var question in Model.Questions!)
+            {
+                <div class="form-group">
+                    <label asp-for="@question.Question!.Id" class="control-label">@question.Question!.QuestionText</label>
+                    <br>
+                    @foreach (var answer in question.Answers!)
+                    {
+                        <input type="radio" id="@answer.Value" name="@question.Question!.Id" value="@answer.Value">
+                        <label for="@answer.Value">@answer.Text</label><br>
+                    }
+                </div>
+            }
+            
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

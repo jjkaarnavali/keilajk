@@ -64,6 +64,18 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (answer.IsCorrect) // make sure that only one answer is correct
+                {
+                    var answers = await _context.Answers.ToListAsync();
+                    foreach (var ans in answers)
+                    {
+                        if (ans.QuestionId == answer.QuestionId && ans.IsCorrect)
+                        {
+                            ans.IsCorrect = false;
+                            _context.Update(ans);
+                        }
+                    }
+                }
                 answer.Id = Guid.NewGuid();
                 _context.Add(answer);
                 await _context.SaveChangesAsync();
@@ -105,33 +117,41 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,QuestionId,AnswerText,IsCorrect")] AnswerCreateEditViewModel vm)
+        public async Task<IActionResult> Edit(Guid id, Answer answer)
         {
-            if (id != vm.Answer!.Id)
+            if (id != answer!.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+            
+                if (answer.IsCorrect) // make sure that only one answer is correct
                 {
-                    _context.Update(vm.Answer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AnswerExists(vm.Answer.Id))
+                    var answers = await _context.Answers.ToListAsync();
+                    foreach (var ans in answers)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        if (ans.QuestionId == answer.QuestionId && ans.IsCorrect)
+                        {
+                            ans.IsCorrect = false;
+                            _context.Update(ans);
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
+                _context.ChangeTracker.Clear();
+                _context.Update(answer);
+                await _context.SaveChangesAsync();
+               
+                
                 return RedirectToAction(nameof(Index));
             }
+            var vm = new AnswerCreateEditViewModel
+            {
+                QuestionSelectList = new SelectList(
+                    _context.Questions, nameof(Question.Id), nameof(Question.QuestionText))
+            };
             return View(vm);
         }
 
