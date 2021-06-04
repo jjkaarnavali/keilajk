@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain\\Domain.csproj": {}
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain.App\\Domain.App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain\\Domain.csproj": {
+    "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain.App\\Domain.App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain\\Domain.csproj",
-        "projectName": "Domain",
-        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain.App\\Domain.App.csproj",
+        "projectName": "Domain.App",
+        "projectPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain.App\\Domain.App.csproj",
         "packagesPath": "C:\\Users\\Jan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\Jan\\RiderProjects\\icd0009-2020s\\Exam\\Domain.App\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
