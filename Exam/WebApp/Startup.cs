@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.EF;
+using DAL.App.EF.AppDataInit;
 using Domain.App.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -39,11 +40,24 @@ namespace WebApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             services.AddControllersWithViews();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsAllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            SetupAppData(app, Configuration);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -71,6 +85,58 @@ namespace WebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+        }
+        private static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
+        {
+            using var serviceScope =
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
+            
+            // in case of testing - dont do setup
+            if (ctx!.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory") 
+                return;
+
+            
+            if (ctx != null)
+            {
+                if (configuration.GetValue<bool>("AppData:DropDatabase"))
+                {
+                    Console.Write("Drop database");
+                    DataInit.DropDatabase(ctx);
+                    Console.WriteLine(" - done");
+                }
+
+                if (configuration.GetValue<bool>("AppData:Migrate"))
+                {
+                    Console.Write("Migrate database");
+                    DataInit.MigrateDatabase(ctx);
+                    Console.WriteLine(" - done");
+                }
+
+                if (configuration.GetValue<bool>("AppData:SeedIdentity"))
+                {
+                    using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+                    using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
+
+                    if (userManager != null && roleManager != null)
+                    {
+                        DataInit.SeedIdentity(userManager, roleManager);
+                    }
+                    else
+                    {
+                        Console.Write($"No user manager {(userManager == null ? "null" : "ok")} or role manager {(roleManager == null ? "null" : "ok")}!" );
+                    }
+                }
+
+                if (configuration.GetValue<bool>("AppData:SeedData"))
+                {
+                    Console.Write("Seed database");
+                    DataInit.SeedAppData(ctx);
+                    Console.WriteLine(" - done");
+                }
+            }
+
+            //C# will dispose all the usings here
         }
     }
 }
