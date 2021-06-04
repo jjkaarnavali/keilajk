@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.App;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -46,7 +47,12 @@ namespace WebApp.Controllers
         // GET: Answers/Create
         public IActionResult Create()
         {
-            return View();
+            var vm = new AnswerCreateEditViewModel
+            {
+                QuestionSelectList = new SelectList(
+                    _context.Questions.OrderBy(a => a.QuizId), nameof(Question.Id), nameof(Question.QuestionText))
+            };
+            return View(vm);
         }
 
         // POST: Answers/Create
@@ -63,7 +69,14 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(answer);
+            
+            var vm = new AnswerCreateEditViewModel
+            {
+                QuestionSelectList = new SelectList(
+                    _context.Questions, nameof(Question.Id), nameof(Question.QuestionText))
+            };
+            
+            return View(vm);
         }
 
         // GET: Answers/Edit/5
@@ -74,12 +87,17 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var answer = await _context.Answers.FindAsync(id);
-            if (answer == null)
+            var vm = new AnswerCreateEditViewModel
+            {
+                QuestionSelectList = new SelectList(
+                    _context.Questions, nameof(Question.Id), nameof(Question.QuestionText)),
+                Answer = await _context.Answers.FindAsync(id)
+            };
+            if (vm.Answer == null)
             {
                 return NotFound();
             }
-            return View(answer);
+            return View(vm);
         }
 
         // POST: Answers/Edit/5
@@ -87,9 +105,9 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,QuestionId,AnswerText,IsCorrect")] Answer answer)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,QuestionId,AnswerText,IsCorrect")] AnswerCreateEditViewModel vm)
         {
-            if (id != answer.Id)
+            if (id != vm.Answer!.Id)
             {
                 return NotFound();
             }
@@ -98,12 +116,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(answer);
+                    _context.Update(vm.Answer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AnswerExists(answer.Id))
+                    if (!AnswerExists(vm.Answer.Id))
                     {
                         return NotFound();
                     }
@@ -114,7 +132,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(answer);
+            return View(vm);
         }
 
         // GET: Answers/Delete/5
