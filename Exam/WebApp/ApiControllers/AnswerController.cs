@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using Answer = DTO.App.AnswerDTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     //[ApiVersion("1.0")]
     public class AnswerController : ControllerBase
@@ -26,7 +27,20 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Answer>>> GetAnswers()
         {
-            return await _context.Answers.ToListAsync();
+            var answers = await _context.Answers.ToListAsync();
+            var dtoAnswers = new List<Answer>();
+            foreach (var answer in answers)
+            {
+                var dtoAnswer = new Answer()
+                {
+                    Id = answer.Id,
+                    QuestionId = answer.QuestionId,
+                    AnswerText = answer.AnswerText,
+                    IsCorrect = answer.IsCorrect
+                };
+                dtoAnswers.Add(dtoAnswer);
+            }
+            return dtoAnswers;
         }
 
         // GET: api/Answer/5
@@ -39,8 +53,15 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            var dtoAnswer = new Answer()
+            {
+                Id = answer.Id,
+                QuestionId = answer.QuestionId,
+                AnswerText = answer.AnswerText,
+                IsCorrect = answer.IsCorrect
+            };
 
-            return answer;
+            return dtoAnswer;
         }
 
         // PUT: api/Answer/5
@@ -79,7 +100,14 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Answer>> PostAnswer(Answer answer)
         {
-            _context.Answers.Add(answer);
+            var domainAnswer = new Domain.App.Answer()
+            {
+                Id = answer.Id,
+                QuestionId = answer.QuestionId,
+                AnswerText = answer.AnswerText,
+                IsCorrect = answer.IsCorrect
+            };
+            _context.Answers.Add(domainAnswer);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAnswer", new { id = answer.Id }, answer);

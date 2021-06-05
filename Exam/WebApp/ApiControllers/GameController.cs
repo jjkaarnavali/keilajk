@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using Game = DTO.App.GameDTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -25,7 +26,19 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Game>>> GetGames()
         {
-            return await _context.Games.ToListAsync();
+            var games = await _context.Games.ToListAsync();
+            var dtoGames = new List<Game>();
+            foreach (var game in games)
+            {
+                var dtoGame = new Game()
+                {
+                    Id = game.Id,
+                    QuizId = game.QuizId,
+                    Score = game.Score
+                };
+                dtoGames.Add(dtoGame);
+            }
+            return dtoGames;
         }
 
         // GET: api/Game/5
@@ -38,8 +51,14 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            var dtoGame = new Game()
+            {
+                Id = game.Id,
+                QuizId = game.QuizId,
+                Score = game.Score
+            };
 
-            return game;
+            return dtoGame;
         }
 
         // PUT: api/Game/5
@@ -78,7 +97,13 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Game>> PostGame(Game game)
         {
-            _context.Games.Add(game);
+            var domainGame = new Domain.App.Game()
+            {
+                Id = game.Id,
+                QuizId = game.QuizId,
+                Score = game.Score
+            };
+            _context.Games.Add(domainGame);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGame", new { id = game.Id }, game);

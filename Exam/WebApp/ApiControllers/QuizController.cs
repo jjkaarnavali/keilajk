@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using Quiz = DTO.App.QuizDTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class QuizController : ControllerBase
     {
@@ -25,7 +26,23 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Quiz>>> GetQuizzes()
         {
-            return await _context.Quizzes.ToListAsync();
+            var quizzes = await _context.Quizzes.ToListAsync();
+            var dtoQuizzes = new List<Quiz>();
+            foreach (var quiz in quizzes)
+            {
+                var dtoQuiz = new Quiz()
+                {
+                    Id = quiz.Id,
+                    AverageScore = quiz.AverageScore,
+                    CategoryId = quiz.CategoryId,
+                    CategoryName = quiz.CategoryName,
+                    Description = quiz.Description,
+                    Name = quiz.Name,
+                    TimesPlayed = quiz.TimesPlayed
+                };
+                dtoQuizzes.Add(dtoQuiz);
+            }
+            return dtoQuizzes;
         }
 
         // GET: api/Quiz/5
@@ -38,8 +55,18 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            var dtoQuiz = new Quiz()
+            {
+                Id = quiz.Id,
+                AverageScore = quiz.AverageScore,
+                CategoryId = quiz.CategoryId,
+                CategoryName = quiz.CategoryName,
+                Description = quiz.Description,
+                Name = quiz.Name,
+                TimesPlayed = quiz.TimesPlayed
+            };
 
-            return quiz;
+            return dtoQuiz;
         }
 
         // PUT: api/Quiz/5
@@ -78,7 +105,17 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Quiz>> PostQuiz(Quiz quiz)
         {
-            _context.Quizzes.Add(quiz);
+            var domainQuiz = new Domain.App.Quiz()
+            {
+                Id = quiz.Id,
+                AverageScore = quiz.AverageScore,
+                CategoryId = quiz.CategoryId,
+                CategoryName = quiz.CategoryName,
+                Description = quiz.Description,
+                Name = quiz.Name,
+                TimesPlayed = quiz.TimesPlayed
+            };
+            _context.Quizzes.Add(domainQuiz);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetQuiz", new { id = quiz.Id }, quiz);

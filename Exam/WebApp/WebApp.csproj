@@ -10,17 +10,23 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
+      <ProjectReference Include="..\DTO.App\DTO.App.csproj" />
+      <ProjectReference Include="..\Extensions.Base\Extensions.Base.csproj" />
     </ItemGroup>
 
 </Project>

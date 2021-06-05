@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using Category = DTO.App.CategoryDTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -25,7 +26,18 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
+            var dtoCategories = new List<Category>();
+            foreach (var category in categories)
+            {
+                var dtoCategory = new Category()
+                {
+                    Id = category.Id,
+                    CategoryName = category.CategoryName
+                };
+                dtoCategories.Add(dtoCategory);
+            }
+            return dtoCategories;
         }
 
         // GET: api/Category/5
@@ -38,8 +50,13 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            var dtoCategory = new Category()
+            {
+                Id = category.Id,
+                CategoryName = category.CategoryName
+            };
 
-            return category;
+            return dtoCategory;
         }
 
         // PUT: api/Category/5
@@ -78,7 +95,12 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Categories.Add(category);
+            var domainCategory = new Domain.App.Category()
+            {
+                Id = category.Id,
+                CategoryName = category.CategoryName
+            };
+            _context.Categories.Add(domainCategory);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCategory", new { id = category.Id }, category);

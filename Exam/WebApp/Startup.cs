@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DAL.App.EF;
 using DAL.App.EF.AppDataInit;
@@ -10,10 +12,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace WebApp
 {
@@ -33,6 +39,28 @@ namespace WebApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
+            
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            
+            services
+                .AddAuthentication()
+                .AddCookie(options =>
+                {
+                    options.SlidingExpiration = true;
+                })
+                .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidIssuer = Configuration["JWT:Issuer"],
+                            ValidAudience = Configuration["JWT:Issuer"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
+                            ClockSkew = TimeSpan.Zero
+                        };
+                    }
+                );
 
             services
                 .AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -51,10 +79,27 @@ namespace WebApp
                         builder.AllowAnyMethod();
                     });
             });
+            
+            // add support for api versioning
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+            });
+            
+            
+            // add support for m2m api documentation
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+            });
+            
+            // add support to generate human readable documentation from m2m docs
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiVersionDescriptionProvider)
         {
             SetupAppData(app, Configuration);
             
@@ -71,15 +116,38 @@ namespace WebApp
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                foreach (var apiVersionDescription in apiVersionDescriptionProvider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint(
+                        $"/swagger/{apiVersionDescription.GroupName}/swagger.json",
+                        apiVersionDescription.GroupName.ToUpperInvariant()
+                    );
+                }
+            });
+            
             app.UseStaticFiles();
 
             app.UseRouting();
+            
+            app.UseRequestLocalization(
+                app.ApplicationServices
+                    .GetService<IOptions<RequestLocalizationOptions>>()?.Value
+            );
 
+            app.UseCors("CorsAllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

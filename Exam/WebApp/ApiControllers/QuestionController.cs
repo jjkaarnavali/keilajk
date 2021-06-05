@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using Domain.App;
+using Question = DTO.App.QuestionDTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -25,7 +26,19 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
         {
-            return await _context.Questions.ToListAsync();
+            var questions = await _context.Questions.ToListAsync();
+            var dtoQuestions = new List<Question>();
+            foreach (var question in questions)
+            {
+                var dtoQuestion = new Question()
+                {
+                    Id = question.Id,
+                    QuestionText = question.QuestionText,
+                    QuizId = question.QuizId
+                };
+                dtoQuestions.Add(dtoQuestion);
+            }
+            return dtoQuestions;
         }
 
         // GET: api/Question/5
@@ -38,8 +51,14 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
+            var dtoQuestion = new Question()
+            {
+                Id = question.Id,
+                QuestionText = question.QuestionText,
+                QuizId = question.QuizId
+            };
 
-            return question;
+            return dtoQuestion;
         }
 
         // PUT: api/Question/5
@@ -78,7 +97,13 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(Question question)
         {
-            _context.Questions.Add(question);
+            var domainQuestion = new Domain.App.Question()
+            {
+                Id = question.Id,
+                QuestionText = question.QuestionText,
+                QuizId = question.QuizId
+            };
+            _context.Questions.Add(domainQuestion);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
