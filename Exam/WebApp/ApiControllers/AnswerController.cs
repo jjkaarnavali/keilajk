@@ -80,7 +80,20 @@ namespace WebApp.ApiControllers
                 AnswerText = answer.AnswerText,
                 IsCorrect = answer.IsCorrect
             };
-
+            if (answer.IsCorrect) // make sure that only one answer is correct
+            {
+                var answers = await _context.Answers.ToListAsync();
+                foreach (var ans in answers)
+                {
+                    if (ans.QuestionId == answer.QuestionId && ans.IsCorrect)
+                    {
+                        ans.IsCorrect = false;
+                        _context.Update(ans);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+            _context.ChangeTracker.Clear();
             _context.Entry(domainAnswer).State = EntityState.Modified;
 
             try
@@ -114,6 +127,19 @@ namespace WebApp.ApiControllers
                 AnswerText = answer.AnswerText,
                 IsCorrect = answer.IsCorrect
             };
+            if (answer.IsCorrect) // make sure that only one answer is correct
+            {
+                var answers = await _context.Answers.ToListAsync();
+                foreach (var ans in answers)
+                {
+                    if (ans.QuestionId == answer.QuestionId && ans.IsCorrect)
+                    {
+                        ans.IsCorrect = false;
+                        _context.Update(ans);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
             _context.Answers.Add(domainAnswer);
             await _context.SaveChangesAsync();
 

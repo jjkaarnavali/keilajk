@@ -78,6 +78,8 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
+            var category = await _context.Categories.FirstOrDefaultAsync(q => q.Id == quiz.CategoryId);
+            quiz.CategoryName = category.CategoryName;
             var domainQuiz = new Domain.App.Quiz()
             {
                 Id = quiz.Id,
@@ -115,6 +117,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Quiz>> PostQuiz(Quiz quiz)
         {
+            var category = await _context.Categories.FirstOrDefaultAsync(q => q.Id == quiz.CategoryId);
+            quiz.CategoryName = category.CategoryName;
             var domainQuiz = new Domain.App.Quiz()
             {
                 Id = quiz.Id,
