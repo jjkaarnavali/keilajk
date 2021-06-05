@@ -31,8 +31,7 @@ namespace WebApp.Controllers
             var vm = new QuizGameViewModel
             {
                 Game = game,
-                Quiz = quiz,
-                QuizQuestions = _context.Questions.Where(q => q.QuizId.Equals(game.QuizId))
+                Quiz = quiz
             };
             
             if (vm.Game == null)
