@@ -32,7 +32,7 @@
                                     <p>
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </p>
-                                    @if (!item.Name!.ToLower().Contains("poll"))
+                                    @if (item.CategoryName! != "Poll")
                                     {
                                         <h4>Average score: @Html.DisplayFor(modelItem => item.AverageScore)%</h4>
                                         <h4>Times played: @Html.DisplayFor(modelItem => item.TimesPlayed)</h4>

@@ -65,6 +65,8 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 quiz.Id = Guid.NewGuid();
+                var category = await _context.Categories.FirstOrDefaultAsync(q => q.Id == quiz.CategoryId);
+                quiz.CategoryName = category.CategoryName;
                 _context.Add(quiz);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -116,6 +118,8 @@ namespace WebApp.Controllers
             {
                 try
                 {
+                    var category = await _context.Categories.FirstOrDefaultAsync(q => q.Id == vm.Quiz.CategoryId);
+                    vm.Quiz.CategoryName = category.CategoryName;
                     _context.Update(vm.Quiz);
                     await _context.SaveChangesAsync();
                 }

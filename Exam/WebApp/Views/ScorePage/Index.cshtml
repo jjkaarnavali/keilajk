@@ -8,7 +8,7 @@
 
 <hr />
 @{
-    if (!Model.Quiz!.Name!.ToLower().Contains("poll"))
+    if (Model.Quiz!.CategoryName != "Poll")
     {
         <h4>Your score: @Html.DisplayFor(modelItem => modelItem.Game!.Score)%</h4>
         <h4>Average score: @Html.DisplayFor(modelItem => modelItem.Quiz!.AverageScore)%</h4>

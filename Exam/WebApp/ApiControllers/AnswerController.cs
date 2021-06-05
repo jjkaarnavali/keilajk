@@ -12,6 +12,7 @@ namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[ApiVersion("1.0")]
     public class AnswerController : ControllerBase
     {
         private readonly AppDbContext _context;

@@ -46,6 +46,7 @@ namespace DAL.App.EF.AppDataInit
             }
 
             var user = new AppUser();
+            user.Id = Guid.NewGuid();
             user.Email = "admin@gmail.com";
             user.FirstName = "Admin";
             user.LastName = "admin.com";
