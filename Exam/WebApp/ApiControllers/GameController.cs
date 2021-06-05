@@ -70,8 +70,14 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
+            var domainGame = new Domain.App.Game()
+            {
+                Id = game.Id,
+                QuizId = game.QuizId,
+                Score = game.Score
+            };
 
-            _context.Entry(game).State = EntityState.Modified;
+            _context.Entry(domainGame).State = EntityState.Modified;
 
             try
             {

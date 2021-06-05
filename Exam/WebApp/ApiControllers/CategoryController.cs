@@ -68,8 +68,13 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
+            var domainCategory = new Domain.App.Category()
+            {
+                Id = category.Id,
+                CategoryName = category.CategoryName
+            };
 
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(domainCategory).State = EntityState.Modified;
 
             try
             {

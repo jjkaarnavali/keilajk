@@ -78,8 +78,18 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
+            var domainQuiz = new Domain.App.Quiz()
+            {
+                Id = quiz.Id,
+                AverageScore = quiz.AverageScore,
+                CategoryId = quiz.CategoryId,
+                CategoryName = quiz.CategoryName,
+                Description = quiz.Description,
+                Name = quiz.Name,
+                TimesPlayed = quiz.TimesPlayed
+            };
 
-            _context.Entry(quiz).State = EntityState.Modified;
+            _context.Entry(domainQuiz).State = EntityState.Modified;
 
             try
             {
